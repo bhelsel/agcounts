@@ -4,9 +4,9 @@ get_counts <- function(path, frequency, epoch, lfe_select = FALSE, write.file = 
   }
   print("Reading ActiGraph GT3X File")
   raw <- read.gt3x::read.gt3x(path = path, asDataFrame = TRUE, imputeZeroes = TRUE)
-  start <- as.POSIXct(format(attr(raw, "start_time"), "%Y-%m-%d"), "%Y-%m-%d", tz = "America/Chicago")
-  end <- as.POSIXct(format(attr(raw, "stop_time"), "%Y-%m-%d"), "%Y-%m-%d", tz = "America/Chicago")
-  raw <- .check_idle_sleep(raw = raw, frequency = frequency)
+  start <- as.POSIXct(format(attr(raw, "start_time"), "%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S", tz = "America/Chicago")
+  end <- as.POSIXct(format(attr(raw, "stop_time"), "%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S", tz = "America/Chicago")
+  raw <- .check_idle_sleep(raw = raw, frequency = frequency, epoch = epoch)
   downsample_data <- .resample(raw = raw, frequency = frequency)
   bpf_data <- .bpf_filter(downsample_data = downsample_data)
   trim_data <- .trim_data(bpf_data = bpf_data, lfe_select=lfe_select)
@@ -17,7 +17,6 @@ get_counts <- function(path, frequency, epoch, lfe_select = FALSE, write.file = 
   epoch_counts$`Vector Magnitude` <- round((sqrt(epoch_counts$Axis1^2 + epoch_counts$Axis2^2 + epoch_counts$Axis3^2)))
 
   first.time.obs <- as.POSIXct(format(raw[1, "time"], "%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S", tz = "America/Chicago")
-
   if(start == first.time.obs){
     epoch_counts <- cbind(time = seq(from = start, by = epoch, length.out = nrow(epoch_counts)), epoch_counts)
   }
@@ -60,22 +59,22 @@ get_counts <- function(path, frequency, epoch, lfe_select = FALSE, write.file = 
   return(list(upsample_factor = upsample_factor, downsample_factor = downsample_factor))
 }
 
-.check_idle_sleep <- function(raw, frequency){
+.check_idle_sleep <- function(raw, frequency, epoch){
   # Missing data that may be due to enabling idle sleep mode.
   # https://actigraphcorp.my.site.com/support/s/article/Idle-Sleep-Mode-Explained
   if(nrow(raw[raw$X==0 & raw$Y==0 & raw$Z==0, ]) != 0){
     print("Missing data found. Carrying the last observation forward to fill in missing values in the raw data.")
     raw[raw$X==0 & raw$Y==0 & raw$Z==0, c("X", "Y", "Z")] <- NA
-    if(is.na(raw[1, "X"]) & is.na(raw[1, "X"]) & is.na(raw[1, "X"])){
-      first.obs <- min(which(!is.na(raw[, "X"])))
-      first.obs.time <- format(raw[first.obs, "time"], "%Y-%m-%d %H:%M:%S")
-      count <- length(raw[format(raw$time, "%Y-%m-%d %H:%M:%S") == first.obs.time, "time"])
+    if(is.na(raw[1, "X"]) & is.na(raw[1, "Y"]) & is.na(raw[1, "Z"])){
+      first.obs <- min(which(!is.na(raw[, "X"]) & !is.na(raw[, "Y"]) & !is.na(raw[, "Z"])))
+      first.time.obs <- format(lubridate::ceiling_date(raw[first.obs, "time"], unit = paste0(epoch, "sec")), "%Y-%m-%d %H:%M:%S")
+      count <- length(raw[format(raw$time, "%Y-%m-%d %H:%M:%S") == first.time.obs, "time"])
       if(count == frequency){
-        raw <- raw[first.obs:nrow(raw), ]
+        raw <- raw[min(which(format(raw$time, "%Y-%m-%d %H:%M:%S") == first.time.obs)):nrow(raw), ]
       }
       if(count != frequency){
-        first.obs.time <- format(as.POSIXct(first.obs.time, "%Y-%m-%d %H:%M:%S", tz = "America/Chicago") + 1, "%Y-%m-%d %H:%M:%S")
-        raw <- raw[format(raw$time, "%Y-%m-%d %H:%M:%S") >= first.obs.time,  ]
+        first.time.obs <- format(as.POSIXct(first.time.obs, "%Y-%m-%d %H:%M:%S", tz = "America/Chicago") + 1, "%Y-%m-%d %H:%M:%S")
+        raw <- raw[format(raw$time, "%Y-%m-%d %H:%M:%S") >= first.time.obs,  ]
       }
     }
     raw$X <- zoo::na.locf(raw$X)
@@ -86,7 +85,7 @@ get_counts <- function(path, frequency, epoch, lfe_select = FALSE, write.file = 
 }
 
 .resample <- function(raw, frequency){
-  print("Creating downsample_data")
+  print("Creating Downsampled Data")
   upsample_factor = .factors(frequency)$upsample_factor # For frequencies not divisible by 3
   downsample_factor = .factors(frequency)$downsample_factor
   raw = t(as.matrix(raw[c("X", "Y", "Z")]))
