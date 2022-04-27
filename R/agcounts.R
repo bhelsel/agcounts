@@ -2,10 +2,11 @@ get_counts <- function(path, frequency, epoch, lfe_select = FALSE, write.file = 
   if(!frequency %in% seq(30, 100, 10)){
     stop(paste0("Frequency has to be 30, 40, 50, 60, 70, 80, 90 or 100 Hz"))
   }
+  print("Reading ActiGraph GT3X File")
   raw <- read.gt3x::read.gt3x(path = path, asDataFrame = TRUE, imputeZeroes = TRUE)
   start <- as.POSIXct(format(attr(raw, "start_time"), "%Y-%m-%d"), "%Y-%m-%d", tz = "America/Chicago")
   end <- as.POSIXct(format(attr(raw, "stop_time"), "%Y-%m-%d"), "%Y-%m-%d", tz = "America/Chicago")
-  raw <- .check_idle_sleep(raw)
+  raw <- .check_idle_sleep(raw = raw, frequency = frequency)
   downsample_data <- .resample(raw = raw, frequency = frequency)
   bpf_data <- .bpf_filter(downsample_data = downsample_data)
   trim_data <- .trim_data(bpf_data = bpf_data, lfe_select=lfe_select)
@@ -13,20 +14,34 @@ get_counts <- function(path, frequency, epoch, lfe_select = FALSE, write.file = 
   epoch_counts <- data.frame(t(.sum_counts(downsample_10hz = downsample_10hz, epoch_seconds = epoch)))
   epoch_counts <- epoch_counts[c("Y", "X", "Z")]
   colnames(epoch_counts) <- c("Axis1", "Axis2", "Axis3")
-  epoch_counts <- cbind(time = seq(from = start, by = epoch, length.out = nrow(epoch_counts)), epoch_counts)
   epoch_counts$`Vector Magnitude` <- round((sqrt(epoch_counts$Axis1^2 + epoch_counts$Axis2^2 + epoch_counts$Axis3^2)))
-  
+
+  first.time.obs <- as.POSIXct(format(raw[1, "time"], "%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S", tz = "America/Chicago")
+
+  if(start == first.time.obs){
+    epoch_counts <- cbind(time = seq(from = start, by = epoch, length.out = nrow(epoch_counts)), epoch_counts)
+  }
+
+  if(start != first.time.obs){
+    last.missing.time <- as.POSIXct(format(raw[1, "time"], "%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S", tz = "America/Chicago") - epoch
+    missing.timestamps <- cbind(time = rev(seq(to = start, from = last.missing.time, by = -epoch)), matrix(0, ncol = 4, nrow = length(rev(seq(to = start, from = last.missing.time, by = -epoch)))))
+    colnames(missing.timestamps) <- c("time", "Axis1", "Axis2", "Axis3", "Vector Magnitude")
+    epoch_counts <- cbind(time = seq(from = first.time.obs, by = epoch, length.out = nrow(epoch_counts)), epoch_counts)
+    epoch_counts <- rbind(missing.timestamps, epoch_counts)
+    epoch_counts$time <- as.POSIXct(epoch_counts$time, origin = "1970-01-01")
+  }
+
   if(write.file){
     if(lfe_select){name <- paste0("AG ", epoch, "s", " LFE ", "Epoch Counts")}
     if(!lfe_select){name <- paste0("AG ", epoch, "s", " Epoch Counts")}
     if(!dir.exists(paste0(dirname(path), "/", name))){dir.create(paste0(dirname(path), "/", name))}
     write.csv(epoch_counts, file = paste0(dirname(path), "/", name, "/", strsplit(basename(path), "[.]")[[1]][1], ".csv"), row.names = FALSE)
   }
-  
+
   if(return.data){
     return(epoch_counts)
   }
-  
+
 }
 
 # Input data coefficients.
@@ -34,7 +49,7 @@ get_counts <- function(path, frequency, epoch, lfe_select = FALSE, write.file = 
   input_coefficients = c("-0.009341062898525", "-0.025470289659360", "-0.004235264826105", "0.044152415456420", "0.036493718347760", "-0.011893961934740", "-0.022917390623150", "-0.006788163862310", "0.000000000000000"),
   output_coefficients = c("1.00000000000000000000", "-3.63367395910957000000", "5.03689812757486000000", "-3.09612247819666000000", "0.50620507633883000000", "0.32421701566682000000", "-0.15685485875559000000", "0.01949130205890000000", "0.00000000000000000000")
   )
-  
+
 .factors <- function(frequency){
   factors <- list(hertz = c(30, 40, 50, 60, 70, 80, 90, 100),
                   upsample_factors = c(1, 3, 3, 1, 3, 3, 1, 3),
@@ -45,12 +60,24 @@ get_counts <- function(path, frequency, epoch, lfe_select = FALSE, write.file = 
   return(list(upsample_factor = upsample_factor, downsample_factor = downsample_factor))
 }
 
-.check_idle_sleep <- function(raw){
-  # Missing data that cmay be due to enabling idle sleep mode.
+.check_idle_sleep <- function(raw, frequency){
+  # Missing data that may be due to enabling idle sleep mode.
   # https://actigraphcorp.my.site.com/support/s/article/Idle-Sleep-Mode-Explained
   if(nrow(raw[raw$X==0 & raw$Y==0 & raw$Z==0, ]) != 0){
     print("Missing data found. Carrying the last observation forward to fill in missing values in the raw data.")
     raw[raw$X==0 & raw$Y==0 & raw$Z==0, c("X", "Y", "Z")] <- NA
+    if(is.na(raw[1, "X"]) & is.na(raw[1, "X"]) & is.na(raw[1, "X"])){
+      first.obs <- min(which(!is.na(raw[, "X"])))
+      first.obs.time <- format(raw[first.obs, "time"], "%Y-%m-%d %H:%M:%S")
+      count <- length(raw[format(raw$time, "%Y-%m-%d %H:%M:%S") == first.obs.time, "time"])
+      if(count == frequency){
+        raw <- raw[first.obs:nrow(raw), ]
+      }
+      if(count != frequency){
+        first.obs.time <- format(as.POSIXct(first.obs.time, "%Y-%m-%d %H:%M:%S", tz = "America/Chicago") + 1, "%Y-%m-%d %H:%M:%S")
+        raw <- raw[format(raw$time, "%Y-%m-%d %H:%M:%S") >= first.obs.time,  ]
+      }
+    }
     raw$X <- zoo::na.locf(raw$X)
     raw$Y <- zoo::na.locf(raw$Y)
     raw$Z <- zoo::na.locf(raw$Z)
@@ -77,9 +104,9 @@ get_counts <- function(path, frequency, epoch, lfe_select = FALSE, write.file = 
     X <- matrix(X, nrow = 3, byrow = TRUE)
     return(X)
   }
-  
+
   if(frequency!=30){rm(raw)}
-  
+
   if(!frequency %in% c(30, 60, 90)){
     upsample_data <- (a_fp * up_factor_fp) * (upsample_data + .np.roll(upsample_data))
     upsample_data <- cbind(rep(0,3), upsample_data)
@@ -88,14 +115,14 @@ get_counts <- function(path, frequency, epoch, lfe_select = FALSE, write.file = 
     }
     upsample_data <- upsample_data[, -1]
   }
-  
+
   if(frequency == 30){
     downsample_data = raw
     rm(raw)
   } else{
     downsample_data = upsample_data[, seq(1, ncol(upsample_data), downsample_factor)]
   }
-  
+
   downsample_data = round(downsample_data, 3)
   if(is.null(rownames(downsample_data))){
     rownames(downsample_data) <- c("X", "Y", "Z")
@@ -118,7 +145,7 @@ get_counts <- function(path, frequency, epoch, lfe_select = FALSE, write.file = 
   rownames(bpf_data) <- c("X", "Y", "Z")
   return(bpf_data)
 }
-  
+
 .trim_data <- function(bpf_data=bpf_data, lfe_select=lfe_select){
   print("Trimming Data")
   if(lfe_select){
@@ -138,7 +165,7 @@ get_counts <- function(path, frequency, epoch, lfe_select = FALSE, write.file = 
     trim_data[trim_data < min_count] <- 0
     trim_data[trim_data > max_count] <- max_count
     trim_data <- floor(trim_data)
-  } 
+  }
   return(trim_data)
 }
 
