@@ -10,18 +10,18 @@ This R Package reads the X, Y, and Z axes in a GT3X accelerometer file and conve
 
 ##### Install the devtools package if it is not already installed
 
-```
+```r
 install.packages("devtools")
 ```
 
 ##### Use the install_github function to download agcounts from GitHub
 
-```
+```r
 devtools::install_github("bhelsel/agcounts")
 ```
 ##### Load the agcounts package
 
-```
+```r
 library(agcounts)
 ```
 <br>
@@ -30,7 +30,7 @@ library(agcounts)
 
 ##### Convert and read in a single GT3X file to R
 
-```
+```r
 path = "Full pathname to the GT3X file"
 
 get_counts(path = path, frequency = 30, epoch = 60, write.file = FALSE, return.data = TRUE)
@@ -42,7 +42,7 @@ get_counts(path = path, frequency = 30, epoch = 60, write.file = FALSE, return.d
 
 ##### Convert a single GT3X file to a CSV file
 
-```
+```r
 path = "Full pathname to the GT3X file"
 
 get_counts(path = path, frequency = 30, epoch = 60, write.file = TRUE, return.data = FALSE)
@@ -50,7 +50,7 @@ get_counts(path = path, frequency = 30, epoch = 60, write.file = TRUE, return.da
 
 ##### Convert multiple GT3X files to a CSV file
 
-```
+```r
 folder = "Full pathname to the folder where the GT3X files are stored"
 
 files = list.files(path = folder, pattern = ".gt3x", full.names = TRUE)
@@ -60,7 +60,7 @@ sapply(files, get_counts, frequency = 30, epoch = 60, write.file = TRUE, return.
 
 ##### Speed up processing time by using the parallel package
 
-```
+```r
 folder = "Full pathname to the folder where the GT3X files are stored"
 
 files = list.files(path = folder, pattern = ".gt3x", full.names = TRUE)
