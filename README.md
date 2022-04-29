@@ -65,15 +65,15 @@ folder = "Full pathname to the folder where the GT3X files are stored"
 
 files = list.files(path = folder, pattern = ".gt3x", full.names = TRUE)
 
-cores <- parallel::detectCores()
+cores = parallel::detectCores()
 
-Ncores <- cores - 1
+Ncores = cores - 1
 
-cl <- parallel::makeCluster(Ncores)
+cl = parallel::makeCluster(Ncores)
 
 doParallel::registerDoParallel(cl)
 
-`%dopar%` <- foreach::`%dopar%`
+`%dopar%` = foreach::`%dopar%`
 
 foreach::foreach(i = files, .packages = "agcounts") %dopar% {
   get_counts(path = i, frequency = 30, epoch = 60, write.file = TRUE, return.data = FALSE)
