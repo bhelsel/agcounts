@@ -75,7 +75,7 @@ doParallel::registerDoParallel(cl)
 
 `%dopar%` <- foreach::`%dopar%`
 
-foreach::foreach(i = files) %dopar% {
+foreach::foreach(i = files, .packages = "agcounts") %dopar% {
   get_counts(path = i, frequency = 30, epoch = 60, write.file = TRUE, return.data = FALSE)
 }
 
