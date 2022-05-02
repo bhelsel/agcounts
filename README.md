@@ -1,8 +1,12 @@
 # agcounts
 
+<!-- badges: start -->
+[![Travis build status](https://travis-ci.com/paulhibbing/agcounts.svg?branch=master)](https://travis-ci.com/paulhibbing/agcounts)
+<!-- badges: end -->
+
 <br>
 
-This R Package reads the X, Y, and Z axes in a GT3X accelerometer file and converts it to Actigraphy counts. This work was inspired by Neishabouri et al. who published the article "Quantification of Acceleration as Activity Counts in ActiGraph Wearables" on February 24, 2022. Here are the links to the <a href = https://www.researchsquare.com/article/rs-1370418/v1>article</a> and <a href = https://github.com/actigraph/agcounts>Python implementation</a> of this code on GitHub.
+This R Package reads the X, Y, and Z axes in a GT3X accelerometer file and converts it to Actigraphy counts. This work was inspired by Neishabouri et al. who released a preprint of "Quantification of Acceleration as Activity Counts in ActiGraph Wearables" on February 24, 2022. Here are the links to the <a href = https://www.researchsquare.com/article/rs-1370418/v1>article</a> and <a href = https://github.com/actigraph/agcounts>Python implementation</a> of this code on GitHub.
 
 <br>
 
@@ -31,9 +35,10 @@ library(agcounts)
 ##### Convert and read in a single GT3X file to R
 
 ```r
-path = "Full pathname to the GT3X file"
+# path = "Full pathname to the GT3X file", e.g.:
+path = system.file("extdata/example.gt3x", package = "agcounts")
 
-get_counts(path = path, frequency = 30, epoch = 60, write.file = FALSE, return.data = TRUE)
+get_counts(path = path, frequency = 90, epoch = 60, write.file = FALSE, return.data = TRUE)
 ```
 
 <br>
@@ -43,7 +48,8 @@ get_counts(path = path, frequency = 30, epoch = 60, write.file = FALSE, return.d
 ##### Convert a single GT3X file to a CSV file
 
 ```r
-path = "Full pathname to the GT3X file"
+# path = "Full pathname to the GT3X file", e.g.:
+path = system.file("extdata/example.gt3x", package = "agcounts")
 
 get_counts(path = path, frequency = 30, epoch = 60, write.file = TRUE, return.data = FALSE)
 ```
@@ -82,10 +88,3 @@ foreach::foreach(i = files, .packages = "agcounts") %dopar% {
 parallel::stopCluster(cl)
 
 ```
-
-
-
-
-
-
-
