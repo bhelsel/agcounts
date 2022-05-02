@@ -7,16 +7,23 @@
 #' @param write.file Export a CSV file of the counts, Default: TRUE
 #' @param return.data Return the data frame to the R Global Environment, Default: FALSE
 #' @param verbose Print the progress of the Actigraph raw data conversion to counts, Default: FALSE.
+#' @param ... arguments passed to \code{\link[data.table]{fwrite}}
 #' @return Returns a CSV file if write.file is TRUE or a data frame if return.data is TRUE
 #' @details Main function to extract counts from the Actigraph GT3X Files.
-#' @examples agcounts::get_counts(path = "filename.gt3x", frequency = 60, epoch = 60, lfe_select = FALSE, write.file = FALSE, return.data = TRUE)
 #' @seealso
 #'  \code{\link[read.gt3x]{read.gt3x}},\code{\link[read.gt3x]{read_gt3x}}
-#' @rdname get_counts
+#' @examples get_counts(
+#'   path = system.file("extdata/example.gt3x", package = "agcounts"),
+#'   frequency = 90, epoch = 60, lfe_select = FALSE,
+#'   write.file = FALSE, return.data = TRUE
+#' )
 #' @export
-#' @importFrom read.gt3x read.gt3x
 
-get_counts <- function(path, frequency, epoch, lfe_select = FALSE, write.file = TRUE, return.data = FALSE, verbose = FALSE){
+get_counts <- function(
+  path, frequency, epoch, lfe_select = FALSE, write.file = FALSE,
+  return.data = TRUE, verbose = FALSE, ...
+){
+
   if(!frequency %in% seq(30, 100, 10)){
     stop(paste0("Frequency has to be 30, 40, 50, 60, 70, 80, 90 or 100 Hz"))
   }
@@ -54,13 +61,16 @@ get_counts <- function(path, frequency, epoch, lfe_select = FALSE, write.file = 
   if(write.file){
     if(lfe_select){name <- paste0("AG ", epoch, "s", " LFE ", "Epoch Counts")}
     if(!lfe_select){name <- paste0("AG ", epoch, "s", " Epoch Counts")}
-    if(!dir.exists(paste0(dirname(path), "/", name))){dir.create(paste0(dirname(path), "/", name))}
-    write.csv(epoch_counts, file = paste0(dirname(path), "/", name, "/", strsplit(basename(path), "[.]")[[1]][1], ".csv"), row.names = FALSE)
+    out_dir <- file.path(dirname(path), name)
+    if(!dir.exists(out_dir)) dir.create(out_dir)
+    data.table::fwrite(
+      epoch_counts,
+      file.path(out_dir, gsub(".gt3x$", ".csv", basename(path))),
+      ...
+    )
   }
 
-  if(return.data){
-    return(epoch_counts)
-  }
+  if(return.data) return(epoch_counts) else invisible()
 
 }
 
@@ -152,7 +162,7 @@ get_counts <- function(path, frequency, epoch, lfe_select = FALSE, write.file = 
 
   .np.roll <- function(X){
     X <- as.vector(c(X[1, ], X[2, ], X[3, ]))
-    X <- c(tail(X, 1) , head(X, -1))
+    X <- c(utils::tail(X, 1) , utils::head(X, -1))
     X <- matrix(X, nrow = 3, byrow = TRUE)
     return(X)
   }
