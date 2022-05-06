@@ -2,4 +2,3 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 inst/extdata/.*Epoch Counts.*
-^\.travis\.yml$
