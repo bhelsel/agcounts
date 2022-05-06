@@ -24,9 +24,9 @@ get_counts(
 
 \item{lfe_select}{Apply the Actigraph Low Frequency Extension filter, Default: FALSE}
 
-\item{write.file}{Export a CSV file of the counts, Default: TRUE}
+\item{write.file}{Export a CSV file of the counts, Default: FALSE}
 
-\item{return.data}{Return the data frame to the R Global Environment, Default: FALSE}
+\item{return.data}{Return the data frame to the R Global Environment, Default: TRUE}
 
 \item{verbose}{Print the progress of the Actigraph raw data conversion to counts, Default: FALSE.}
 

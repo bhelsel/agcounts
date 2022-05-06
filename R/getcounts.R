@@ -4,8 +4,8 @@
 #' @param frequency Sampling frequency in hertz. Sampling frequency must be a multiple of 10 between 30 and 100 hertz.
 #' @param epoch The epoch length for which the counts should be summed.
 #' @param lfe_select Apply the Actigraph Low Frequency Extension filter, Default: FALSE
-#' @param write.file Export a CSV file of the counts, Default: TRUE
-#' @param return.data Return the data frame to the R Global Environment, Default: FALSE
+#' @param write.file Export a CSV file of the counts, Default: FALSE
+#' @param return.data Return the data frame to the R Global Environment, Default: TRUE
 #' @param verbose Print the progress of the Actigraph raw data conversion to counts, Default: FALSE.
 #' @param ... arguments passed to \code{\link[data.table]{fwrite}}
 #' @return Returns a CSV file if write.file is TRUE or a data frame if return.data is TRUE
