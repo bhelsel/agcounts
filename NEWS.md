@@ -1,6 +1,6 @@
 # agcounts 0.2.0
 
-* Split `get_counts` into a few constituent functions to allow more flexible
+* Split `calculate_counts` out of `get_counts` to allow more flexible
   programming for end-users
 * Moved the dot functions to internal
 * Revised some of the logic for filling in missing timestamps during count
