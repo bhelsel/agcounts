@@ -32,7 +32,7 @@ library(agcounts)
 # path = "Full pathname to the GT3X file", e.g.:
 path = system.file("extdata/example.gt3x", package = "agcounts")
 
-get_counts(path = path, frequency = 90, epoch = 60, write.file = FALSE, return.data = TRUE)
+get_counts(path = path, epoch = 60, write.file = FALSE, return.data = TRUE)
 ```
 
 <br>
@@ -45,7 +45,7 @@ get_counts(path = path, frequency = 90, epoch = 60, write.file = FALSE, return.d
 # path = "Full pathname to the GT3X file", e.g.:
 path = system.file("extdata/example.gt3x", package = "agcounts")
 
-get_counts(path = path, frequency = 30, epoch = 60, write.file = TRUE, return.data = FALSE)
+get_counts(path = path, epoch = 60, write.file = TRUE, return.data = FALSE)
 ```
 
 ##### Convert multiple GT3X files to a CSV file
@@ -55,7 +55,7 @@ folder = "Full pathname to the folder where the GT3X files are stored"
 
 files = list.files(path = folder, pattern = ".gt3x", full.names = TRUE)
 
-sapply(files, get_counts, frequency = 30, epoch = 60, write.file = TRUE, return.data = FALSE)
+sapply(files, get_counts, epoch = 60, write.file = TRUE, return.data = FALSE)
 ```
 
 ##### Speed up processing time by using the parallel package
@@ -76,7 +76,7 @@ doParallel::registerDoParallel(cl)
 `%dopar%` = foreach::`%dopar%`
 
 foreach::foreach(i = files, .packages = "agcounts") %dopar% {
-  get_counts(path = i, frequency = 30, epoch = 60, write.file = TRUE, return.data = FALSE)
+  get_counts(path = i, epoch = 60, write.file = TRUE, return.data = FALSE)
 }
 
 parallel::stopCluster(cl)
