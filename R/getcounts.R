@@ -1,62 +1,36 @@
 #' @title get_counts
 #' @description Main function to extract counts from the Actigraph GT3X Files.
 #' @param path Full path name to the GT3X File
-#' @param frequency Sampling frequency in hertz. Sampling frequency must be a multiple of 10 between 30 and 100 hertz.
 #' @param epoch The epoch length for which the counts should be summed.
 #' @param lfe_select Apply the Actigraph Low Frequency Extension filter, Default: FALSE
 #' @param write.file Export a CSV file of the counts, Default: FALSE
 #' @param return.data Return the data frame to the R Global Environment, Default: TRUE
 #' @param verbose Print the progress of the Actigraph raw data conversion to counts, Default: FALSE.
+#' @param tz the desired timezone (defaults to \code{UTC})
 #' @param ... arguments passed to \code{\link[data.table]{fwrite}}
 #' @return Returns a CSV file if write.file is TRUE or a data frame if return.data is TRUE
 #' @details Main function to extract counts from the Actigraph GT3X Files.
 #' @seealso
-#'  \code{\link[read.gt3x]{read.gt3x}},\code{\link[read.gt3x]{read_gt3x}}
+#'  \code{\link[read.gt3x]{read.gt3x}}
 #' @examples get_counts(
 #'   path = system.file("extdata/example.gt3x", package = "agcounts"),
-#'   frequency = 90, epoch = 60, lfe_select = FALSE,
+#'   epoch = 60, lfe_select = FALSE,
 #'   write.file = FALSE, return.data = TRUE
 #' )
 #' @export
 
 get_counts <- function(
-  path, frequency, epoch, lfe_select = FALSE, write.file = FALSE,
-  return.data = TRUE, verbose = FALSE, ...
+  path, epoch, lfe_select = FALSE, write.file = FALSE,
+  return.data = TRUE, verbose = FALSE, tz = "UTC", ...
 ){
 
-  if(!frequency %in% seq(30, 100, 10)){
-    stop(paste0("Frequency has to be 30, 40, 50, 60, 70, 80, 90 or 100 Hz"))
-  }
   if(verbose){
     print(paste0("------------------------- ", "Reading ActiGraph GT3X File for ", basename(path), " -------------------------"))
   }
 
-  raw <- read.gt3x::read.gt3x(path = path, asDataFrame = TRUE, imputeZeroes = TRUE)
-  start <- as.POSIXct(format(attr(raw, "start_time"), "%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S", tz = "America/Chicago")
-  end <- as.POSIXct(format(attr(raw, "stop_time"), "%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S", tz = "America/Chicago")
-  raw <- .check_idle_sleep(raw = raw, frequency = frequency, epoch = epoch, verbose = verbose)
-  downsample_data <- .resample(raw = raw, frequency = frequency, verbose = verbose)
-  bpf_data <- .bpf_filter(downsample_data = downsample_data, verbose = verbose)
-  trim_data <- .trim_data(bpf_data = bpf_data, lfe_select=lfe_select, verbose = verbose)
-  downsample_10hz <- .resample_10hz(trim_data = trim_data, verbose = verbose)
-  epoch_counts <- data.frame(t(.sum_counts(downsample_10hz = downsample_10hz, epoch_seconds = epoch, verbose = verbose)))
-  epoch_counts <- epoch_counts[c("Y", "X", "Z")]
-  colnames(epoch_counts) <- c("Axis1", "Axis2", "Axis3")
-  epoch_counts$`Vector Magnitude` <- round((sqrt(epoch_counts$Axis1^2 + epoch_counts$Axis2^2 + epoch_counts$Axis3^2)))
-
-  first.time.obs <- as.POSIXct(format(raw[1, "time"], "%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S", tz = "America/Chicago")
-  if(start == first.time.obs){
-    epoch_counts <- cbind(time = seq(from = start, by = epoch, length.out = nrow(epoch_counts)), epoch_counts)
-  }
-
-  if(start != first.time.obs){
-    last.missing.time <- as.POSIXct(format(raw[1, "time"], "%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S", tz = "America/Chicago") - epoch
-    missing.timestamps <- cbind(time = rev(seq(to = start, from = last.missing.time, by = -epoch)), matrix(0, ncol = 4, nrow = length(rev(seq(to = start, from = last.missing.time, by = -epoch)))))
-    colnames(missing.timestamps) <- c("time", "Axis1", "Axis2", "Axis3", "Vector Magnitude")
-    epoch_counts <- cbind(time = seq(from = first.time.obs, by = epoch, length.out = nrow(epoch_counts)), epoch_counts)
-    epoch_counts <- rbind(missing.timestamps, epoch_counts)
-    epoch_counts$time <- as.POSIXct(epoch_counts$time, origin = "1970-01-01")
-  }
+  epoch_counts <-
+    read.gt3x::read.gt3x(path, asDataFrame = TRUE, imputeZeroes = TRUE) %>%
+    calculate_counts(epoch, lfe_select, tz, verbose)
 
   if(write.file){
     if(lfe_select){name <- paste0("AG ", epoch, "s", " LFE ", "Epoch Counts")}
@@ -74,26 +48,9 @@ get_counts <- function(
 
 }
 
-# Input data coefficients.
-.coefficients = list(
-  input_coefficients = c("-0.009341062898525", "-0.025470289659360", "-0.004235264826105", "0.044152415456420", "0.036493718347760", "-0.011893961934740", "-0.022917390623150", "-0.006788163862310", "0.000000000000000"),
-  output_coefficients = c("1.00000000000000000000", "-3.63367395910957000000", "5.03689812757486000000", "-3.09612247819666000000", "0.50620507633883000000", "0.32421701566682000000", "-0.15685485875559000000", "0.01949130205890000000", "0.00000000000000000000")
-  )
-
-.factors <- function(frequency){
-  factors <- list(hertz = c(30, 40, 50, 60, 70, 80, 90, 100),
-                  upsample_factors = c(1, 3, 3, 1, 3, 3, 1, 3),
-                  downsample_factors = c(1, 4, 5, 2, 7, 8, 3, 10))
-  position <- which(factors$hertz==frequency)
-  upsample_factor <- factors[["upsample_factors"]][position]
-  downsample_factor <- factors[["downsample_factors"]][position]
-  return(list(upsample_factor = upsample_factor, downsample_factor = downsample_factor))
-}
-
 #' @title .check_idle_sleep
 #' @description Check for missing raw data in the Actigraph file
 #' @param raw A data frame of the raw Actigraph data that will be checked for missing data.
-#' @param frequency Sampling frequency in hertz. Sampling frequency must be a multiple of 10 between 30 and 100 hertz.
 #' @param epoch The epoch length for which the counts should be summed.
 #' @param verbose Print the progress of the Actigraph raw data conversion to counts, Default: FALSE.
 #' @return Data set with the raw missing values filled in with the last observed observation.
@@ -101,13 +58,12 @@ get_counts <- function(
 #' @seealso
 #'  \code{\link[lubridate]{round_date}}
 #'  \code{\link[zoo]{na.locf}}
-#' @rdname .check_idle_sleep
-#' @export
-#' @importFrom lubridate ceiling_date
 #' @importFrom zoo na.locf
 #' @noRd
+#' @keywords internal
 
-.check_idle_sleep <- function(raw, frequency, epoch, verbose = FALSE){
+.check_idle_sleep <- function(raw, frequency, epoch, verbose = FALSE, tz){
+
   # Missing data that may be due to enabling idle sleep mode.
   # https://actigraphcorp.my.site.com/support/s/article/Idle-Sleep-Mode-Explained
   if(nrow(raw[raw$X==0 & raw$Y==0 & raw$Z==0, ]) != 0){
@@ -117,13 +73,19 @@ get_counts <- function(
     raw[raw$X==0 & raw$Y==0 & raw$Z==0, c("X", "Y", "Z")] <- NA
     if(is.na(raw[1, "X"]) & is.na(raw[1, "Y"]) & is.na(raw[1, "Z"])){
       first.obs <- min(which(!is.na(raw[, "X"]) & !is.na(raw[, "Y"]) & !is.na(raw[, "Z"])))
-      first.time.obs <- format(lubridate::ceiling_date(raw[first.obs, "time"], unit = paste0(epoch, "sec")), "%Y-%m-%d %H:%M:%S")
+      first.time.obs <-
+        raw[first.obs, "time"] %>%
+        lubridate::ceiling_date(paste0(epoch, "sec")) %>%
+        format("%Y-%m-%d %H:%M:%S")
       count <- length(raw[format(raw$time, "%Y-%m-%d %H:%M:%S") == first.time.obs, "time"])
       if(count == frequency){
         raw <- raw[min(which(format(raw$time, "%Y-%m-%d %H:%M:%S") == first.time.obs)):nrow(raw), ]
       }
       if(count != frequency){
-        first.time.obs <- format(as.POSIXct(first.time.obs, "%Y-%m-%d %H:%M:%S", tz = "America/Chicago") + 1, "%Y-%m-%d %H:%M:%S")
+        first.time.obs %<>%
+          as.POSIXct(tz) %>%
+          {. + 1} %>%
+          format("%Y-%m-%d %H:%M:%S")
         raw <- raw[format(raw$time, "%Y-%m-%d %H:%M:%S") >= first.time.obs,  ]
       }
     }
@@ -137,13 +99,11 @@ get_counts <- function(
 #' @title .resample
 #' @description Down sample data to a sampling frequency of 30 hertz
 #' @param raw A data frame of the raw Actigraph data that will be down sampled.
-#' @param frequency Sampling frequency in hertz. Sampling frequency must be a multiple of 10 between 30 and 100 hertz.
 #' @param verbose Print the progress of the Actigraph raw data conversion to counts, Default: FALSE.
 #' @return Down sampled data
 #' @details Down sample data to a sampling frequency of 30 hertz
-#' @rdname .resample
-#' @export
 #' @noRd
+#' @keywords internal
 
 .resample <- function(raw, frequency, verbose = FALSE){
   if(verbose){
@@ -200,10 +160,9 @@ get_counts <- function(
 #' @details Band pass filter for down sampled Actigraph data
 #' @seealso
 #'  \code{\link[gsignal]{filter_zi}},\code{\link[gsignal]{filter}}
-#' @rdname .bpf_filter
-#' @export
 #' @importFrom gsignal filter_zi filter
 #' @noRd
+#' @keywords internal
 
 .bpf_filter <- function(downsample_data, verbose = FALSE){
   if(verbose){
@@ -230,9 +189,8 @@ get_counts <- function(
 #' @param verbose Print the progress of the Actigraph raw data conversion to counts, Default: FALSE.
 #' @return Data that have been filtered by Actigraph's normal or low frequency extension filter.
 #' @details Adds the Actigraph normal or low frequency extension filters to the band pass filtered data.
-#' @rdname .trim_data
-#' @export
 #' @noRd
+#' @keywords internal
 
 .trim_data <- function(bpf_data, lfe_select=FALSE, verbose = FALSE){
   if(verbose){
@@ -265,9 +223,8 @@ get_counts <- function(
 #' @param verbose Print the progress of the Actigraph raw data conversion to counts, Default: FALSE.
 #' @return Resampled data that was converted to 10 hertz
 #' @details Resample the filtered data from 30 hertz to 10 hertz.
-#' @rdname .resample_10hz
-#' @export
 #' @noRd
+#' @keywords internal
 
 .resample_10hz <- function(trim_data, verbose = FALSE){
   if(verbose){
@@ -286,9 +243,8 @@ get_counts <- function(
 #' @param verbose Print the progress of the Actigraph raw data conversion to counts, Default: FALSE.
 #' @return Actigraph counts for the X, Y, and Z axes.
 #' @details Add the counts over the specified epoch.
-#' @rdname .sum_counts
-#' @export
 #' @noRd
+#' @keywords internal
 
 .sum_counts <- function(downsample_10hz, epoch_seconds, verbose = FALSE){
   if(verbose){
