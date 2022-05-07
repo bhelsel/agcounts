@@ -1,7 +1,7 @@
 Package: agcounts
 Type: Package
 Title: R Package for Extracting Actigraphy Counts from Accelerometer Data
-Version: 0.2.1
+Version: 0.2.2
 Author: Brian C. Helsel
 Maintainer: The package maintainer <bhelsel80@gmail.com>
 Description: This R Package reads the X, Y, and Z axes in a GT3X accelerometer file and converts it to Actigraphy counts.

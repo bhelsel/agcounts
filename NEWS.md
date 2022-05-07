@@ -1,5 +1,9 @@
 # agcounts 0.2.1
 
+* Swapped in `min` in a place where `pmin` was incorrectly used
+
+# agcounts 0.2.1
+
 * Fixed automatic sampling frequency detection to remove assumption about
   file having >= 1000 rows
 
