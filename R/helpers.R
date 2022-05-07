@@ -1,7 +1,7 @@
 .get_frequency <- function(raw, timevar = "time") {
   timevar %T>%
   {stopifnot(exists(., raw))} %>%
-  raw[1:1000, .] %>%
+  raw[1:pmin(nrow(raw), 1000), .] %>%
   lubridate::floor_date("1 sec") %>%
   table(.) %>%
   table(.) %>%

@@ -1,3 +1,8 @@
+# agcounts 0.2.1
+
+* Fixed automatic sampling frequency detection to remove assumption about
+  file having >= 1000 rows
+
 # agcounts 0.2.0
 
 * Split `calculate_counts` out of `get_counts` to allow more flexible
