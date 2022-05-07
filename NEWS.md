@@ -1,4 +1,4 @@
-# agcounts 0.2.1
+# agcounts 0.2.2
 
 * Swapped in `min` in a place where `pmin` was incorrectly used
 
