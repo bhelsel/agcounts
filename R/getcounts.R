@@ -238,21 +238,22 @@ get_counts <- function(
 
 #' @title .sum_counts
 #' @description Add the counts over the specified epoch.
-#' @param downsample_10hz Resampled data that was converted to 10 hertz
-#' @param epoch_seconds The epoch length to sum the counts.
-#' @param verbose Print the progress of the Actigraph raw data conversion to counts, Default: FALSE.
+#'
+#' @inheritParams get_counts
+#' @inheritParams calculate_counts
+#'
 #' @return Actigraph counts for the X, Y, and Z axes.
-#' @details Add the counts over the specified epoch.
+#'
 #' @noRd
 #' @keywords internal
 
-.sum_counts <- function(downsample_10hz, epoch_seconds, verbose = FALSE){
+.sum_counts <- function(raw, epoch, verbose = FALSE){
   if(verbose){
     print("Summing epochs")
   }
   # Accumulator for epoch
-  block_size = epoch_seconds * 10
-  epoch_counts = t(apply(downsample_10hz, 1, cumsum))
+  block_size = epoch * 10
+  epoch_counts = t(apply(raw, 1, cumsum))
   epoch_counts[, (block_size+1):ncol(epoch_counts)] <- (epoch_counts[, (block_size+1):ncol(epoch_counts)] - epoch_counts[, 1:(ncol(epoch_counts)-block_size)])
   epoch_counts <- floor(epoch_counts[, seq(block_size, ncol(epoch_counts), block_size)])
   return (epoch_counts)

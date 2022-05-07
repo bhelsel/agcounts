@@ -21,6 +21,10 @@ calculate_counts <- function(
 
     end <-
       attr(raw, "stop_time") %>%
+      {if (strftime(., "%Y-%m-%d %H:%M:%S", tz) == "0001-01-01 00:00:00")
+        raw$time[nrow(raw)]
+        else .
+      } %>%
       {. - 0.001} %>%
       lubridate::floor_date(paste(epoch, "sec")) %>%
       lubridate::force_tz(tz)
@@ -47,7 +51,7 @@ calculate_counts <- function(
       data.frame(stringsAsFactors = FALSE) %>%
       .[c("Y", "X", "Z")] %>%
       stats::setNames(c("Axis1", "Axis2", "Axis3")) %>%
-      within({`Vector Magnitude` = round(sqrt(
+      within({Vector.Magnitude = round(sqrt(
         Axis1^2 + Axis2^2 + Axis3^2
       ))}) %>%
       data.frame(
@@ -59,10 +63,11 @@ calculate_counts <- function(
 
     as.character(timestamps) %>%
     setdiff(as.character(epoch_counts$time)) %>%
-    data.frame(
-      time = ., Axis1 = rep(0, length(.)), Axis2 = rep(0, length(.)), Axis3 = rep(0, length(.)),
-      stringsAsFactors = FALSE
-    ) %>%
+    {data.frame(
+      time = as.POSIXct(., tz), Axis1 = rep(0, length(.)),
+      Axis2 = rep(0, length(.)), Axis3 = rep(0, length(.)),
+      Vector.Magnitude = rep(0, length(.)), stringsAsFactors = FALSE
+    )} %>%
     rbind(epoch_counts) %>%
     .[order(.$time), ] %>%
     structure(., row.names = seq(nrow(.)))
