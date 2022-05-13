@@ -6,19 +6,17 @@
 \usage{
 get_counts(
   path,
-  frequency,
   epoch,
   lfe_select = FALSE,
   write.file = FALSE,
   return.data = TRUE,
   verbose = FALSE,
+  tz = "UTC",
   ...
 )
 }
 \arguments{
 \item{path}{Full path name to the GT3X File}
-
-\item{frequency}{Sampling frequency in hertz. Sampling frequency must be a multiple of 10 between 30 and 100 hertz.}
 
 \item{epoch}{The epoch length for which the counts should be summed.}
 
@@ -29,6 +27,8 @@ get_counts(
 \item{return.data}{Return the data frame to the R Global Environment, Default: TRUE}
 
 \item{verbose}{Print the progress of the Actigraph raw data conversion to counts, Default: FALSE.}
+
+\item{tz}{the desired timezone (defaults to \code{UTC})}
 
 \item{...}{arguments passed to \code{\link[data.table]{fwrite}}}
 }
@@ -44,10 +44,10 @@ Main function to extract counts from the Actigraph GT3X Files.
 \examples{
 get_counts(
   path = system.file("extdata/example.gt3x", package = "agcounts"),
-  frequency = 90, epoch = 60, lfe_select = FALSE,
+  epoch = 60, lfe_select = FALSE,
   write.file = FALSE, return.data = TRUE
 )
 }
 \seealso{
-\code{\link[read.gt3x]{read.gt3x}},\code{\link[read.gt3x]{read_gt3x}}
+\code{\link[read.gt3x]{read.gt3x}}
 }
