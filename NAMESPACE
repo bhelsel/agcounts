@@ -2,10 +2,8 @@
 
 export(calculate_counts)
 export(get_counts)
+import(magrittr)
 importFrom(gsignal,filter)
 importFrom(gsignal,filter_zi)
-importFrom(magrittr,"%<>%")
-importFrom(magrittr,"%>%")
-importFrom(magrittr,"%T>%")
 importFrom(read.gt3x,read.gt3x)
 importFrom(zoo,na.locf)

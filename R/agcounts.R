@@ -9,5 +9,5 @@
 #' @docType package
 #' @name agcounts
 #' @importFrom read.gt3x read.gt3x
-#' @importFrom magrittr %>% %<>% %T>%
+#' @import magrittr
 NULL
