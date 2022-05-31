@@ -1,3 +1,12 @@
+# agcounts 0.2.3
+
+* Changed package namespace to include magrittr as an import
+* Fixed the printing order of verbose by changing the magrittr's 
+  pipe to eager pipe
+* Added `dateTimeAs = "write.csv"` to the `data.table::fwrite` function
+  to correctly display time stamps when data are exported to csv
+* Moved all of the internal functions in agcounts to the helpers.R file
+
 # agcounts 0.2.2
 
 * Swapped in `min` in a place where `pmin` was incorrectly used
