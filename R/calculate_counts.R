@@ -41,12 +41,12 @@ calculate_counts <- function(
       as.POSIXct(tz)
 
     epoch_counts <-
-      .check_idle_sleep(raw, frequency, epoch, verbose, tz) %>%
-      .resample(frequency, verbose) %>%
-      .bpf_filter(verbose) %>%
-      .trim_data(lfe_select, verbose) %>%
-      .resample_10hz(verbose) %>%
-      .sum_counts(epoch, verbose) %>%
+      .check_idle_sleep(raw, frequency, epoch, verbose, tz) %!>%
+      .resample(frequency, verbose) %!>%
+      .bpf_filter(verbose) %!>%
+      .trim_data(lfe_select, verbose) %!>%
+      .resample_10hz(verbose) %!>%
+      .sum_counts(epoch, verbose) %!>%
       t(.) %>%
       data.frame(stringsAsFactors = FALSE) %>%
       .[c("Y", "X", "Z")] %>%
