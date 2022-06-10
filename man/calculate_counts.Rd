@@ -23,7 +23,7 @@ Calculate ActiGraph activity counts from raw acceleration data
     by passing in a data frame with a time stamp, X, Y, and Z axis. This function
     allows the ability to work with the raw data from other files, but the data
     frame needs to have "start_time" and "stop_time" attributes. This is different
-    from the \code{\link[get_counts]{get_counts}} function because it reads a raw
+    from the \code{\link{get_counts}} function because it reads a raw
     data frame rather than a path name to a GT3X file.
 }
 \examples{
