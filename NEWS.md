@@ -1,3 +1,9 @@
+# agcounts 0.2.4
+
+* Added a unit test to ensure the agcounts package and Actilife counts match
+* Added a unit test to check if the output of the algorithm is as expected
+* Added testthat (>= 3.0.0) to the description file.
+
 # agcounts 0.2.3
 
 * Changed package namespace to include magrittr as an import
