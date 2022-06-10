@@ -1,9 +1,12 @@
 Package: agcounts
 Type: Package
 Title: R Package for Extracting Actigraphy Counts from Accelerometer Data
-Version: 0.1.0
-Author: Brian C. Helsel
-Maintainer: The package maintainer <bhelsel80@gmail.com>
+Version: 0.3.0
+Authors@R: c(
+    person(c("Brian", "C."), "Helsel", email = "bhelsel80@gmail.com",
+        role = c("aut", "cre")),
+    person(c("Paul", "R."), "Hibbing", role = "ctb")
+    )
 Description: This R Package reads the X, Y, and Z axes in a GT3X accelerometer file and converts it to Actigraphy counts.
     This work was inspired by Neishabouri et al. who published the article "Quantification of Acceleration as Activity Counts in ActiGraph Wearables" on February 24, 2022.
     The link to the article (https://www.researchsquare.com/article/rs-1370418/v1) and Python implementation of this code (https://github.com/actigraph/agcounts).
@@ -15,7 +18,9 @@ Imports:
     data.table,
     gsignal,
     lubridate,
+    magrittr,
     read.gt3x,
+    stats,
     utils,
     zoo
 Remotes:
@@ -23,4 +28,6 @@ Remotes:
 Suggests: 
     parallel,
     devtools,
-    foreach
+    foreach,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
