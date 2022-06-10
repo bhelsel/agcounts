@@ -6,7 +6,7 @@
 #' @param write.file Export a CSV file of the counts, Default: FALSE
 #' @param return.data Return the data frame to the R Global Environment, Default: TRUE
 #' @param verbose Print the progress of the Actigraph raw data conversion to counts, Default: FALSE.
-#' @param tz the desired timezone (defaults to \code{UTC})
+#' @param tz the desired timezone, Default: \code{UTC}
 #' @param ... arguments passed to \code{\link[data.table]{fwrite}}
 #' @return Returns a CSV file if write.file is TRUE or a data frame if return.data is TRUE
 #' @details Main function to extract counts from the Actigraph GT3X Files.

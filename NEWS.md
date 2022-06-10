@@ -1,3 +1,8 @@
+# agcounts 0.3.0
+
+* Updated documentation for a new release
+* Added Paul R. Hibbing as a package contributor.
+
 # agcounts 0.2.4
 
 * Added a unit test to ensure the agcounts package and Actilife counts match
