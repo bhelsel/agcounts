@@ -21,7 +21,7 @@ calculate_counts <- function(
   #* Determine the complete time range that should be represented in the file
 
     frequency <- .get_frequency(raw)
-    timestamps <- .get_timestamps(raw, tz, epoch, frequency)
+    timestamps <- .get_timestamps(raw, epoch, frequency, tz)
 
 
   #* Now calculate counts
