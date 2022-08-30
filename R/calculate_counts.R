@@ -20,25 +20,12 @@ calculate_counts <- function(
 
   #* Determine the complete time range that should be represented in the file
 
-    start <-
-      attr(raw, "start_time") %>%
-      lubridate::force_tz(tz)
+    frequency <- .get_frequency(raw)
+    timestamps <- .get_timestamps(raw, tz, epoch, frequency)
+    # raw %<>% .fill_raw(timestamps, frequency, epoch)
 
-    end <-
-      attr(raw, "stop_time") %>%
-      {if (strftime(., "%Y-%m-%d %H:%M:%S", tz) == "0001-01-01 00:00:00")
-        raw$time[nrow(raw)]
-        else .
-      } %>%
-      {. - 0.001} %>%
-      lubridate::floor_date(paste(epoch, "sec")) %>%
-      lubridate::force_tz(tz)
-
-    timestamps <- seq(start, end, epoch)
 
   #* Now calculate counts
-
-    frequency <- .get_frequency(raw)
 
     data_start <-
       raw[1, "time"] %>%
@@ -66,7 +53,7 @@ calculate_counts <- function(
 
   #* Add 0-count rows for any missing times, then return
 
-    as.character(timestamps) %>%
+    as.character(timestamps$timestamps) %>%
     setdiff(as.character(epoch_counts$time)) %>%
     {data.frame(
       time = as.POSIXct(., tz), Axis1 = rep(0, length(.)),
