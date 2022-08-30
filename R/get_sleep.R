@@ -5,12 +5,12 @@
 }
 
 #' @export
-.get_sleep.default <- function(raw) {
+.get_sleep.default <- function(raw, ...) {
   raw$X==0 & raw$Y==0 & raw$Z==0
 }
 
 #' @export
-.get_sleep.activity_df <- function(raw) {
+.get_sleep.activity_df <- function(raw, ...) {
 
 
   is_sleep <-

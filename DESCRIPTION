@@ -10,6 +10,8 @@ Authors@R: c(
 Description: This R Package reads the X, Y, and Z axes in a GT3X accelerometer file and converts it to Actigraphy counts.
     This work was inspired by Neishabouri et al. who published the article "Quantification of Acceleration as Activity Counts in ActiGraph Wearables" on February 24, 2022.
     The link to the article (https://www.researchsquare.com/article/rs-1370418/v1) and Python implementation of this code (https://github.com/actigraph/agcounts).
+Depends:
+    R (>= 3.5.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
