@@ -22,7 +22,6 @@ calculate_counts <- function(
 
     frequency <- .get_frequency(raw)
     timestamps <- .get_timestamps(raw, tz, epoch, frequency)
-    # raw %<>% .fill_raw(timestamps, frequency, epoch)
 
 
   #* Now calculate counts
