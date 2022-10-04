@@ -16,4 +16,9 @@
 #' @name agcounts
 #' @importFrom read.gt3x read.gt3x
 #' @import magrittr
+
+
+#' @useDynLib agcounts, .registration = TRUE
+#' @importFrom Rcpp sourceCpp
+
 NULL

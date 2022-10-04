@@ -97,9 +97,10 @@
   if(!frequency %in% c(30, 60, 90)){
     upsample_data <- (a_fp * up_factor_fp) * (upsample_data + .np.roll(upsample_data))
     upsample_data <- cbind(rep(0,3), upsample_data)
-    for (i in 2:ncol(upsample_data)){
-      upsample_data[, i] <- upsample_data[, i] + -b_fp * upsample_data[, i-1]
-    }
+    upsample_data <- upsampleC(upsample_data, b_fp)
+    # for (i in 2:ncol(upsample_data)){
+    #   upsample_data[, i] <- upsample_data[, i] + -b_fp * upsample_data[, i-1]
+    # }
     upsample_data <- upsample_data[, -1]
   }
 
