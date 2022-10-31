@@ -1,7 +1,7 @@
 # agcounts <img src="man/figures/agcounts.png" align="right" height="139" />
 
 <!-- badges: start -->
-  [![CRAN status](https://www.r-pkg.org/badges/version/agcounts)](https://CRAN.R-project.org/package=agcounts)
+[![CRAN status](https://www.r-pkg.org/badges/version/agcounts)](https://CRAN.R-project.org/package=agcounts)
 [![R-CMD-check](https://github.com/bhelsel/agcounts/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/bhelsel/agcounts/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
@@ -9,42 +9,97 @@ This R Package reads the X, Y, and Z axes in a GT3X accelerometer file and conve
 
 <br>
 
-### Install
-
-##### Install the devtools package if it is not already installed
-
+### Install the `agcounts` package
 ```r
+# Install the devtools package if it is not already installed
 install.packages("devtools")
-```
 
-##### Use the install_github function to download agcounts from GitHub
-
-```r
+# Use the `install_github` function to download agcounts from GitHub
 devtools::install_github("bhelsel/agcounts")
 ```
-##### Load the agcounts package
-
-```r
-library(agcounts)
-```
-<br>
-
 ### Reading Files
 
-##### Convert and read in a single GT3X file to R
+##### Read in raw acceleration data and calculate ActiGraph counts
+
+There are 3 ways to read in raw acceleration data using the `agcounts` package.
+The preferred method is to use the calibrated reader from ActiGraph's 
+<a href = https://github.com/actigraph/pygt3x>pygt3x</a> package. This requires
+the user to ensure that Python version > 3.7 and < 3.9 is installed. To check if 
+Python is installed, the user can use the `reticulate` package. 
+
+```r
+# Check Python path and version
+reticulate::py_config()
+
+# If python is not installed, use the install_python() function from reticulate
+reticulate::install_python(version = 3.9)
+
+# Then try installing the pygt3x package from Github
+reticulate::py_install("pygt3x")
+```
+You can also choose to use the `g.calibrate` function from the 
+<a href=https://github.com/wadpac/GGIR>GGIR</a> package. No additional 
+configuration is needed except for ensuring the GGIR package is installed.
+Finally, the `read.gt3x::read.gt3x` can be used to read in uncalibrated data.
+We include a S3 generic function within the `agcounts` package called `agread`
+to implement these read methods. The preferred order if all readers are
+functioning correctly is: 1) pygt3x, 2) `read.gt3x` to `g.calibrate`, and 
+3) `read.gt3x` (uncalibrated). These are represented by the functions `agread.pygt3x`, 
+`agread.ggir`, and `agread.gt3x`, respectively. They will be implemented in that
+order if the `agread` S3 generic function is called.
+
+### Calculate Counts
+
+`calculate_counts` is the main function in the `agcounts` package.
+
+##### Read and Convert a single GT3X file to ActiGraph counts
 
 ```r
 # path = "Full pathname to the GT3X file", e.g.:
+
 path = system.file("extdata/example.gt3x", package = "agcounts")
 
+# Ensure that the r-reticulate virtual environment has been activated.
+# This may not be necessary based on your Python configuration and how you installed the python packages.
+
+reticulate::use_virtualenv("r-reticulate")
+
+library(agcounts)
+
+# Using the default pygt3x reader because pygt3x is installed
+epochs <- 
+  agread(path) %>%
+  calculate_counts(epoch = 60)
+  
+# GGIR calibrated reader
+epochs_ggir <- 
+  agread.ggir(path) %>%
+  calculate_counts(epoch = 60)
+  
+# Uncalibrated raw acceleration data
+epochs_gt3x <-
+  agread.gt3x(path) %>%
+  calculate_counts(epoch = 60)
+
+```
+
+### Get Counts
+
+The `get_counts` function is the wrapper function for `calculate_counts` that
+also reads in the data using `agread` and one of the listed methods. 
+See `sloop::s3_methods_generic("agread")`.
+
+```r
+path = system.file("extdata/example.gt3x", package = "agcounts")
 get_counts(path = path, epoch = 60, write.file = FALSE, return.data = TRUE)
 ```
 
-<br>
-
 ### Writing Files
 
-##### Convert a single GT3X file to a CSV file
+##### Read and convert a single GT3X file to ActiGraph counts exported to a CSV file
+
+We also offer a `write.file` argument that will read, convert, and export the
+Actigraph count data to a CSV file in the same directory.
 
 ```r
 # path = "Full pathname to the GT3X file", e.g.:
@@ -53,7 +108,10 @@ path = system.file("extdata/example.gt3x", package = "agcounts")
 get_counts(path = path, epoch = 60, write.file = TRUE, return.data = FALSE)
 ```
 
-##### Convert multiple GT3X files to a CSV file
+##### Read and convert multiple GT3X files to ActiGraph counts exported a CSV file
+
+We can extend the `write.file` argument by passing the path name of several GT3X
+files to an `apply` function.
 
 ```r
 folder = "Full pathname to the folder where the GT3X files are stored"
@@ -63,7 +121,9 @@ files = list.files(path = folder, pattern = ".gt3x", full.names = TRUE)
 sapply(files, get_counts, epoch = 60, write.file = TRUE, return.data = FALSE)
 ```
 
-##### Speed up processing time by using the parallel package
+To speed up processing time, the parallel package may be a useful addition to
+the `write.file` argument. Here is sample code that can be adjusted based on 
+each user's computer and R configurations.
 
 ```r
 folder = "Full pathname to the folder where the GT3X files are stored"
