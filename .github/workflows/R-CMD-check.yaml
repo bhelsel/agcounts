@@ -18,11 +18,11 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: macos-latest,   r: 'release'}
-          - {os: windows-latest, r: 'release'}
-          - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
-          - {os: ubuntu-latest,   r: 'release'}
-          - {os: ubuntu-latest,   r: 'oldrel-1'}
+          - {os: macos-latest,   r: 'release', python: '3.9'}
+          - {os: windows-latest, r: 'release', python: '3.9'}
+          - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release', python: '3.9'}
+          - {os: ubuntu-latest,   r: 'release', python: '3.9'}
+          - {os: ubuntu-latest,   r: 'oldrel-1', python: '3.9'}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -39,10 +39,23 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
+      - uses: actions/setup-python@v4
+        with:
+          Python-version: ${{ matrix.config.python }}
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck
-          needs: check
+          extra-packages: rcmdcheck remotes
+
+      - name: setup r-reticulate venv
+        shell: Rscript {0}
+        run: |
+          remotes::install_local()
+          reticulate::virtualenv_create("agcounts", Sys.which("python"))
+          reticulate::virtualenv_install("agcounts", c("numpy", "pandas", "pygt3x")
+          python <- reticulate::virtualenv_ptyhon("agcounts")
+          writeLines(sprintf("RETICULATE_PYTHON=%s", python),
+                     Sys.getenv("GITHUB_ENV"))
 
       - uses: r-lib/actions/check-r-package@v2
         with:
