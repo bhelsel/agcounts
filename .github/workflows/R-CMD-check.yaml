@@ -53,7 +53,7 @@ jobs:
           remotes::install_local()
           reticulate::virtualenv_create("agcounts", Sys.which("python"))
           reticulate::virtualenv_install("agcounts", c("numpy", "pandas", "pygt3x"))
-          python <- reticulate::virtualenv_ptyhon("agcounts")
+          python <- reticulate::virtualenv_python("agcounts")
           writeLines(sprintf("RETICULATE_PYTHON=%s", python),
                      Sys.getenv("GITHUB_ENV"))
 
