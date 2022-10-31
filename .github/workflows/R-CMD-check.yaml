@@ -45,7 +45,7 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: remotes::rcmdcheck, any::XML
+          extra-packages: rcmdcheck remotes XML
 
       - name: setup r-reticulate venv
         shell: Rscript {0}
