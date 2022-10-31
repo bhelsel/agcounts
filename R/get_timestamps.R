@@ -1,8 +1,14 @@
 .get_timestamps <- function(raw, epoch, frequency, tz) {
 
-  start <-
-    attr(raw, "start_time") %>%
-    lubridate::force_tz(tz)
+  if("activity_df" %in% class(raw)){
+    start <-
+      attr(raw, "start_time") %>%
+      lubridate::force_tz(tz)
+  } else {
+    start <-
+      raw[1, "time"] %>%
+      lubridate::force_tz(tz)
+  }
 
   end <- .last_complete_epoch(raw, epoch, frequency, tz)
 

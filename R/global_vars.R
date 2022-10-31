@@ -1,5 +1,5 @@
 if(getRversion() >= "2.15.1")  utils::globalVariables(c(
-  ".", "Axis1", "Axis2", "Axis3", "Vector Magnitude"
+  ".", "Axis1", "Axis2", "Axis3", "Vector Magnitude", "time", "reader"
 ))
 
 .coefficients = list(

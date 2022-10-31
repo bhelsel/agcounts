@@ -25,14 +25,16 @@ Imports:
     read.gt3x,
     stats,
     utils,
-    zoo
+    zoo,
+    reticulate,
+    GGIR
 Remotes:
     THLfi/read.gt3x
 Suggests: 
     parallel,
     devtools,
     foreach,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
 Config/testthat/edition: 3
 LinkingTo: 
     Rcpp
