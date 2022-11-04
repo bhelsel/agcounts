@@ -24,19 +24,29 @@ devtools::install_github("bhelsel/agcounts")
 There are 3 ways to read in raw acceleration data using the `agcounts` package.
 The preferred method is to use the calibrated reader from ActiGraph's 
 <a href = https://github.com/actigraph/pygt3x>pygt3x</a> package. This requires
-the user to ensure that Python version > 3.7 and < 3.9 is installed. To check if 
-Python is installed, the user can use the `reticulate` package. 
+the user to ensure that Python version > 3.7 and < 3.9 is installed. The user 
+can use the `reticulate` package to install python and the pygt3x package by
+following these steps.
 
 ```r
-# Check Python path and version
-reticulate::py_config()
 
-# If python is not installed, use the install_python() function from reticulate
-reticulate::install_python(version = 3.9)
+library(reticulate)
 
-# Then try installing the pygt3x package from Github
-reticulate::py_install("pygt3x")
+# Install miniconda and restart your R session
+reticulate::install_miniconda()
+
+# Run py_config() to ensure that you have a python version available
+# This will also initialize the r-reticulate virtual environment
+py_config()
+
+# Install pygt3x from Gitub using pip
+py_install("pygt3x", pip = TRUE)
+
+# Check to see if the pygt3x installation worked
+py_list_packages()
+
 ```
+
 You can also choose to use the `g.calibrate` function from the 
 <a href=https://github.com/wadpac/GGIR>GGIR</a> package. No additional 
 configuration is needed except for ensuring the GGIR package is installed.
