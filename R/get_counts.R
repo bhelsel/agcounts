@@ -12,11 +12,14 @@
 #' @details Main function to extract counts from the Actigraph GT3X Files.
 #' @seealso
 #'  \code{\link[read.gt3x]{read.gt3x}}
-#' @examples get_counts(
+#' @examples
+#' if(interactive()){
+#'  get_counts(
 #'   path = system.file("extdata/example.gt3x", package = "agcounts"),
 #'   epoch = 60, lfe_select = FALSE,
 #'   write.file = FALSE, return.data = TRUE
-#' )
+#'   )
+#'   }
 #' @export
 
 get_counts <- function(
@@ -28,8 +31,7 @@ get_counts <- function(
     print(paste0("------------------------- ", "Reading ActiGraph GT3X File for ", basename(path), " -------------------------"))
   }
 
-  epoch_counts <-
-    read.gt3x::read.gt3x(path, asDataFrame = TRUE, imputeZeroes = TRUE) %>%
+  epoch_counts <- agread(path) %>%
     calculate_counts(epoch, lfe_select, tz, verbose)
 
   if(write.file){

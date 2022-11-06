@@ -1,3 +1,14 @@
+# agcounts 0.4.0
+
+* Added Github R-CMD-check workflow.
+* Created a S3 generic function to extract and handle idle sleep time.
+* Created a S3 generic function to read in the raw acceleration data using
+  calibrated readers.
+* Replaced a for loop in the `.resample` function with `Rcpp` to reduce 
+  processing time.
+* Added a package hexagon sticker and updated the README with the calibrated readers.
+* Added a unit test to test the calibrated readers.
+
 # agcounts 0.3.0
 
 * Updated documentation for a new release

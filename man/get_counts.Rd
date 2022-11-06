@@ -42,11 +42,13 @@ Main function to extract counts from the Actigraph GT3X Files.
 Main function to extract counts from the Actigraph GT3X Files.
 }
 \examples{
-get_counts(
+if(interactive()){
+ get_counts(
   path = system.file("extdata/example.gt3x", package = "agcounts"),
   epoch = 60, lfe_select = FALSE,
   write.file = FALSE, return.data = TRUE
-)
+  )
+  }
 }
 \seealso{
 \code{\link[read.gt3x]{read.gt3x}}

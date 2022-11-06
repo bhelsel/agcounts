@@ -16,34 +16,48 @@
 
   # Missing data that may be due to enabling idle sleep mode.
   # https://actigraphcorp.my.site.com/support/s/article/Idle-Sleep-Mode-Explained
-  if(nrow(raw[raw$X==0 & raw$Y==0 & raw$Z==0, ]) != 0){
-    if(verbose){
-      print("Missing data found. Carrying the last observation forward to fill in missing values in the raw data.")
+
+  is_sleep <- .get_sleep(raw)
+
+  if (!any(is_sleep)) return(raw)
+
+  if (verbose) print(paste(
+    "Missing data found. Carrying the last observation",
+    "forward to fill in missing values in the raw data."
+  ))
+
+  raw[is_sleep, c("X", "Y", "Z")] <- NA
+
+  if(is_sleep[1]){
+
+    first.obs <- which(!is_sleep)[1]
+
+    first.time.obs <-
+      raw[first.obs, "time"] %>%
+      lubridate::ceiling_date(paste0(epoch, "sec"))
+
+    raw <- raw[raw$time >= first.time.obs,  ]
+
+    full_second <-
+      raw$time[1:(frequency * 2)] %>%
+      lubridate::floor_date("1 sec") %>%
+      as.character(.) %>%
+      {rle(.)$lengths} %>%
+      .[1] %>%
+      {. == frequency}
+
+    if(!full_second){
+      raw <- raw[raw$time >= first.time.obs + 1,  ]
     }
-    raw[raw$X==0 & raw$Y==0 & raw$Z==0, c("X", "Y", "Z")] <- NA
-    if(is.na(raw[1, "X"]) & is.na(raw[1, "Y"]) & is.na(raw[1, "Z"])){
-      first.obs <- min(which(!is.na(raw[, "X"]) & !is.na(raw[, "Y"]) & !is.na(raw[, "Z"])))
-      first.time.obs <-
-        raw[first.obs, "time"] %>%
-        lubridate::ceiling_date(paste0(epoch, "sec")) %>%
-        format("%Y-%m-%d %H:%M:%S")
-      count <- length(raw[format(raw$time, "%Y-%m-%d %H:%M:%S") == first.time.obs, "time"])
-      if(count == frequency){
-        raw <- raw[min(which(format(raw$time, "%Y-%m-%d %H:%M:%S") == first.time.obs)):nrow(raw), ]
-      }
-      if(count != frequency){
-        first.time.obs %<>%
-          as.POSIXct(tz) %>%
-          {. + 1} %>%
-          format("%Y-%m-%d %H:%M:%S")
-        raw <- raw[format(raw$time, "%Y-%m-%d %H:%M:%S") >= first.time.obs,  ]
-      }
-    }
-    raw$X <- zoo::na.locf(raw$X)
-    raw$Y <- zoo::na.locf(raw$Y)
-    raw$Z <- zoo::na.locf(raw$Z)
+
   }
-  return(raw)
+
+  raw$X <- zoo::na.locf0(raw$X)
+  raw$Y <- zoo::na.locf0(raw$Y)
+  raw$Z <- zoo::na.locf0(raw$Z)
+
+  raw
+
 }
 
 #' @title .resample
@@ -59,8 +73,9 @@
   if(verbose){
     print("Creating Downsampled Data")
   }
-  upsample_factor = .factors(frequency)$upsample_factor # For frequencies not divisible by 3
-  downsample_factor = .factors(frequency)$downsample_factor
+  f <- .factors(frequency)
+  upsample_factor = f$upsample_factor # For frequencies not divisible by 3
+  downsample_factor = f$downsample_factor
   raw = t(as.matrix(raw[c("X", "Y", "Z")]))
   m = nrow(raw)
   n = ncol(raw)
@@ -82,9 +97,10 @@
   if(!frequency %in% c(30, 60, 90)){
     upsample_data <- (a_fp * up_factor_fp) * (upsample_data + .np.roll(upsample_data))
     upsample_data <- cbind(rep(0,3), upsample_data)
-    for (i in 2:ncol(upsample_data)){
-      upsample_data[, i] <- upsample_data[, i] + -b_fp * upsample_data[, i-1]
-    }
+    upsample_data <- upsampleC(upsample_data, b_fp)
+    # for (i in 2:ncol(upsample_data)){
+    #   upsample_data[, i] <- upsample_data[, i] + -b_fp * upsample_data[, i-1]
+    # }
     upsample_data <- upsample_data[, -1]
   }
 
@@ -143,28 +159,26 @@
 #' @keywords internal
 
 .trim_data <- function(bpf_data, lfe_select=FALSE, verbose = FALSE){
-  if(verbose){
-    print("Trimming Data")
-  }
+
+  if(verbose) print("Trimming Data")
+
+  min_count <- ifelse(lfe_select, 1, 4)
+  max_count <- 128
+
+  trim_data <-
+    abs(bpf_data) %>%
+    {ifelse(. < min_count, 0, .)} %>%
+    pmin(max_count)
+
   if(lfe_select){
-    min_count <- 1
-    max_count <- 128 * 1
-    trim_data <- abs(bpf_data)
-    trim_data[(trim_data < min_count) & (trim_data >= 4)] <- 0
-    trim_data[trim_data > max_count] <- max_count
+
     mask <- (trim_data < 4) & (trim_data >= min_count)
-    trim_data[mask] <- abs(trim_data[mask]) - 1
-    trim_data <- floor(trim_data)
+    trim_data[mask] <- trim_data[mask] - 1
+
   }
-  if(!lfe_select){
-    min_count <- 4
-    max_count <- 128
-    trim_data <- abs(bpf_data)
-    trim_data[trim_data < min_count] <- 0
-    trim_data[trim_data > max_count] <- max_count
-    trim_data <- floor(trim_data)
-  }
-  return(trim_data)
+
+  floor(trim_data)
+
 }
 
 #' @title .resample_10hz
@@ -210,6 +224,9 @@
 }
 
 .get_frequency <- function(raw, timevar = "time") {
+
+  if (exists("sample_rate", attributes(raw))) return(attr(raw, "sample_rate"))
+
   timevar %T>%
   {stopifnot(exists(., raw))} %>%
   raw[1:min(nrow(raw), 1000), .] %>%
@@ -221,6 +238,7 @@
   {if(!. %in% seq(30, 100, 10)) stop(
     "Frequency has to be 30, 40, 50, 60, 70, 80, 90 or 100 Hz"
   )}
+
 }
 
 .factors <- function(frequency){
