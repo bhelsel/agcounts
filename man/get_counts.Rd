@@ -12,6 +12,7 @@ get_counts(
   return.data = TRUE,
   verbose = FALSE,
   tz = "UTC",
+  parser = c("pygt3x", "ggir", "gt3x"),
   ...
 )
 }
@@ -29,6 +30,8 @@ get_counts(
 \item{verbose}{Print the progress of the Actigraph raw data conversion to counts, Default: FALSE.}
 
 \item{tz}{the desired timezone, Default: \code{UTC}}
+
+\item{parser}{The parser to use when reading in the data. Parser values include pygt3x, ggir, and gt3x (uncalibrated reader).}
 
 \item{...}{arguments passed to \code{\link[data.table]{fwrite}}}
 }

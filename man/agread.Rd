@@ -4,12 +4,22 @@
 \alias{agread}
 \title{Read in raw acceleration data}
 \usage{
-agread(path, verbose = FALSE, ...)
+agread(
+  raw,
+  verbose = FALSE,
+  parser = c("pygt3x", "ggir", "gt3x"),
+  tz = "UTC",
+  ...
+)
 }
 \arguments{
-\item{path}{Path name to the GT3X file}
+\item{raw}{Path name to the GT3X file or the dataset with columns time, X, Y, and Z axis}
 
 \item{verbose}{Print the read method, Default: FALSE.}
+
+\item{parser}{The parser to use when reading in the data. Parser values include pygt3x, ggir, and gt3x (uncalibrated reader)}
+
+\item{tz}{the desired timezone, Default: \code{UTC}}
 
 \item{...}{Additional arguments to pass into the agread S3 generic function}
 }

@@ -2,9 +2,8 @@
 
 S3method(.get_sleep,activity_df)
 S3method(.get_sleep,default)
-S3method(agread,ggir)
-S3method(agread,gt3x)
-S3method(agread,pygt3x)
+S3method(agread,activity_df)
+S3method(agread,character)
 export(.get_sleep)
 export(agread)
 export(calculate_counts)
