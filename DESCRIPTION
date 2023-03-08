@@ -1,7 +1,7 @@
 Package: agcounts
 Type: Package
 Title: R Package for Extracting Actigraphy Counts from Accelerometer Data
-Version: 0.4.0
+Version: 0.5.0
 Authors@R: c(
     person(c("Brian", "C."), "Helsel", email = "bhelsel80@gmail.com",
         role = c("aut", "cre")),
@@ -15,7 +15,7 @@ Depends:
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Imports: 
     data.table,
     gsignal,
@@ -26,8 +26,7 @@ Imports:
     stats,
     utils,
     zoo,
-    reticulate,
-    GGIR
+    reticulate
 Remotes:
     THLfi/read.gt3x
 Suggests: 
@@ -37,4 +36,5 @@ Suggests:
     testthat (>= 3.0.0),
 Config/testthat/edition: 3
 LinkingTo: 
-    Rcpp
+    Rcpp,
+    RcppArmadillo
