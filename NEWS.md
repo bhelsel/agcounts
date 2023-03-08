@@ -1,3 +1,12 @@
+# agcounts 0.5.0
+
+* Updated pygt3x python reader (ActiGraph removed the CalibratedReader class).
+* Removed GGIR dependency and added a C++ version of the GGIR g.calibrate function.
+* Removed the agread.gt3x, agread.ggir, and agread.pygt3x S3 methods.
+* Added `agread.character` with a switch statement to allow the user to choose a calibrated or uncalibrated parser.
+* Added `agread.activity_df` to allow piping calibration with the `calculate_counts` function.
+* Removed test_calibrated_readers.R file since `agread.ggir` and `agread.pygt3x` are no longer used.
+
 # agcounts 0.4.0
 
 * Added Github R-CMD-check workflow.
