@@ -117,6 +117,8 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue, Rcpp:
       Rcpp::Rcout << " " << i + 1;
     }
 
+    if(pathname.isNull() & dataset.isNull()) break;
+
     // Segment data
     if(pathname.isNotNull() & dataset.isNull()) {
       Rcpp::Environment read_gt3x = Rcpp::Environment::namespace_env("read.gt3x");
@@ -130,45 +132,43 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue, Rcpp:
       }
       
       data = readGT3X(Rcpp::Named("path") = pathname, Rcpp::Named("batch_begin") = startpage, Rcpp::Named("batch_end") = endpage, Rcpp::Named("asDataFrame") = false);
-
-      if(i==0 & data.nrow() < sf * ws[2] * 2){
-          // Not enough data for calibration.
-          break;
-      }
+      if(i==0 & data.nrow() < sf * ws[2] * 2) break; // Not enough data for calibration.
     }
-    if(dataset.isNotNull()){
-        if(i==0 & Rcpp::as<Rcpp::NumericMatrix>(dataset).nrow() < sf * ws[2] * 2){
-          // Not enough data for calibration.
-          break;
-        }
-        if(i == 0) {
-          startpage = 0;
-          endpage = startpage + (blocksize * sf) - 1;
-      } else {
-          startpage = (endpage * i) + 1;
-          endpage = startpage + (blocksize * sf) - 1;
-      }
-        data = Rcpp::as<Rcpp::NumericMatrix>(dataset)(Rcpp::Range(startpage, endpage), Rcpp::_);
-      }
     
-    if(pathname.isNull() & dataset.isNull()) break;
-
-    if(data.nrow() < endpage) endpage = data.nrow();
+    if(dataset.isNotNull()){
+      Rcpp::NumericMatrix dataset_(dataset);
+      if(i==0 & dataset_.nrow() < sf * ws[2] * 2) break; // Not enough data for calibration.
+      if(i == 0) {
+        startpage = 0;
+        endpage = startpage + ((blocksize * sf) - 1) + sf;
+      } else {
+        startpage = (endpage - sf) + 1;
+        endpage = startpage + ((blocksize * sf) - 1) + sf;
+      }
+      if(dataset_.nrow() < endpage) endpage = dataset_.nrow() - 1;
+      data = dataset_(Rcpp::Range(startpage, endpage), Rcpp::_);
+      
+    }
     
     if(data.nrow() < blocksize) break;
-
+    
     // add left over data using a similar rbind function
     if(S.nrow() > 0) {
       data = rbindC(S, data);   
     }
     LD = data.nrow();
     int use = (floor(LD / (ws[2]*sf))) * (ws[2]*sf); // number of data points to use
-  
+    
     if(use > 0 & use != LD){
       S = data(Rcpp::Range(use, LD-1), Rcpp::_); 
     }
     data = data(Rcpp::Range(0, use-1), Rcpp::_);
-    LD = data.nrow(); 
+    
+    if(data.nrow() < blocksize * 30){
+      LD = 0;
+    } else{
+      LD = data.nrow(); 
+    }
 
     Gx = data(Rcpp::_, 0); Gy = data(Rcpp::_, 1); Gz = data(Rcpp::_, 2);
     EN = sqrt(pow(Gx, 2) + pow(Gy, 2) + pow(Gz, 2)); EN2 = gDownSample(EN, sf); 

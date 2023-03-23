@@ -26,7 +26,7 @@
 get_counts <- function(
   path, epoch, lfe_select = FALSE, write.file = FALSE,
   return.data = TRUE, verbose = FALSE, tz = "UTC",
-  parser = c("pygt3x", "ggir", "gt3x"), ...
+  parser = c("pygt3x", "ggir", "uncalibrated"), ...
 ){
 
   if(verbose){
@@ -35,7 +35,7 @@ get_counts <- function(
 
   parser <- match.arg(parser)
 
-  epoch_counts <- agread(raw = path, verbose = verbose, parser = parser) %>%
+  epoch_counts <- agread(path = path, verbose = verbose, parser = parser) %>%
     calculate_counts(epoch, lfe_select, tz, verbose)
 
   if(write.file){

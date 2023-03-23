@@ -5,26 +5,26 @@
 \title{Read in raw acceleration data}
 \usage{
 agread(
-  raw,
-  verbose = FALSE,
-  parser = c("pygt3x", "ggir", "gt3x"),
+  path,
+  parser = c("pygt3x", "ggir", "uncalibrated"),
   tz = "UTC",
+  verbose = FALSE,
   ...
 )
 }
 \arguments{
-\item{raw}{Path name to the GT3X file or the dataset with columns time, X, Y, and Z axis}
+\item{path}{Path name to the GT3X file or the dataset with columns time, X, Y, and Z axis}
 
-\item{verbose}{Print the read method, Default: FALSE.}
-
-\item{parser}{The parser to use when reading in the data. Parser values include pygt3x, ggir, and gt3x (uncalibrated reader)}
+\item{parser}{The parser to use when reading in the data. Parser values include pygt3x, ggir, and uncalibrated readers}
 
 \item{tz}{the desired timezone, Default: \code{UTC}}
 
-\item{...}{Additional arguments to pass into the agread S3 generic function}
+\item{verbose}{Print the read method, Default: FALSE.}
+
+\item{...}{Additional arguments to pass into the agread function}
 }
 \value{
-Returns the raw acceleration signal
+Returns the calibrated or uncalibrated raw acceleration data
 }
 \description{
 This generic function reads in calibrated raw acceleration data
@@ -32,11 +32,10 @@ This generic function reads in calibrated raw acceleration data
     from the read.gt3x package.
 }
 \details{
-This generic function reads in calibrated raw acceleration data
-    from the python module pygt3x or the R read.gt3x and GGIR packages.
+This function reads in calibrated raw acceleration data from GGIR or pygt3x.
 }
 \examples{
 \dontrun{
-   agread(system.file("extdata/example.gt3x", package = agcounts))
+   agread(system.file("extdata/example.gt3x", package = "agcounts"), parser = "pygt3x")
 }
 }

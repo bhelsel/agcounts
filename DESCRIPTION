@@ -23,6 +23,7 @@ Imports:
     magrittr,
     Rcpp,
     read.gt3x,
+    GGIR,
     stats,
     utils,
     zoo,
