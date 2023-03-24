@@ -5,6 +5,7 @@
 * Removed the agread S3 methods and replaced it with a switch statement.
 * Added options for the user to choose a calibrated or uncalibrated parser.
 * Removed test_calibrated_readers.R file since `agread.ggir` and `agread.pygt3x` are no longer used.
+* Added codecov to the `agcounts` package.
 
 # agcounts 0.4.0
 
