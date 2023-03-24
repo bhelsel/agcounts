@@ -56,7 +56,7 @@ Rcpp::NumericMatrix Cscale(Rcpp::NumericMatrix X, Rcpp::NumericVector offset, Rc
   for(int j = 0; j < X.ncol(); j++){
     out(Rcpp::_, j) = (X(Rcpp::_, j) + offset[j]) / (1/scale[j]);
   }
-  return (out);
+  return out;
 }
 
 double calcRes(Rcpp::NumericMatrix curr, Rcpp::NumericMatrix closestpoint, Rcpp::DoubleVector weights){
@@ -132,12 +132,12 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue, Rcpp:
       }
       
       data = readGT3X(Rcpp::Named("path") = pathname, Rcpp::Named("batch_begin") = startpage, Rcpp::Named("batch_end") = endpage, Rcpp::Named("asDataFrame") = false);
-      if(i==0 & data.nrow() < sf * ws[2] * 2) break; // Not enough data for calibration.
+      if((i==0) & (data.nrow() < sf * ws[2] * 2)) break; // Not enough data for calibration.
     }
     
     if(dataset.isNotNull()){
       Rcpp::NumericMatrix dataset_(dataset);
-      if(i==0 & dataset_.nrow() < sf * ws[2] * 2) break; // Not enough data for calibration.
+      if((i==0) & (dataset_.nrow() < sf * ws[2] * 2)) break; // Not enough data for calibration.
       if(i == 0) {
         startpage = 0;
         endpage = startpage + ((blocksize * sf) - 1) + sf;
@@ -159,8 +159,8 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue, Rcpp:
     LD = data.nrow();
     int use = (floor(LD / (ws[2]*sf))) * (ws[2]*sf); // number of data points to use
     
-    if(use > 0 & use != LD){
-      S = data(Rcpp::Range(use, LD-1), Rcpp::_); 
+    if((use > 0) & (use != LD)){
+      S = data(Rcpp::Range(use, LD-1), Rcpp::_);
     }
     data = data(Rcpp::Range(0, use-1), Rcpp::_);
     
@@ -309,7 +309,7 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue, Rcpp:
       calErrorEnd = std::round((calErrorEnd / meta_temp2.nrow()) * 100000) / 100000;
 
 
-      if(calErrorEnd < calErrorStart & calErrorEnd < 0.01 & nhoursused > minloadcrit){
+      if((calErrorEnd < calErrorStart) & (calErrorEnd < 0.01) & (nhoursused > minloadcrit)){
         LD = 0;
       }
     }
