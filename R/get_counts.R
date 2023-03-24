@@ -7,6 +7,7 @@
 #' @param return.data Return the data frame to the R Global Environment, Default: TRUE
 #' @param verbose Print the progress of the Actigraph raw data conversion to counts, Default: FALSE.
 #' @param tz the desired timezone, Default: \code{UTC}
+#' @param parser The parser to use when reading in the data. Parser values include pygt3x, ggir, and gt3x (uncalibrated reader).
 #' @param ... arguments passed to \code{\link[data.table]{fwrite}}
 #' @return Returns a CSV file if write.file is TRUE or a data frame if return.data is TRUE
 #' @details Main function to extract counts from the Actigraph GT3X Files.
@@ -24,14 +25,17 @@
 
 get_counts <- function(
   path, epoch, lfe_select = FALSE, write.file = FALSE,
-  return.data = TRUE, verbose = FALSE, tz = "UTC", ...
+  return.data = TRUE, verbose = FALSE, tz = "UTC",
+  parser = c("pygt3x", "ggir", "uncalibrated"), ...
 ){
 
   if(verbose){
     print(paste0("------------------------- ", "Reading ActiGraph GT3X File for ", basename(path), " -------------------------"))
   }
 
-  epoch_counts <- agread(path) %>%
+  parser <- match.arg(parser)
+
+  epoch_counts <- agread(path = path, verbose = verbose, parser = parser) %>%
     calculate_counts(epoch, lfe_select, tz, verbose)
 
   if(write.file){

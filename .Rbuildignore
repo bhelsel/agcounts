@@ -3,3 +3,4 @@
 ^LICENSE\.md$
 inst/extdata/.*Epoch Counts.*
 ^\.github$
+^codecov\.yml$
