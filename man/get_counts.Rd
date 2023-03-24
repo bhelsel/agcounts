@@ -12,7 +12,7 @@ get_counts(
   return.data = TRUE,
   verbose = FALSE,
   tz = "UTC",
-  parser = c("pygt3x", "ggir", "gt3x"),
+  parser = c("pygt3x", "ggir", "uncalibrated"),
   ...
 )
 }
