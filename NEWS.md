@@ -1,3 +1,12 @@
+# agcounts 0.6.0
+
+* Developed a Shiny app to allow users to visualize, explore, and compare activity counts.
+* Added the `.calculate_raw_metrics` function to calculate ENMO and MAD for the Shiny App.
+* Added the `.read_agd` function to extract metadata and data from the ActiGraph agd file for the Shiny app.
+* Changed the use of the bitwise '&' with Boolean operands to '&&' in the gcalibrate.cpp file.
+* Updated README.md with the new `agread` methods using the `parser` argument.
+
+
 # agcounts 0.5.0
 
 * Updated pygt3x python reader (ActiGraph removed the CalibratedReader class).
