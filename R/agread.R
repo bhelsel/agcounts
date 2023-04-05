@@ -13,10 +13,14 @@
 #' \dontrun{
 #'    agread(system.file("extdata/example.gt3x", package = "agcounts"), parser = "pygt3x")
 #' }
+#' @seealso
+#'  \code{\link[GGIR]{g.calibrate}}
+#'  \code{\link[read.gt3x]{read.gt3x}}
 #' @rdname agread
-#' @importFrom utils installed.packages
-#' @importFrom reticulate import py_module_available `%as%` py_to_r
 #' @export
+#' @importFrom reticulate import py_module_available `%as%`
+#' @importFrom GGIR g.calibrate
+#' @importFrom read.gt3x read.gt3x
 
 agread <- function(path, parser = c("pygt3x", "ggir", "uncalibrated"), tz = "UTC", verbose = FALSE, ...){
   parser = match.arg(parser)
@@ -34,6 +38,7 @@ agread <- function(path, parser = c("pygt3x", "ggir", "uncalibrated"), tz = "UTC
 }
 
 .pygt3xReader <- function(path, parser = c("pygt3x", "ggir", "gt3x"), tz = "UTC", verbose = FALSE, ...){
+  reader <- NULL
   if(!reticulate::py_module_available("pygt3x")) stop('Python module "pygt3x" not found.')
   if(verbose) print("Reading and calibrating data with pygt3x.")
   `%as%` <- reticulate::`%as%`
@@ -94,8 +99,13 @@ agread <- function(path, parser = c("pygt3x", "ggir", "uncalibrated"), tz = "UTC
 agcalibrate <- function(raw, verbose = FALSE, tz = "UTC", ...){
   if(any(.get_sleep(raw))) stop("Calibration requires the data to be imported without imputed zeros.")
   sf = .get_frequency(raw)
+  if("last_sample_time" %in% names(attributes(raw))){
+    last_sample_time <- attr(raw, "last_sample_time")
+  } else{
+    last_sample_time <- raw[nrow(raw), 1]
+  }
   C <- gcalibrateC(dataset = as.matrix(raw[, c("X", "Y", "Z")]), sf = sf)
-  timestamps = seq(raw[1, 1], raw[nrow(raw), 1], 1/sf) %>% lubridate::force_tz(tz) %>% data.frame(time = .)
+  timestamps = seq(raw[1, 1], last_sample_time, 1/sf) %>% lubridate::force_tz(tz) %>% data.frame(time = .)
   raw = merge(timestamps, raw, by = "time", all = TRUE)
   raw[which(is.na(raw[, 2])), 2] <- 0
   raw[which(is.na(raw[, 3])), 3] <- 0
@@ -104,3 +114,36 @@ agcalibrate <- function(raw, verbose = FALSE, tz = "UTC", ...){
   if(C$nhoursused==0) message("\n There is not enough data to perform the GGIR calibration method. Returning uncalibrated data.")
   raw
 }
+
+#' @title Read ActiGraph AGD Files
+#' @description Read the settings or data from the ActiGraph AGD Files
+#' @param path The path to the AGD file or the filename if the AGD file is in the current working directory
+#' @return Returns a list containing the filter type, epoch length, and the data.
+#' @details Read the filter type, epoch length, and data from the ActiGraph AGD Files
+#' @rdname .read_agd
+#' @noRd
+#' @keywords internal
+#' @importFrom DBI dbConnect dbReadTable dbDisconnect
+#' @importFrom RSQLite SQLite
+
+.read_agd <- function(path) {
+  con <- DBI::dbConnect(RSQLite::SQLite(), path)
+  settings <- DBI::dbReadTable(con, "settings")
+  filter <- settings[settings["settingName"]=="filter", "settingValue"]
+  epoch_length <- as.numeric(settings[settings["settingName"]=="epochlength", "settingValue"])
+  data <- DBI::dbReadTable(con, "data")
+  data$dataTimestamp <- as.POSIXct((data$dataTimestamp / 1e7), origin = "0001-01-01 00:00:00", tz = "UTC")
+  if("axis3" %in% colnames(data)){
+    data <- data[, 1:4] %>% `colnames<-`(c("time", "Axis1", "Axis2", "Axis3"))
+    data$Vector.Magnitude <- round((sqrt(data$Axis1^2 + data$Axis2^2 + data$Axis3^2)))
+  }
+  DBI::dbDisconnect(con)
+  return(list(filter = filter, epoch_length = epoch_length, data = data))
+}
+
+
+
+
+
+
+
