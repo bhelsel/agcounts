@@ -39,3 +39,7 @@ This function reads in calibrated raw acceleration data from GGIR or pygt3x.
    agread(system.file("extdata/example.gt3x", package = "agcounts"), parser = "pygt3x")
 }
 }
+\seealso{
+\code{\link[GGIR]{g.calibrate}}
+ \code{\link[read.gt3x]{read.gt3x}}
+}

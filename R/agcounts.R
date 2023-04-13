@@ -12,6 +12,8 @@
 #'
 #' \code{\link{calculate_counts}}
 #'
+#' \code{\link{agShinyDeployApp}}
+#'
 #' @docType package
 #' @name agcounts
 #' @importFrom read.gt3x read.gt3x

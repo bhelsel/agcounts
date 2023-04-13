@@ -26,14 +26,26 @@ calculate_counts <- function(
 
   #* Now calculate counts
 
+    raw <- .check_idle_sleep(raw, frequency, epoch, verbose, tz)
+
     data_start <-
       raw[1, "time"] %>%
       format("%Y-%m-%d %H:%M:%S") %>%
-      as.POSIXct(tz)
+      as.POSIXct(tz) %>%
+      lubridate::floor_date(paste(epoch, "secs"))
+
+    if(data_start != raw[1, "time"]){
+      raw <-
+        seq(data_start, (raw[1, "time"]-1), 1/frequency) %>%
+        {data.frame(
+          time = as.POSIXct(., tz), X = rep(raw[1, "X"], length(.)),
+          Y = rep(raw[1, "Y"], length(.)), Z = rep(raw[1, "Z"], length(.))
+        )} %>%
+        rbind(raw)
+    }
 
     epoch_counts <-
-      .check_idle_sleep(raw, frequency, epoch, verbose, tz) %!>%
-      .resample(frequency, verbose) %!>%
+      .resample(raw, frequency, verbose) %!>%
       .bpf_filter(verbose) %!>%
       .trim_data(lfe_select, verbose) %!>%
       .resample_10hz(verbose) %!>%

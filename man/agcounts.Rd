@@ -17,5 +17,7 @@ This R Package reads the X, Y, and Z axes in a GT3X accelerometer file
 \code{\link{get_counts}}
 
 \code{\link{calculate_counts}}
+
+\code{\link{agShinyDeployApp}}
 }
 

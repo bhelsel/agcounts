@@ -202,12 +202,9 @@
 
 #' @title .sum_counts
 #' @description Add the counts over the specified epoch.
-#'
 #' @inheritParams get_counts
 #' @inheritParams calculate_counts
-#'
 #' @return Actigraph counts for the X, Y, and Z axes.
-#'
 #' @noRd
 #' @keywords internal
 
@@ -250,4 +247,37 @@
   {.[match(frequency, c(30, 40, 50, 60, 70, 80, 90, 100)), ]} %>%
   as.list(.)
 
+}
+
+
+#' @title calculate_raw_metrics
+#' @description Calculate Euclidean Norm Minus One and Mean Amplitude Deviation
+#' @param data Data set containing a time, X, Y, and Z variable
+#' @param sample_frequency Sample frequency
+#' @param epoch Epoch level
+#' @return Data set with Euclidean Norm Minus One and Mean Amplitude Deviation
+#' @noRd
+#' @keywords internal
+
+.calculate_raw_metrics <- function(data, sample_frequency, epoch){
+  win.vl <- sample_frequency * epoch
+  data$vm = sqrt(data$X^2 + data$Y^2 + data$Z^2)
+  vm <- data$vm
+  # Calculate ENMO
+  enmo.vec <- vm - 1
+  enmo.vec[which(enmo.vec < 0)] = 0
+  enmo.vec <- cumsum(c(0, enmo.vec))
+  rn.seq = seq(from = 1, to = length(enmo.vec), by = win.vl)
+  enmo.vec <- diff(enmo.vec[rn.seq]) / win.vl
+  # Calculate MAD
+  mad <- function(vm.win){mean(abs(vm.win - mean(vm.win)))}
+  rn.seq <- seq(from = 1, to = length(vm) - length(vm) %% win.vl, by = win.vl)
+  mad.vec <-
+    sapply(rn.seq, function(rn.i){
+      vm.win.idx <- rn.i : (rn.i + win.vl - 1)
+      vm.win <- vm[vm.win.idx]
+      mad(vm.win)
+    })
+  raw.data <- data.frame(time = data$time[rn.seq], ENMO = enmo.vec, MAD = mad.vec)
+  raw.data
 }
