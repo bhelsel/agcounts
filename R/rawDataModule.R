@@ -2,7 +2,6 @@
 #' @description UI for rawDataModuleUI
 #' @noRd
 #' @keywords internal
-#' @importFrom reactable reactableOutput
 
 rawDataModuleUI <- function(id) {
   ns <- shiny::NS(id)
@@ -39,11 +38,6 @@ rawDataModuleUI <- function(id) {
 #' @description Server for rawDataModuleServer
 #' @noRd
 #' @keywords internal
-#' @importFrom read.gt3x read.gt3x
-#' @importFrom dplyr mutate select group_by summarise mutate_at
-#' @importFrom stringr regex
-#' @importFrom reactable renderReactable reactable colDef
-#' @importFrom grDevices colors
 
 rawDataModuleServer <- function(id) {
   shiny::moduleServer(id, function(input, output, session) {

@@ -4,9 +4,11 @@
 \alias{agShinyDeployApp}
 \title{agShinyDeployApp}
 \usage{
-agShinyDeployApp(...)
+agShinyDeployApp(shinyTheme = "spacelab", ...)
 }
 \arguments{
+\item{shinyTheme}{Change the theme of the shiny app using the \code{\link[bslib]{bs_theme}} function, Default: 'spacelab'}
+
 \item{...}{arguments passed to \code{\link[shiny]{shinyApp}}}
 }
 \value{

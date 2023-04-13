@@ -2,7 +2,6 @@
 #' @description UI for countsModuleUI
 #' @noRd
 #' @keywords internal
-#' @importFrom reactable reactableOutput
 
 countsModuleUI <- function(id){
   ns <- shiny::NS(id)
@@ -34,10 +33,6 @@ countsModuleUI <- function(id){
 #' @description Server for countsModuleServer
 #' @noRd
 #' @keywords internal
-#' @importFrom stringr regex
-#' @importFrom dplyr mutate group_by summarise
-#' @importFrom reactable renderReactable reactable colDef colGroup
-#' @importFrom grDevices colors
 
 countsModuleServer <- function(id, filteredData){
   shiny::moduleServer(id, function(input, output, session){

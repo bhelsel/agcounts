@@ -2,8 +2,6 @@
 #' @description UI for compareCountsModule
 #' @noRd
 #' @keywords internal
-#' @importFrom reactable reactableOutput
-#'
 
 compareCountsModuleUI <- function(id){
   ns <- shiny::NS(id)
@@ -32,11 +30,6 @@ compareCountsModuleUI <- function(id){
 #' @description Server for compareCountsModuleServer
 #' @noRd
 #' @keywords internal
-#' @importFrom dplyr mutate rename select
-#' @importFrom stringr regex
-#' @importFrom reactable renderReactable reactable colDef
-#' @importFrom grDevices colors
-#' @importFrom stats sd
 
 compareCountsModuleServer <- function(id, filteredData){
   shiny::moduleServer(id, function(input, output, session){

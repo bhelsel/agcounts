@@ -4,6 +4,7 @@
 #' @details This function deploys the agcounts Shiny app for data visualization
 #' and exploration. It also provides an opportunity to compare ActiGraph counts
 #' generated from the agcounts package with those from ActiGraph's .agd files.
+#' @param shinyTheme Change the theme of the shiny app using the \code{\link[bslib]{bs_theme}} function, Default: 'spacelab'
 #' @param ... arguments passed to \code{\link[shiny]{shinyApp}}
 #' @seealso
 #'  \code{\link[shiny]{fluidPage}}, \code{\link[shiny]{titlePanel}}, \code{\link[shiny]{reexports}}, \code{\link[shiny]{shinyApp}}
@@ -13,10 +14,16 @@
 #' @import shiny
 #' @import ggplot2
 #' @importFrom bslib bs_theme
+#' @importFrom reactable reactableTheme reactableOutput renderReactable reactable colDef colGroup
+#' @importFrom read.gt3x read.gt3x
+#' @importFrom stringr regex
+#' @importFrom grDevices colors
+#' @importFrom dplyr mutate group_by summarise select mutate_at
+#' @importFrom stats sd
 
-agShinyDeployApp <-function(...){
+agShinyDeployApp <-function(shinyTheme = "spacelab", ...){
   ui <- shiny::fluidPage(
-    theme = bslib::bs_theme(bootswatch = "spacelab"),
+    theme = bslib::bs_theme(bootswatch = shinyTheme),
     shiny::titlePanel("agcounts: An R Package to Calculate ActiGraph Counts"),
     shiny::h3("Import and Visualize Raw Acceleration Data"),
     rawDataModuleUI("rawDataModule"),
@@ -52,7 +59,6 @@ agShinyDeployApp <-function(...){
 #' @description Add a reactable theme to the tables in agShiny
 #' @noRd
 #' @keywords internal
-#' @importFrom reactable reactableTheme
 .agReactableTheme <- function(){
   theme = reactable::reactableTheme(
     color = "#000000",
