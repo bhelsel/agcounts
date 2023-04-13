@@ -3,6 +3,7 @@
 * Added `start_time` and `stop_time` attributes to data read by the `pygt3x` calibrated reader.
 * Added `lubridate::floor_date` to round data_start in case data doesn't start on the specified epoch.
 * Updated Shiny app documentation by moving all `importFrom` documentation to the `agShinyDeployApp` function.
+* Deployed the Shiny app to shinyapps.io and contained it in the inst/agcounts folder.
 
 # agcounts 0.6.0
 
