@@ -56,6 +56,9 @@ agread <- function(path, parser = c("pygt3x", "ggir", "uncalibrated"), tz = "UTC
   # Return Data
   colnames(raw) <- c("time", "X", "Y", "Z")
   raw$time <- as.POSIXct(raw$time, origin = "1970-01-01 00:00:00", tz=tz)
+  meta <- read.gt3x::parse_gt3x_info(path)
+  attr(raw, "start_time") <- meta$`Start Date` %>% lubridate::force_tz(tz)
+  attr(raw, "stop_time") <- meta$`Stop Date` %>% lubridate::force_tz(tz)
   raw
 }
 

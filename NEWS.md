@@ -1,3 +1,8 @@
+# agcounts 0.6.1
+
+* Added `start_time` and `stop_time` attributes to data read by the `pygt3x` calibrated reader.
+* Added `lubridate::floor_date` to round data_start in case data doesn't start on the specified epoch.
+
 # agcounts 0.6.0
 
 * Developed a Shiny app to allow users to visualize, explore, and compare activity counts.

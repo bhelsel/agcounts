@@ -1,6 +1,6 @@
 .get_timestamps <- function(raw, epoch, frequency, tz) {
 
-  if("activity_df" %in% class(raw)){
+  if("start_time" %in% names(attributes(raw))){
     start <-
       attr(raw, "start_time") %>%
       lubridate::force_tz(tz)
