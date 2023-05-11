@@ -10,6 +10,7 @@ rawDataModuleUI <- function(id) {
       shiny::fileInput(ns("gt3xFile"), "Choose GT3X File", multiple = FALSE, accept = c(".gt3x")),
       shiny::radioButtons(ns("parser"), "Select your parser", choices = c("pygt3x", "ggir", "uncalibrated", "agcalibrate"), inline = TRUE, selected = 0),
       shiny::uiOutput(ns("dateAccessed")),
+      shiny::uiOutput(ns("timeSlot")),
       shiny::selectInput(ns("axisRaw"), "Raw Axis", choices = c("X", "Y", "Z", "Vector.Magnitude"), selected = "Vector.Magnitude"),
       shiny::uiOutput(ns("applyRaw")),
       shiny::uiOutput(ns("applyEpoch")),
@@ -56,6 +57,11 @@ rawDataModuleServer <- function(id) {
       shiny::req(input$gt3xFile, input$parser)
       dates <- format(seq(minDate(), maxDate(), "day"), "%B %d, %Y")
       shiny::selectInput(session$ns("dateAccessed"), "Choose a date", choices = dates, selected = dates[1])
+    })
+
+    output$timeSlot <- shiny::renderUI({
+      shiny::req(input$gt3xFile, input$parser)
+      shiny::radioButtons(session$ns("timeSlot"), "Choose AM or PM", choices = c("AM", "PM"), selected = "AM")
     })
 
     output$applyRaw <- shiny::renderUI({
@@ -129,9 +135,14 @@ rawDataModuleServer <- function(id) {
 
     # Filter data by dateAccessed to make processing faster
     filteredData <- shiny::reactive({
-      shiny::req(calibratedData(), input$dateAccessed)
+      shiny::req(calibratedData(), input$dateAccessed, input$timeSlot)
       date2filter <- as.Date(input$dateAccessed, "%B %d, %Y")
-      data <- calibratedData()[as.Date(calibratedData()$time) == date2filter, ]
+
+      if(input$timeSlot == "AM"){
+        data <- calibratedData()[as.Date(calibratedData()$time) == date2filter & as.numeric(format(calibratedData()$time, "%H") < 12), ]
+      } else{
+        data <- calibratedData()[as.Date(calibratedData()$time) == date2filter & as.numeric(format(calibratedData()$time, "%H") >= 12), ]
+      }
     })
 
     processedData <- shiny::reactive({
