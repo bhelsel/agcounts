@@ -1,3 +1,8 @@
+# agcounts 0.6.2
+* Update the Shiny rawDataModule UI and Server to filter by AM or PM to make plotting faster
+* Improved test coverage from 19 to 56% by adding tests for the Shiny UI, `gcalibrateC`, `get_counts`, `agread`.
+* Updated the test_actilife_counts.R file using a new data set that was uploaded for `gcalibrateC` testing.
+
 # agcounts 0.6.1
 
 * Added `start_time` and `stop_time` attributes to data read by the `pygt3x` calibrated reader.
