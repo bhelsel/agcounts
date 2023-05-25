@@ -48,9 +48,9 @@
               <label class="control-label" id="rawDataModule-axisRaw-label" for="rawDataModule-axisRaw">Raw Axis</label>
               <div>
                 <select id="rawDataModule-axisRaw"><option value="X">X</option>
-      <option value="Y">Y</option>
+      <option value="Y" selected>Y</option>
       <option value="Z">Z</option>
-      <option value="Vector.Magnitude" selected>Vector.Magnitude</option></select>
+      <option value="Vector.Magnitude">Vector.Magnitude</option></select>
                 <script type="application/json" data-for="rawDataModule-axisRaw" data-nonempty="">{"plugins":["selectize-plugin-a11y"]}</script>
               </div>
             </div>

@@ -11,7 +11,7 @@ rawDataModuleUI <- function(id) {
       shiny::radioButtons(ns("parser"), "Select your parser", choices = c("pygt3x", "ggir", "uncalibrated", "agcalibrate"), inline = TRUE, selected = 0),
       shiny::uiOutput(ns("dateAccessed")),
       shiny::uiOutput(ns("timeSlot")),
-      shiny::selectInput(ns("axisRaw"), "Raw Axis", choices = c("X", "Y", "Z", "Vector.Magnitude"), selected = "Vector.Magnitude"),
+      shiny::selectInput(ns("axisRaw"), "Raw Axis", choices = c("X", "Y", "Z", "Vector.Magnitude"), selected = "Y"),
       shiny::uiOutput(ns("applyRaw")),
       shiny::uiOutput(ns("applyEpoch")),
       shiny::HTML("<h5><b>Plot Settings for Raw Data</b></h5>"),
@@ -43,7 +43,7 @@ rawDataModuleUI <- function(id) {
 rawDataModuleServer <- function(id) {
   shiny::moduleServer(id, function(input, output, session) {
 
-
+    ns <- shiny::NS(id)
 
     # Increase file size capacity to handle GT3X files
     options(shiny.maxRequestSize=2000*1024^2)
@@ -52,11 +52,12 @@ rawDataModuleServer <- function(id) {
     # Dynamic UI components generated from the server
     minDate <- shiny::reactive({ shiny::req(calibratedData()); as.Date(calibratedData()[1, "time"]) })
     maxDate <- shiny::reactive({ shiny::req(calibratedData()); as.Date(calibratedData()[nrow(calibratedData()), "time"]) })
+    dates <- shiny::reactive({ shiny::req(minDate(), maxDate()); dates <- format(seq(minDate(), maxDate(), "day"), "%B %d, %Y")})
+
 
     output$dateAccessed <- shiny::renderUI({
-      shiny::req(input$gt3xFile, input$parser)
-      dates <- format(seq(minDate(), maxDate(), "day"), "%B %d, %Y")
-      shiny::selectInput(session$ns("dateAccessed"), "Choose a date", choices = dates, selected = dates[1])
+      shiny::req(dates())
+      shiny::selectInput(session$ns("dateAccessed"), "Choose a date", choices = dates(), selected = dates()[1])
     })
 
     output$timeSlot <- shiny::renderUI({
@@ -65,7 +66,7 @@ rawDataModuleServer <- function(id) {
     })
 
     output$applyRaw <- shiny::renderUI({
-      shiny::req(input$axisRaw == "Vector.Magnitude")
+      shiny::req(input$gt3xFile, input$parser, input$axisRaw == "Vector.Magnitude")
       shiny::radioButtons(session$ns("applyRaw"),
                           "Apply Vector Magnitude Processing",
                           choices = c("Raw", "ENMO", "MAD"),

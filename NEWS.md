@@ -1,3 +1,8 @@
+# agcounts 0.6.3
+* Improved test coverage including tests for the Shiny Server
+* Removed the Shiny App from the inst folder to only make it a callable app using `agShinyDeployApp`
+
+
 # agcounts 0.6.2
 * Update the Shiny rawDataModule UI and Server to filter by AM or PM to make plotting faster
 * Improved test coverage from 19 to 56% by adding tests for the Shiny UI, `gcalibrateC`, `get_counts`, `agread`.

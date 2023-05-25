@@ -1,0 +1,171 @@
+{
+  "output": {
+    "countsModule-countsReactableTable": {
+      "x": {
+        "tag": {
+          "name": "Reactable",
+          "attribs": {
+            "data": {
+              "Date": [
+                "2019-02-14"
+              ],
+              "sAxis1": [
+                10821
+              ],
+              "mAxis1": [
+                1804
+              ],
+              "sAxis2": [
+                8139
+              ],
+              "mAxis2": [
+                1356
+              ],
+              "sAxis3": [
+                12179
+              ],
+              "mAxis3": [
+                2030
+              ],
+              "sVM": [
+                18525
+              ],
+              "mVM": [
+                3088
+              ]
+            },
+            "columns": [
+              {
+                "id": "Date",
+                "name": "Date",
+                "type": "Date",
+                "minWidth": 125,
+                "align": "center"
+              },
+              {
+                "id": "sAxis1",
+                "name": "Sum",
+                "type": "numeric",
+                "align": "center"
+              },
+              {
+                "id": "mAxis1",
+                "name": "Mean",
+                "type": "numeric",
+                "align": "center"
+              },
+              {
+                "id": "sAxis2",
+                "name": "Sum",
+                "type": "numeric",
+                "align": "center"
+              },
+              {
+                "id": "mAxis2",
+                "name": "Mean",
+                "type": "numeric",
+                "align": "center"
+              },
+              {
+                "id": "sAxis3",
+                "name": "Sum",
+                "type": "numeric",
+                "align": "center"
+              },
+              {
+                "id": "mAxis3",
+                "name": "Mean",
+                "type": "numeric",
+                "align": "center"
+              },
+              {
+                "id": "sVM",
+                "name": "Sum",
+                "type": "numeric",
+                "align": "center"
+              },
+              {
+                "id": "mVM",
+                "name": "Mean",
+                "type": "numeric",
+                "align": "center"
+              }
+            ],
+            "columnGroups": [
+              {
+                "name": "Axis 1",
+                "columns": [
+                  "sAxis1",
+                  "mAxis1"
+                ]
+              },
+              {
+                "name": "Axis 2",
+                "columns": [
+                  "sAxis2",
+                  "mAxis2"
+                ]
+              },
+              {
+                "name": "Axis 3",
+                "columns": [
+                  "sAxis3",
+                  "mAxis3"
+                ]
+              },
+              {
+                "name": "Vector Magnitude",
+                "columns": [
+                  "sVM",
+                  "mVM"
+                ]
+              }
+            ],
+            "searchable": true,
+            "defaultPageSize": 5,
+            "showPageSizeOptions": true,
+            "pageSizeOptions": [
+              5,
+              10,
+              15,
+              20,
+              25
+            ],
+            "highlight": true,
+            "bordered": true,
+            "striped": true,
+            "theme": {
+              "color": "#000000",
+              "borderColor": "#133e7e",
+              "borderWidth": 2,
+              "stripedColor": "#bad6f9",
+              "highlightColor": "#7db0ea",
+              "cellPadding": "8px 12px",
+              "style": {
+                "fontFamily": "-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif"
+              },
+              "searchInputStyle": {
+                "width": "100%"
+              }
+            },
+            "dataKey": "7ee7a0067639b48e4d3921f86739b6f7",
+            "static": false
+          },
+          "children": [
+
+          ]
+        },
+        "class": "reactR_markup"
+      },
+      "evals": [
+
+      ],
+      "jsHooks": [
+
+      ],
+      "deps": [
+
+      ]
+    }
+  }
+}
