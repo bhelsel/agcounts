@@ -1,0 +1,103 @@
+{
+  "output": {
+    "rawDataModule-rawReactableTable": {
+      "x": {
+        "tag": {
+          "name": "Reactable",
+          "attribs": {
+            "data": {
+              "Hour": [
+                "17"
+              ],
+              "X": [
+                0.96999999999999997
+              ],
+              "Y": [
+                0.59999999999999998
+              ],
+              "Z": [
+                0.14999999999999999
+              ],
+              "Vector.Magnitude": [
+                1.3500000000000001
+              ]
+            },
+            "columns": [
+              {
+                "id": "Hour",
+                "name": "Hour",
+                "type": "character",
+                "align": "center"
+              },
+              {
+                "id": "X",
+                "name": "X-Axis",
+                "type": "numeric",
+                "align": "center"
+              },
+              {
+                "id": "Y",
+                "name": "Y-Axis",
+                "type": "numeric",
+                "align": "center"
+              },
+              {
+                "id": "Z",
+                "name": "Z-Axis",
+                "type": "numeric",
+                "align": "center"
+              },
+              {
+                "id": "Vector.Magnitude",
+                "name": "Vector Magnitude",
+                "type": "numeric",
+                "align": "center"
+              }
+            ],
+            "defaultPageSize": 5,
+            "showPageSizeOptions": true,
+            "pageSizeOptions": [
+              5,
+              10,
+              15,
+              20,
+              25
+            ],
+            "highlight": true,
+            "bordered": true,
+            "striped": true,
+            "theme": {
+              "color": "#000000",
+              "borderColor": "#133e7e",
+              "borderWidth": 2,
+              "stripedColor": "#bad6f9",
+              "highlightColor": "#7db0ea",
+              "cellPadding": "8px 12px",
+              "style": {
+                "fontFamily": "-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif"
+              },
+              "searchInputStyle": {
+                "width": "100%"
+              }
+            },
+            "dataKey": "8e183da5bc9b40c2b0d4aea7cc72abcb",
+            "static": false
+          },
+          "children": [
+
+          ]
+        },
+        "class": "reactR_markup"
+      },
+      "evals": [
+
+      ],
+      "jsHooks": [
+
+      ],
+      "deps": [
+
+      ]
+    }
+  }
+}

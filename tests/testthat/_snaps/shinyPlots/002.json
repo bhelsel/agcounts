@@ -1,0 +1,46 @@
+{
+  "output": {
+    "compareCountsModule-comparisonPlot": {
+      "src": "[image data hash: c7f7e417420929ebd5504184197ed2b4]",
+      "width": 627.328125,
+      "height": 400,
+      "alt": "Plot object",
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": 9.049999999999983,
+              "right": 2845.95,
+              "bottom": -0.05,
+              "top": 0.05
+            },
+            "mapping": {
+              "x": "Average",
+              "y": "Difference"
+            },
+            "range": {
+              "left": 246.0551577418016,
+              "right": 1239.388127853881,
+              "bottom": 624.8149587644074,
+              "top": 154.3129929431299
+            }
+          }
+        ],
+        "dims": {
+          "width": 1254.65625,
+          "height": 800
+        }
+      }
+    }
+  }
+}
