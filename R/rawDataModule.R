@@ -62,7 +62,7 @@ rawDataModuleServer <- function(id) {
 
     output$timeSlot <- shiny::renderUI({
       shiny::req(input$gt3xFile, input$parser)
-      shiny::radioButtons(session$ns("timeSlot"), "Choose AM or PM", choices = c("AM", "PM"), selected = "AM")
+      shiny::radioButtons(session$ns("timeSlot"), "Choose AM or PM", choices = c("All Day", "AM", "PM"), selected = "All Day")
     })
 
     output$applyRaw <- shiny::renderUI({
@@ -138,12 +138,29 @@ rawDataModuleServer <- function(id) {
     filteredData <- shiny::reactive({
       shiny::req(calibratedData(), input$dateAccessed, input$timeSlot)
       date2filter <- as.Date(input$dateAccessed, "%B %d, %Y")
+      data <- calibratedData()[as.Date(calibratedData()$time) == date2filter, ]
 
-      if(input$timeSlot == "AM"){
-        data <- calibratedData()[as.Date(calibratedData()$time) == date2filter & as.numeric(format(calibratedData()$time, "%H") < 12), ]
-      } else{
-        data <- calibratedData()[as.Date(calibratedData()$time) == date2filter & as.numeric(format(calibratedData()$time, "%H") >= 12), ]
+      valid_am <- any(unique(as.numeric(format(data$time, "%H"))) < 12)
+      valid_pm <- any(unique(as.numeric(format(data$time, "%H"))) >= 12)
+
+      if(input$timeSlot == "AM" & valid_am){
+        time_slot <- "AM"
+      } else if(input$timeSlot == "PM" & valid_pm){
+        time_slot <- "PM"
+      } else {
+        time_slot <- "All Day"
       }
+
+      data <-
+        switch(
+          time_slot,
+          "All Day" = data,
+          "AM" = data[as.numeric(format(data$time, "%H")) < 12, ],
+          "PM" = data[as.numeric(format(data$time, "%H")) >= 12, ]
+        )
+
+      return(data)
+
     })
 
     processedData <- shiny::reactive({
@@ -157,7 +174,7 @@ rawDataModuleServer <- function(id) {
 
     # Calibrated Data Plot
     output$gt3xPlot <- shiny::renderPlot({
-      shiny::req(input$gt3xFile, input$parser)
+      shiny::req(input$gt3xFile, input$parser, filteredData())
       .data <- NULL
       hexFormat <- stringr::regex("^#([A-Fa-f0-9]{6})$")
       gt3xColor <- ifelse(input$gt3xPlotColor %in% grDevices::colors() | grepl(hexFormat, input$gt3xPlotColor), input$gt3xPlotColor, "#000000")
