@@ -1,9 +1,7 @@
 
 testthat::test_that("Check to see if gcalibrateC is getting the same result as GGIR g.calibrate", {
 
-  # Skip on linux and solaris operating systems since it seems that decimal
-  # values are either rounded or stored differently on these opearting systems.
-  skip_on_os(os = c("linux", "solaris"))
+  # skip_on_os(os = c("linux", "solaris"))
 
   # Load Data
   load(system.file("extdata/calibrationXaxis.RData", package = "agcounts"))
