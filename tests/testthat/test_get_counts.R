@@ -20,10 +20,10 @@ testthat::test_that("Check that get_counts is working as expected", {
   # Tests
   expect_equal(nrow(data), nrow(raw) / (sf * 5))
   expect_equal(ncol(data), 5)
-  expect_equal(sum(data$Axis1), 46258)
-  expect_equal(sum(data$Axis2), 47643)
-  expect_equal(sum(data$Axis3), 21966)
-  expect_equal(sum(data$Vector.Magnitude), 72981)
+  expect_equal(sum(data$Axis1), 6516)
+  expect_equal(sum(data$Axis2), 10422)
+  expect_equal(sum(data$Axis3), 9028)
+  expect_equal(sum(data$Vector.Magnitude), 15790)
 
   file.copy(from = file, to = tempdir())
 
@@ -63,9 +63,9 @@ testthat::test_that("Check that get_counts is working as expected", {
 
   file.remove(file.path(tempdir(), "example.gt3x"))
 
-  expect_equal(data$Axis1, c(4647, 8435, 13062, 13621, 6493))
-  expect_equal(data$Axis2, c(4970, 9394, 12511, 10425, 10343))
-  expect_equal(data$Axis3, c(4322, 6597, 4072, 5656, 1319))
-  expect_equal(data$Vector.Magnitude, c(8061, 14245, 18540, 18061, 12283))
+  expect_equal(data$Axis1, c(2606, 1738, 2172))
+  expect_equal(data$Axis2, c(3116, 3943, 3363))
+  expect_equal(data$Axis3, c(3542, 2840, 2646))
+  expect_equal(data$Vector.Magnitude, c(5389, 5161, 4799))
 
 })

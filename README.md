@@ -4,7 +4,6 @@
 [![CRAN status](https://www.r-pkg.org/badges/version/agcounts)](https://CRAN.R-project.org/package=agcounts)
 [![R-CMD-check](https://github.com/bhelsel/agcounts/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/bhelsel/agcounts/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/bhelsel/agcounts/branch/master/graph/badge.svg)](https://app.codecov.io/gh/bhelsel/agcounts?branch=master)
-[![Travis build status](https://travis-ci.com/bhelsel/agcounts.svg?branch=master)](https://travis-ci.com/bhelsel/agcounts)
 <!-- badges: end -->
 
 This R Package reads the X, Y, and Z axes in a GT3X accelerometer file and converts it to Actigraphy counts. This work was inspired by Neishabouri et al. who released a preprint of "Quantification of Acceleration as Activity Counts in ActiGraph Wearables" on February 24, 2022. Here are the links to the <a href = https://www.researchsquare.com/article/rs-1370418/v1>article</a> and <a href = https://github.com/actigraph/agcounts>Python implementation</a> of this code on GitHub.

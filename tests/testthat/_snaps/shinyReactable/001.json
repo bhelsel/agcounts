@@ -7,19 +7,19 @@
           "attribs": {
             "data": {
               "Hour": [
-                "17"
+
               ],
               "X": [
-                0.96999999999999997
+
               ],
               "Y": [
-                0.59999999999999998
+
               ],
               "Z": [
-                0.14999999999999999
+
               ],
               "Vector.Magnitude": [
-                1.3500000000000001
+
               ]
             },
             "columns": [
@@ -80,7 +80,7 @@
                 "width": "100%"
               }
             },
-            "dataKey": "8e183da5bc9b40c2b0d4aea7cc72abcb",
+            "dataKey": "b11df07a48a54acd9a171dc2b4d0a694",
             "static": false
           },
           "children": [
