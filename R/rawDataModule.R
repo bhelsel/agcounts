@@ -11,7 +11,7 @@ rawDataModuleUI <- function(id) {
       shiny::radioButtons(ns("parser"), "Select your parser", choices = c("pygt3x", "ggir", "uncalibrated", "agcalibrate"), inline = TRUE, selected = 0),
       shiny::uiOutput(ns("dateAccessed")),
       shiny::uiOutput(ns("timeSlot")),
-      shiny::selectInput(ns("axisRaw"), "Raw Axis", choices = c("X", "Y", "Z", "Vector.Magnitude"), selected = "Vector.Magnitude"),
+      shiny::selectInput(ns("axisRaw"), "Raw Axis", choices = c("X", "Y", "Z", "Vector.Magnitude"), selected = "Y"),
       shiny::uiOutput(ns("applyRaw")),
       shiny::uiOutput(ns("applyEpoch")),
       shiny::HTML("<h5><b>Plot Settings for Raw Data</b></h5>"),
@@ -43,7 +43,7 @@ rawDataModuleUI <- function(id) {
 rawDataModuleServer <- function(id) {
   shiny::moduleServer(id, function(input, output, session) {
 
-
+    ns <- shiny::NS(id)
 
     # Increase file size capacity to handle GT3X files
     options(shiny.maxRequestSize=2000*1024^2)
@@ -52,20 +52,21 @@ rawDataModuleServer <- function(id) {
     # Dynamic UI components generated from the server
     minDate <- shiny::reactive({ shiny::req(calibratedData()); as.Date(calibratedData()[1, "time"]) })
     maxDate <- shiny::reactive({ shiny::req(calibratedData()); as.Date(calibratedData()[nrow(calibratedData()), "time"]) })
+    dates <- shiny::reactive({ shiny::req(minDate(), maxDate()); dates <- format(seq(minDate(), maxDate(), "day"), "%B %d, %Y")})
+
 
     output$dateAccessed <- shiny::renderUI({
-      shiny::req(input$gt3xFile, input$parser)
-      dates <- format(seq(minDate(), maxDate(), "day"), "%B %d, %Y")
-      shiny::selectInput(session$ns("dateAccessed"), "Choose a date", choices = dates, selected = dates[1])
+      shiny::req(dates())
+      shiny::selectInput(session$ns("dateAccessed"), "Choose a date", choices = dates(), selected = dates()[1])
     })
 
     output$timeSlot <- shiny::renderUI({
-      shiny::req(input$gt3xFile, input$parser)
-      shiny::radioButtons(session$ns("timeSlot"), "Choose AM or PM", choices = c("AM", "PM"), selected = "AM")
+      shiny::req(calibratedData())
+      shiny::radioButtons(session$ns("timeSlot"), "Choose AM or PM", choices = c("All Day", "AM", "PM"), selected = "All Day")
     })
 
     output$applyRaw <- shiny::renderUI({
-      shiny::req(input$axisRaw == "Vector.Magnitude")
+      shiny::req(calibratedData(), input$axisRaw == "Vector.Magnitude")
       shiny::radioButtons(session$ns("applyRaw"),
                           "Apply Vector Magnitude Processing",
                           choices = c("Raw", "ENMO", "MAD"),
@@ -74,7 +75,7 @@ rawDataModuleServer <- function(id) {
     })
 
     output$applyEpoch <- shiny::renderUI({
-      shiny::req(input$gt3xFile, input$parser, input$applyRaw %in% c("ENMO", "MAD"))
+      shiny::req(calibratedData(), input$applyRaw %in% c("ENMO", "MAD"))
       shiny::sliderInput(session$ns("applyEpoch"),
                          "What epoch level?",
                          min = 1, max = 10, value = 5, step = 1,
@@ -137,12 +138,29 @@ rawDataModuleServer <- function(id) {
     filteredData <- shiny::reactive({
       shiny::req(calibratedData(), input$dateAccessed, input$timeSlot)
       date2filter <- as.Date(input$dateAccessed, "%B %d, %Y")
+      data <- calibratedData()[as.Date(calibratedData()$time) == date2filter, ]
 
-      if(input$timeSlot == "AM"){
-        data <- calibratedData()[as.Date(calibratedData()$time) == date2filter & as.numeric(format(calibratedData()$time, "%H") < 12), ]
-      } else{
-        data <- calibratedData()[as.Date(calibratedData()$time) == date2filter & as.numeric(format(calibratedData()$time, "%H") >= 12), ]
+      valid_am <- any(unique(as.numeric(format(data$time, "%H"))) < 12)
+      valid_pm <- any(unique(as.numeric(format(data$time, "%H"))) >= 12)
+
+      if(input$timeSlot == "AM" & valid_am){
+        time_slot <- "AM"
+      } else if(input$timeSlot == "PM" & valid_pm){
+        time_slot <- "PM"
+      } else {
+        time_slot <- "All Day"
       }
+
+      data <-
+        switch(
+          time_slot,
+          "All Day" = data,
+          "AM" = data[as.numeric(format(data$time, "%H")) < 12, ],
+          "PM" = data[as.numeric(format(data$time, "%H")) >= 12, ]
+        )
+
+      return(data)
+
     })
 
     processedData <- shiny::reactive({
@@ -156,7 +174,7 @@ rawDataModuleServer <- function(id) {
 
     # Calibrated Data Plot
     output$gt3xPlot <- shiny::renderPlot({
-      shiny::req(input$gt3xFile, input$parser)
+      shiny::req(input$gt3xFile, input$parser, filteredData())
       .data <- NULL
       hexFormat <- stringr::regex("^#([A-Fa-f0-9]{6})$")
       gt3xColor <- ifelse(input$gt3xPlotColor %in% grDevices::colors() | grepl(hexFormat, input$gt3xPlotColor), input$gt3xPlotColor, "#000000")

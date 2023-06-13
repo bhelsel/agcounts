@@ -1,0 +1,139 @@
+{
+  "output": {
+    "compareCountsModule-comparisonReactableTable": {
+      "x": {
+        "tag": {
+          "name": "Reactable",
+          "attribs": {
+            "data": {
+              "time": [
+                "2023-06-13T08:34:40Z",
+                "2023-06-13T08:35:20Z",
+                "2023-06-13T08:35:45Z",
+                "2023-06-13T08:36:15Z",
+                "2023-06-13T08:36:20Z",
+                "2023-06-13T08:36:30Z",
+                "2023-06-13T08:36:35Z",
+                "2023-06-13T08:36:45Z"
+              ],
+              "agcounts": [
+                335,
+                328,
+                405,
+                419,
+                363,
+                359,
+                377,
+                413
+              ],
+              "agd": [
+                333,
+                327,
+                404,
+                417,
+                361,
+                358,
+                378,
+                412
+              ],
+              "Difference": [
+                2,
+                1,
+                1,
+                2,
+                2,
+                1,
+                -1,
+                1
+              ],
+              "Average": [
+                334,
+                327.5,
+                404.5,
+                418,
+                362,
+                358.5,
+                377.5,
+                412.5
+              ]
+            },
+            "columns": [
+              {
+                "id": "time",
+                "name": "time",
+                "type": "Date",
+                "minWidth": 125
+              },
+              {
+                "id": "agcounts",
+                "name": "agcounts",
+                "type": "numeric",
+                "filterable": true
+              },
+              {
+                "id": "agd",
+                "name": "agd",
+                "type": "numeric",
+                "filterable": true
+              },
+              {
+                "id": "Difference",
+                "name": "Difference",
+                "type": "numeric",
+                "filterable": true
+              },
+              {
+                "id": "Average",
+                "name": "Average",
+                "type": "numeric",
+                "filterable": true
+              }
+            ],
+            "searchable": true,
+            "defaultPageSize": 5,
+            "showPageSizeOptions": true,
+            "pageSizeOptions": [
+              5,
+              10,
+              15,
+              20,
+              25
+            ],
+            "highlight": true,
+            "bordered": true,
+            "striped": true,
+            "theme": {
+              "color": "#000000",
+              "borderColor": "#133e7e",
+              "borderWidth": 2,
+              "stripedColor": "#bad6f9",
+              "highlightColor": "#7db0ea",
+              "cellPadding": "8px 12px",
+              "style": {
+                "fontFamily": "-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif"
+              },
+              "searchInputStyle": {
+                "width": "100%"
+              }
+            },
+            "dataKey": "67fc23a9e827c32a5fcc634333aa1a2f",
+            "static": false
+          },
+          "children": [
+
+          ]
+        },
+        "class": "reactR_markup"
+      },
+      "evals": [
+
+      ],
+      "jsHooks": [
+
+      ],
+      "deps": [
+
+      ]
+    }
+  }
+}
