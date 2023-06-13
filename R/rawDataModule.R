@@ -61,12 +61,12 @@ rawDataModuleServer <- function(id) {
     })
 
     output$timeSlot <- shiny::renderUI({
-      shiny::req(input$gt3xFile, input$parser)
+      shiny::req(calibratedData())
       shiny::radioButtons(session$ns("timeSlot"), "Choose AM or PM", choices = c("All Day", "AM", "PM"), selected = "All Day")
     })
 
     output$applyRaw <- shiny::renderUI({
-      shiny::req(input$gt3xFile, input$parser, input$axisRaw == "Vector.Magnitude")
+      shiny::req(calibratedData(), input$axisRaw == "Vector.Magnitude")
       shiny::radioButtons(session$ns("applyRaw"),
                           "Apply Vector Magnitude Processing",
                           choices = c("Raw", "ENMO", "MAD"),
@@ -75,7 +75,7 @@ rawDataModuleServer <- function(id) {
     })
 
     output$applyEpoch <- shiny::renderUI({
-      shiny::req(input$gt3xFile, input$parser, input$applyRaw %in% c("ENMO", "MAD"))
+      shiny::req(calibratedData(), input$applyRaw %in% c("ENMO", "MAD"))
       shiny::sliderInput(session$ns("applyEpoch"),
                          "What epoch level?",
                          min = 1, max = 10, value = 5, step = 1,
