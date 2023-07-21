@@ -1,3 +1,7 @@
+# Copyright © 2022 University of Kansas. All rights reserved.
+#
+# Creative Commons Attribution NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
+
 .get_timestamps <- function(raw, epoch, frequency, tz) {
 
   if("start_time" %in% names(attributes(raw))){
@@ -25,7 +29,7 @@
 
   samples_per_epoch <- frequency * epoch
 
-  utils::tail(raw$time, samples_per_epoch * 3) %>%
+  utils::tail(raw$time, samples_per_epoch * 10) %>%
   lubridate::floor_date(paste(epoch, "sec")) %>%
   as.character(.) %>%
   rle(.) %>%
