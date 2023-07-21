@@ -1,11 +1,14 @@
+# Copyright © 2022 University of Kansas. All rights reserved.
+#
+# Creative Commons Attribution NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
+
 #' @title agShinyDeployApp
 #' @description This function deploys the agcounts Shiny app.
 #' @return No data or values are returned.
 #' @details This function deploys the agcounts Shiny app for data visualization
 #' and exploration. It also provides an opportunity to compare ActiGraph counts
 #' generated from the agcounts package with those from ActiGraph's .agd files.
-#' @param shinyTheme Change the theme of the shiny app using the \code{\link[bslib]{bs_theme}} function, Default: 'spacelab'
-#' @param ... arguments passed to \code{\link[shiny]{shinyApp}}
+#' @param ... arguments passed to \code{\link[bslib]{bs_theme}}
 #' @seealso
 #'  \code{\link[shiny]{fluidPage}}, \code{\link[shiny]{titlePanel}}, \code{\link[shiny]{reexports}}, \code{\link[shiny]{shinyApp}}
 #'  \code{\link[bslib]{bs_theme}}
@@ -21,9 +24,9 @@
 #' @importFrom dplyr mutate group_by summarise select mutate_at
 #' @importFrom stats sd
 
-agShinyDeployApp <-function(shinyTheme = "spacelab", ...){
+agShinyDeployApp <-function(...){
   ui <- shiny::fluidPage(
-    theme = bslib::bs_theme(bootswatch = shinyTheme),
+    theme = bslib::bs_theme(...),
     shiny::titlePanel("agcounts: An R Package to Calculate ActiGraph Counts"),
     shiny::h3("Import and Visualize Raw Acceleration Data"),
     rawDataModuleUI("rawDataModule"),
@@ -39,7 +42,7 @@ agShinyDeployApp <-function(shinyTheme = "spacelab", ...){
     compareCountsModuleServer("compareCountsModule", filteredData)
   }
 
-  shiny::shinyApp(ui, server, ...)
+  shiny::shinyApp(ui, server)
 }
 
 #' @title .agPlotTheme

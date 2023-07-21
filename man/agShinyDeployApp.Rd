@@ -4,12 +4,10 @@
 \alias{agShinyDeployApp}
 \title{agShinyDeployApp}
 \usage{
-agShinyDeployApp(shinyTheme = "spacelab", ...)
+agShinyDeployApp(...)
 }
 \arguments{
-\item{shinyTheme}{Change the theme of the shiny app using the \code{\link[bslib]{bs_theme}} function, Default: 'spacelab'}
-
-\item{...}{arguments passed to \code{\link[shiny]{shinyApp}}}
+\item{...}{arguments passed to \code{\link[bslib]{bs_theme}}}
 }
 \value{
 No data or values are returned.
