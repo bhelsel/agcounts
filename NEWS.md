@@ -1,3 +1,10 @@
+# agcounts 0.6.4
+* Updated the agcounts license with KU Copyright and Creative Commons (CC BY-NC-SA 4.0).
+* Changed the parsers to reflect the Python and R package names.
+* Created more flexibility for adding a Shiny app theme.
+* Extending the `.last_complete_epoch` function after discovering a file that did not find a complete epoch.
+
+
 # agcounts 0.6.3
 * Improved test coverage including tests for the Shiny Server
 * Removed the Shiny App from the inst folder to only make it a callable app using `agShinyDeployApp`
