@@ -1,3 +1,7 @@
+# Copyright © 2022 University of Kansas. All rights reserved.
+#
+# Creative Commons Attribution NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
+
 #' @title .check_idle_sleep
 #' @description Check for missing raw data in the Actigraph file
 #' @param raw A data frame of the raw Actigraph data that will be checked for missing data.

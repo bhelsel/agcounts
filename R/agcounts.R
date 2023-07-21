@@ -1,3 +1,7 @@
+# Copyright © 2022 University of Kansas. All rights reserved.
+#
+# Creative Commons Attribution NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
+
 #' @title agcounts: R Package for Extracting Actigraphy Counts from Accelerometer Data.
 #'
 #' @description This R Package reads the X, Y, and Z axes in a GT3X accelerometer file
