@@ -29,12 +29,12 @@
                   <span>pygt3x</span>
                 </label>
                 <label class="radio-inline">
-                  <input type="radio" name="rawDataModule-parser" value="ggir"/>
-                  <span>ggir</span>
+                  <input type="radio" name="rawDataModule-parser" value="GGIR"/>
+                  <span>GGIR</span>
                 </label>
                 <label class="radio-inline">
-                  <input type="radio" name="rawDataModule-parser" value="uncalibrated"/>
-                  <span>uncalibrated</span>
+                  <input type="radio" name="rawDataModule-parser" value="read.gt3x"/>
+                  <span>read.gt3x</span>
                 </label>
                 <label class="radio-inline">
                   <input type="radio" name="rawDataModule-parser" value="agcalibrate"/>

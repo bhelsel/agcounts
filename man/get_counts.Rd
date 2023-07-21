@@ -12,7 +12,7 @@ get_counts(
   return.data = TRUE,
   verbose = FALSE,
   tz = "UTC",
-  parser = c("pygt3x", "ggir", "uncalibrated"),
+  parser = c("pygt3x", "GGIR", "read.gt3x"),
   ...
 )
 }
@@ -31,7 +31,7 @@ get_counts(
 
 \item{tz}{the desired timezone, Default: \code{UTC}}
 
-\item{parser}{The parser to use when reading in the data. Parser values include pygt3x, ggir, and gt3x (uncalibrated reader).}
+\item{parser}{The parser to use when reading in the data. Parser values include pygt3x, GGIR, and read.gt3x options.}
 
 \item{...}{arguments passed to \code{\link[data.table]{fwrite}}}
 }

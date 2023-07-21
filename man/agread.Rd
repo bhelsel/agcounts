@@ -6,7 +6,7 @@
 \usage{
 agread(
   path,
-  parser = c("pygt3x", "ggir", "uncalibrated"),
+  parser = c("pygt3x", "GGIR", "read.gt3x"),
   tz = "UTC",
   verbose = FALSE,
   ...
@@ -15,7 +15,7 @@ agread(
 \arguments{
 \item{path}{Path name to the GT3X file or the dataset with columns time, X, Y, and Z axis}
 
-\item{parser}{The parser to use when reading in the data. Parser values include pygt3x, ggir, and uncalibrated readers}
+\item{parser}{The parser to use when reading in the data. Parser values include pygt3x, GGIR, and read.gt3x options.}
 
 \item{tz}{the desired timezone, Default: \code{UTC}}
 
@@ -24,15 +24,15 @@ agread(
 \item{...}{Additional arguments to pass into the agread function}
 }
 \value{
-Returns the calibrated or uncalibrated raw acceleration data
+Returns the raw acceleration data
 }
 \description{
-This generic function reads in calibrated raw acceleration data
-    from the python module pygt3x or the R GGIR package or uncalibrated data
-    from the read.gt3x package.
+This function reads in raw acceleration data
+    with the pygt3x Python package, the read.gt3x R package with GGIR autocalibration, or the read.gt3x R package.
 }
 \details{
-This function reads in calibrated raw acceleration data from GGIR or pygt3x.
+This function reads in raw acceleration data
+    with the pygt3x Python package, the read.gt3x R package with GGIR autocalibration, or the read.gt3x R package.
 }
 \examples{
 \dontrun{
