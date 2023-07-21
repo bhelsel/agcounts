@@ -1,7 +1,7 @@
 Package: agcounts
 Type: Package
 Title: R Package for Extracting Actigraphy Counts from Accelerometer Data
-Version: 0.6.2
+Version: 0.6.4
 Authors@R: c(
     person(c("Brian", "C."), "Helsel", email = "bhelsel80@gmail.com",
         role = c("aut", "cre")),
@@ -12,7 +12,7 @@ Description: This R Package reads the X, Y, and Z axes in a GT3X accelerometer f
     The link to the article (https://www.researchsquare.com/article/rs-1370418/v1) and Python implementation of this code (https://github.com/actigraph/agcounts).
 Depends:
     R (>= 3.5.0)
-License: MIT + file LICENSE
+License: file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.3

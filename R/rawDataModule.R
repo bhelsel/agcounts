@@ -1,3 +1,7 @@
+# Copyright © 2022 University of Kansas. All rights reserved.
+#
+# Creative Commons Attribution NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
+
 #' @title rawDataModuleUI
 #' @description UI for rawDataModuleUI
 #' @noRd
@@ -8,7 +12,7 @@ rawDataModuleUI <- function(id) {
   shiny::sidebarLayout(
     shiny::sidebarPanel(
       shiny::fileInput(ns("gt3xFile"), "Choose GT3X File", multiple = FALSE, accept = c(".gt3x")),
-      shiny::radioButtons(ns("parser"), "Select your parser", choices = c("pygt3x", "ggir", "uncalibrated", "agcalibrate"), inline = TRUE, selected = 0),
+      shiny::radioButtons(ns("parser"), "Select your parser", choices = c("pygt3x", "GGIR", "read.gt3x", "agcalibrate"), inline = TRUE, selected = 0),
       shiny::uiOutput(ns("dateAccessed")),
       shiny::uiOutput(ns("timeSlot")),
       shiny::selectInput(ns("axisRaw"), "Raw Axis", choices = c("X", "Y", "Z", "Vector.Magnitude"), selected = "Y"),
@@ -119,8 +123,8 @@ rawDataModuleServer <- function(id) {
 
     # Data Processing ----
 
-    # Read in the uncalibrated data with the read.gt3x function
-    uncalibratedData <- shiny::reactive({
+    # Read in the data with the read.gt3x function
+    rawData <- shiny::reactive({
       shiny::req(input$gt3xFile)
       read.gt3x::read.gt3x(input$gt3xFile$datapath, asDataFrame = TRUE)
     })
@@ -128,7 +132,7 @@ rawDataModuleServer <- function(id) {
     # Read in the calibrated data with the read.gt3x function
     calibratedData <- shiny::reactive({
       shiny::req(input$gt3xFile, input$parser)
-      if(input$parser == "agcalibrate") data <- agcalibrate(uncalibratedData())
+      if(input$parser == "agcalibrate") data <- agcalibrate(rawData())
       if(input$parser != "agcalibrate") data <- agread(path = input$gt3xFile$datapath, parser = input$parser)
       data$Vector.Magnitude <- sqrt(data$X^2 + data$Y^2 + data$Z^2)
       return(data)
@@ -232,18 +236,19 @@ rawDataModuleServer <- function(id) {
 
     output$sampleFrequency <- shiny::renderText({
       shiny::req(input$gt3xFile)
-      sf <- .get_frequency(uncalibratedData())
+      sf <- .get_frequency(rawData())
       paste("The sample frequency is", sf, "Hertz.")
     })
+
 
     output$calibrationMethod <- shiny::renderUI({
       shiny::req(input$gt3xFile, input$parser)
       msgParser <-
         switch(input$parser,
                "pygt3x" = paste("<b><br>You chose the", input$parser, "parser.</b>", "<br>Description: Data is calibrated using the ActiGraph's pygt3x python module."),
-               "ggir" = paste("<b><br>You chose the", input$parser, "parser.</b>", "<br>Description: Data is calibrated using the GGIR g.calibrate function."),
-               "uncalibrated" = paste("<b><br>You chose the", input$parser, "parser.</b>", "<br>Description: Data is uncalibrated and read with the R read.gt3x package."),
-               "agcalibrate" = paste("<b><br>You chose the", input$parser, "parser.</b>", "<br>Description: Data is calibrated using a C++ version of the GGIR g.calibrate function."))
+               "GGIR" = paste("<b><br>You chose the", input$parser, "parser.</b>", "<br>Description: Data is read with the read.gt3x R package and calibrated with GGIR autocalibration."),
+               "read.gt3x" = paste("<b><br>You chose the", input$parser, "parser.</b>", "<br>Description: Data is read with the read.gt3x R package."),
+               "agcalibrate" = paste("<b><br>You chose the", input$parser, "parser.</b>", "<br>Description: Data is read with the read.gt3x R package and calibrated using a C++ version of the GGIR autocalibration."))
       shiny::HTML(msgParser)
     })
 

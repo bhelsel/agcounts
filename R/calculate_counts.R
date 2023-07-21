@@ -1,3 +1,7 @@
+# Copyright © 2022 University of Kansas. All rights reserved.
+#
+# Creative Commons Attribution NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
+
 #' @title calculate_counts
 #' @description Calculate ActiGraph activity counts from raw acceleration data
 #'     by passing in a data frame with a time stamp, X, Y, and Z axis. This function

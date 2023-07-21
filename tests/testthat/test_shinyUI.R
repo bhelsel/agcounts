@@ -1,12 +1,16 @@
+# Copyright © 2022 University of Kansas. All rights reserved.
+#
+# Creative Commons Attribution NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
+
 .testHTML_rawDataModuleUI <- function(...) {
   shiny:::withPrivateSeed(set.seed(100))
   rawDataModuleUI(...)
 }
 
 testthat::test_that("shiny rawDataModuleUI creates expected HTML", {
-  
+
   expect_snapshot(.testHTML_rawDataModuleUI("rawDataModule"))
-  
+
 })
 
 .testHTML_countsModuleUI <- function(...) {
@@ -15,9 +19,9 @@ testthat::test_that("shiny rawDataModuleUI creates expected HTML", {
 }
 
 testthat::test_that("shiny countsModuleUI creates expected HTML", {
-  
+
   expect_snapshot(.testHTML_countsModuleUI("countsModule"))
-  
+
 })
 
 
@@ -27,7 +31,7 @@ testthat::test_that("shiny countsModuleUI creates expected HTML", {
 }
 
 testthat::test_that("shiny compareCountsModuleUI creates expected HTML", {
-  
+
   expect_snapshot(.testHTML_compareCountsModuleUI("compareCountsModule"))
-  
+
 })

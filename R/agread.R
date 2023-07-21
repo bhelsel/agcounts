@@ -1,14 +1,18 @@
+# Copyright © 2022 University of Kansas. All rights reserved.
+#
+# Creative Commons Attribution NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
+
 #' @title Read in raw acceleration data
-#' @description This generic function reads in calibrated raw acceleration data
-#'     from the python module pygt3x or the R GGIR package or uncalibrated data
-#'     from the read.gt3x package.
+#' @description This function reads in raw acceleration data
+#'     with the pygt3x Python package, the read.gt3x R package with GGIR autocalibration, or the read.gt3x R package.
 #' @param path Path name to the GT3X file or the dataset with columns time, X, Y, and Z axis
 #' @param verbose Print the read method, Default: FALSE.
-#' @param parser The parser to use when reading in the data. Parser values include pygt3x, ggir, and uncalibrated readers
+#' @param parser The parser to use when reading in the data. Parser values include pygt3x, GGIR, and read.gt3x options.
 #' @param tz the desired timezone, Default: \code{UTC}
 #' @param ... Additional arguments to pass into the agread function
-#' @return Returns the calibrated or uncalibrated raw acceleration data
-#' @details This function reads in calibrated raw acceleration data from GGIR or pygt3x.
+#' @return Returns the raw acceleration data
+#' @details This function reads in raw acceleration data
+#'     with the pygt3x Python package, the read.gt3x R package with GGIR autocalibration, or the read.gt3x R package.
 #' @examples
 #' \dontrun{
 #'    agread(system.file("extdata/example.gt3x", package = "agcounts"), parser = "pygt3x")
@@ -22,22 +26,22 @@
 #' @importFrom GGIR g.calibrate
 #' @importFrom read.gt3x read.gt3x
 
-agread <- function(path, parser = c("pygt3x", "ggir", "uncalibrated"), tz = "UTC", verbose = FALSE, ...){
+agread <- function(path, parser = c("pygt3x", "GGIR", "read.gt3x"), tz = "UTC", verbose = FALSE, ...){
   parser = match.arg(parser)
 
   if(parser == "pygt3x" & !reticulate::py_module_available("pygt3x")) {
     message('Python module "pygt3x" is not found. Switching parser to GGIR.')
-    parser <- "ggir"
+    parser <- "GGIR"
   }
   switch(parser,
          "pygt3x" = .pygt3xReader(path = path, verbose = verbose, ...),
-         "ggir" = .ggirReader(path = path, verbose = verbose, ...),
-         "uncalibrated" = .uncalibratedReader(path = path, verbose = verbose, ...),
+         "GGIR" = .ggirReader(path = path, verbose = verbose, ...),
+         "read.gt3x" = .gt3xReader(path = path, verbose = verbose, ...),
          stop("No method exists yet for ", sQuote(parser), call. = FALSE)
          )
 }
 
-.pygt3xReader <- function(path, parser = c("pygt3x", "ggir", "gt3x"), tz = "UTC", verbose = FALSE, ...){
+.pygt3xReader <- function(path, tz = "UTC", verbose = FALSE, ...){
   reader <- NULL
   if(!reticulate::py_module_available("pygt3x")) stop('Python module "pygt3x" not found.')
   if(verbose) print("Reading and calibrating data with pygt3x.")
@@ -62,17 +66,17 @@ agread <- function(path, parser = c("pygt3x", "ggir", "uncalibrated"), tz = "UTC
   raw
 }
 
-.ggirReader <- function(path, parser = c("pygt3x", "ggir", "gt3x"), tz = "UTC", verbose = FALSE, ...){
+.ggirReader <- function(path, tz = "UTC", verbose = FALSE, ...){
   if(verbose) print("Reading data with read.gt3x and calibrating with GGIR.")
   C <- GGIR::g.calibrate(datafile = path, use.temp = FALSE, printsummary = FALSE)
   raw <- read.gt3x::read.gt3x(path, asDataFrame = TRUE, imputeZeroes = TRUE)
   raw[, 2:4] <- scale(raw[, 2:4], center = -C$offset, scale = 1/C$scale)
-  if(C$nhoursused==0) message("\n There is not enough data to perform the GGIR calibration method. Returning uncalibrated data.")
+  if(C$nhoursused==0) message("\n There is not enough data to perform the GGIR autocalibration method. Returning data as read by read.gt3x.")
   raw
 }
 
-.uncalibratedReader <- function(path, parser = c("pygt3x", "ggir", "gt3x"), tz = "UTC", verbose = FALSE, ...){
-  if(verbose) print("Reading uncalibrated with read.gt3x.")
+.gt3xReader <- function(path, tz = "UTC", verbose = FALSE, ...){
+  if(verbose) print("Reading data with read.gt3x.")
   raw <- read.gt3x::read.gt3x(path, asDataFrame = TRUE, imputeZeroes = TRUE)
   raw
 }
@@ -114,7 +118,7 @@ agcalibrate <- function(raw, verbose = FALSE, tz = "UTC", ...){
   raw[which(is.na(raw[, 3])), 3] <- 0
   raw[which(is.na(raw[, 4])), 4] <- 0
   raw[, c("X", "Y", "Z")] <- scale(raw[, c("X", "Y", "Z")], center = -C$offset, scale = 1/C$scale)
-  if(C$nhoursused==0) message("\n There is not enough data to perform the GGIR calibration method. Returning uncalibrated data.")
+  if(C$nhoursused==0) message("\n There is not enough data to perform the GGIR calibration method. Returning data as read by read.gt3x.")
   raw
 }
 

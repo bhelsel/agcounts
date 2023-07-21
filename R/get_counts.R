@@ -1,3 +1,7 @@
+# Copyright © 2022 University of Kansas. All rights reserved.
+#
+# Creative Commons Attribution NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
+
 #' @title get_counts
 #' @description Main function to extract counts from the Actigraph GT3X Files.
 #' @param path Full path name to the GT3X File
@@ -7,7 +11,7 @@
 #' @param return.data Return the data frame to the R Global Environment, Default: TRUE
 #' @param verbose Print the progress of the Actigraph raw data conversion to counts, Default: FALSE.
 #' @param tz the desired timezone, Default: \code{UTC}
-#' @param parser The parser to use when reading in the data. Parser values include pygt3x, ggir, and gt3x (uncalibrated reader).
+#' @param parser The parser to use when reading in the data. Parser values include pygt3x, GGIR, and read.gt3x options.
 #' @param ... arguments passed to \code{\link[data.table]{fwrite}}
 #' @return Returns a CSV file if write.file is TRUE or a data frame if return.data is TRUE
 #' @details Main function to extract counts from the Actigraph GT3X Files.
@@ -26,7 +30,7 @@
 get_counts <- function(
   path, epoch, lfe_select = FALSE, write.file = FALSE,
   return.data = TRUE, verbose = FALSE, tz = "UTC",
-  parser = c("pygt3x", "ggir", "uncalibrated"), ...
+  parser = c("pygt3x", "GGIR", "read.gt3x"), ...
 ){
 
   if(verbose){

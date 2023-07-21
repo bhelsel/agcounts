@@ -1,3 +1,6 @@
+# Copyright © 2022 University of Kansas. All rights reserved.
+#
+# Creative Commons Attribution NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
 
 testthat::test_that("Shiny app rawDataModuleServer loads raw acceleration data", {
   shiny::testServer(rawDataModuleServer, {
@@ -6,11 +9,11 @@ testthat::test_that("Shiny app rawDataModuleServer loads raw acceleration data",
                       applyRaw = "ENMO", timeSlot = "AM")
 
     # Test Uncalibrated Data
-    testthat::expect_equal(ncol(uncalibratedData()), 4)
-    testthat::expect_equal(nrow(uncalibratedData()), 18000)
-    testthat::compare(mean(uncalibratedData()$X), 0.9727254, tolerance = 1e-7)
-    testthat::compare(mean(uncalibratedData()$Y), 0.6042353, tolerance = 1e-7)
-    testthat::compare(mean(uncalibratedData()$Z), 0.1478806, tolerance = 1e-7)
+    testthat::expect_equal(ncol(rawData()), 4)
+    testthat::expect_equal(nrow(rawData()), 18000)
+    testthat::compare(mean(rawData()$X), 0.9727254, tolerance = 1e-7)
+    testthat::compare(mean(rawData()$Y), 0.6042353, tolerance = 1e-7)
+    testthat::compare(mean(rawData()$Z), 0.1478806, tolerance = 1e-7)
 
     # Test the Parser
     testthat::compare(input$parser, "pygt3x")
@@ -31,8 +34,8 @@ testthat::test_that("Shiny app rawDataModuleServer loads raw acceleration data",
 testthat::test_that("Shiny app rawDataModuleServer loads dynamic UI", {
   app <- shinytest2::AppDriver$new(agShinyDeployApp())
   app$upload_file(`rawDataModule-gt3xFile` = system.file("extdata/example.gt3x", package = "agcounts"))
-  app$set_inputs(`rawDataModule-parser` = "uncalibrated")
-  testthat::expect_equal(app$get_value(input = "rawDataModule-parser"), "uncalibrated")
+  app$set_inputs(`rawDataModule-parser` = "read.gt3x")
+  testthat::expect_equal(app$get_value(input = "rawDataModule-parser"), "read.gt3x")
 
   # Test that Raw is set when Vector.Magnitude is selected
   app$set_inputs(`rawDataModule-axisRaw` = "Vector.Magnitude")

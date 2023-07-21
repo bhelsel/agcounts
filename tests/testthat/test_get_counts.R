@@ -1,4 +1,6 @@
-
+# Copyright © 2022 University of Kansas. All rights reserved.
+#
+# Creative Commons Attribution NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
 
 testthat::test_that("Check that get_counts is working as expected", {
 
@@ -13,7 +15,7 @@ testthat::test_that("Check that get_counts is working as expected", {
     write.file = FALSE,
     verbose = TRUE,
     tz = "UTC",
-    parser = "uncalibrated",
+    parser = "read.gt3x",
     return.data = TRUE
     )
 
@@ -38,7 +40,7 @@ testthat::test_that("Check that get_counts is working as expected", {
     write.file = TRUE,
     verbose = FALSE,
     tz = "UTC",
-    parser = "uncalibrated",
+    parser = "read.gt3x",
     return.data = FALSE
   )
 
@@ -49,7 +51,7 @@ testthat::test_that("Check that get_counts is working as expected", {
     write.file = TRUE,
     verbose = FALSE,
     tz = "UTC",
-    parser = "uncalibrated",
+    parser = "read.gt3x",
     return.data = FALSE
   )
 
