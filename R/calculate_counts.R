@@ -33,7 +33,7 @@ calculate_counts <- function(
     raw <- .check_idle_sleep(raw, frequency, epoch, verbose, tz)
 
     data_start <-
-      raw[1, "time"] %>%
+      raw[["time"]][1] %>%
       format("%Y-%m-%d %H:%M:%S") %>%
       as.POSIXct(tz) %>%
       lubridate::floor_date(paste(epoch, "secs"))
