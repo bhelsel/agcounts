@@ -10,7 +10,7 @@
       lubridate::force_tz(tz)
   } else {
     start <-
-      raw[1, "time"] %>%
+      raw[["time"]][1] %>%
       lubridate::force_tz(tz)
   }
 
