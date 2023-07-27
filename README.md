@@ -65,7 +65,7 @@ Use of the `agcountsShinyDeployApp` is relatively self explanatory but does requ
 
 ### Reading Files
 
-##### Read in raw acceleration data and calculate ActiGraph counts
+#### Read in raw acceleration data and calculate ActiGraph counts
 
 There are 3 ways to read in raw acceleration data using the `agcounts` package.
 This is done by the `parser` argument from the `agread` function. This is an
@@ -109,7 +109,7 @@ of the `ggir` parser that offers calibration at an improved speed.
 ### Calculate Counts
 `calculate_counts` is the main function in the `agcounts` package.
 
-##### Read and Convert a single GT3X file to ActiGraph counts
+#### Read and Convert a single GT3X file to ActiGraph counts
 ```r
 # path = "Full pathname to the GT3X file", e.g.:
 
@@ -160,7 +160,7 @@ get_counts(path = path, epoch = 60, write.file = FALSE, return.data = TRUE, pars
 
 ### Writing Files
 
-##### Read and convert a single GT3X file to ActiGraph counts exported to a CSV file
+#### Read and convert a single GT3X file to ActiGraph counts exported to a CSV file
 
 We also offer a `write.file` argument that will read, convert, and export the
 Actigraph count data to a CSV file in the same directory.
@@ -172,7 +172,7 @@ path = system.file("extdata/example.gt3x", package = "agcounts")
 get_counts(path = path, epoch = 60, write.file = TRUE, return.data = FALSE, parser = "pygt3x")
 ```
 
-##### Read and convert multiple GT3X files to ActiGraph counts exported a CSV file
+#### Read and convert multiple GT3X files to ActiGraph counts exported a CSV file
 
 We can extend the `write.file` argument by passing the path name of several GT3X
 files to an `apply` function.
