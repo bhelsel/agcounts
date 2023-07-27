@@ -5,14 +5,12 @@
 [![R-CMD-check](https://github.com/bhelsel/agcounts/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/bhelsel/agcounts/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/bhelsel/agcounts/branch/master/graph/badge.svg)](https://app.codecov.io/gh/bhelsel/agcounts?branch=master)
 <!-- badges: end -->
-<br>
 
 
 
 ### Background
 
 The use of portable accelerometers for the assessment of physical activity in free-living individuals has increased exponentially since the introduction of this technique in the early 1980’s (Montoye et al., 1983; Troiano et al., 2008, 2014). Over the past ~40 years, data collection and processing protocols have been refined (Troiano, 2023). The ActiGraph (ActiGraph LLC, Pensacola, FL) is among the most widely used accelerometers in physical activity and health research (Wijndaele et al., 2015). The 2022 release of the ActiGraph count algorithm (Neishabouri et al.) <a href = https://www.researchsquare.com/article/rs-1370418/v1>"Quantification of Acceleration as Activity Counts in ActiGraph Wearables"</a>, and accompanying Python package improved the transparency and interpretation of accelerometer device-measured physical activity. However, not all users are comfortable with the Python language. 
-<br>
 
 
 
@@ -26,7 +24,6 @@ Key functionalities and extensions include:\n
   3) Accessibility and usability for individuals without programming experience. 
 
 The package reads the X, Y, and Z axes in a GT3X accelerometer file and converts it to Actigraphy counts. 
-<br>
 
 
 
@@ -41,7 +38,6 @@ We suggest the following workflow:
   3) [Read Files](/README.md#reading-files)
   4) [Calculate Counts](/README.md#calculate-counts)
   5) [Write Output](/README.md#writing-files)
-<br>
 
 
 
@@ -53,7 +49,6 @@ install.packages("devtools")
 # Use the `install_github` function to download agcounts from GitHub
 devtools::install_github("bhelsel/agcounts")
 ```
-<br>
 
 
 
@@ -65,7 +60,6 @@ The `agcounts` package includes a Shiny app to assist the user with fine tuning 
 agcounts::agcountsShinyApp()
 ```
 Use of the `agcountsShinyDeployApp` is relatively self explanatory but does require familiarity with analysis of GT3X files. Use and interpretation of GT3X files is beyond the scope of this README file. The app is dynamic to provide realtime decision making regarding parameters. After identifying appropriate parameters to suit project needs, users will use the [R command line](/README.md#reading-files) to fully process and output data. 
-<br>
 
 
 
@@ -109,13 +103,11 @@ Currently, this is the slowest way to calibrate data but can handle non-ActiGrap
 files. Finally, the `read.gt3x::read.gt3x` can be used to read in uncalibrated data.
 If the user is working with an ActiGraph device, we have also included a C++ version
 of the `ggir` parser that offers calibration at an improved speed.
-<br>
 
 
 
 ### Calculate Counts
 `calculate_counts` is the main function in the `agcounts` package.
-<br>
 
 ##### Read and Convert a single GT3X file to ActiGraph counts
 ```r
@@ -151,7 +143,6 @@ epochs_uncalibrated <-
   agread(path, parser = "uncalibrated") %>%
   calculate_counts(epoch = 60)
 ```
-<br>
 
 
 
@@ -164,7 +155,6 @@ also reads in the data using `agread` and one of the listed methods.
 path = system.file("extdata/example.gt3x", package = "agcounts")
 get_counts(path = path, epoch = 60, write.file = FALSE, return.data = TRUE, parser = "pygt3x")
 ```
-<br>
 
 
 
@@ -181,7 +171,6 @@ path = system.file("extdata/example.gt3x", package = "agcounts")
 
 get_counts(path = path, epoch = 60, write.file = TRUE, return.data = FALSE, parser = "pygt3x")
 ```
-<br>
 
 ##### Read and convert multiple GT3X files to ActiGraph counts exported a CSV file
 
@@ -222,7 +211,6 @@ foreach::foreach(i = files, .packages = "agcounts") %dopar% {
 parallel::stopCluster(cl)
 
 ```
-<br>
 
 
 
