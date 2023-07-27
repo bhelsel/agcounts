@@ -57,8 +57,7 @@ The `agcounts` package includes a Shiny app to assist the user with fine tuning 
 #Launch the Shiny app.
 agcounts::agcountsShinyApp()
 ```
-
-After identifying appropriate parameters to suit project needs, users will use the [R-command-line](###Reading-Files) to fully process and output data. 
+Use of the `agcountsShinyDeployApp` is relatively self explanatory but does require familiarity with analysis of GT3X files. Use and interpretation of GT3X files is beyond the scope of this README file. The app is dynamic to provide realtime decision making regarding parameters. After identifying appropriate parameters to suit project needs, users will use the [R command line](/README.md#reading-files) to fully process and output data. 
 <br>
 
 
