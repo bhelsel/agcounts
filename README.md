@@ -13,6 +13,7 @@
 The use of portable accelerometers for the assessment of physical activity in free-living individuals has increased exponentially since the introduction of this technique in the early 1980’s (Montoye et al., 1983; Troiano et al., 2008, 2014). Over the past ~40 years, data collection and processing protocols have been refined (Troiano, 2023). The ActiGraph (ActiGraph LLC, Pensacola, FL) is among the most widely used accelerometers in physical activity and health research (Wijndaele et al., 2015). The 2022 release of the ActiGraph count algorithm (Neishabouri et al.) <a href = https://www.researchsquare.com/article/rs-1370418/v1>"Quantification of Acceleration as Activity Counts in ActiGraph Wearables"</a>, and accompanying Python package improved the transparency and interpretation of accelerometer device-measured physical activity. However, not all users are comfortable with the Python language. 
 <br>
 
+
 ### What the Package Does
 
 This R Package is a translation of ActiGraph’s Python package, with additional extensions to make data processing easier and faster for end users. 
@@ -25,6 +26,7 @@ Key functionalities and extensions include:\n
 The package reads the X, Y, and Z axes in a GT3X accelerometer file and converts it to Actigraphy counts. 
 <br>
 
+
 ### Getting Started
 
 Use of the package requires R (version 4.2.2 or greater recommended), with `devtools` and `agcounts` installed and Actigraph data file of type ".GT3X". 
@@ -36,6 +38,7 @@ We suggest the following workflow:
   3) [Read and Calculate Counts](/README.md#reading-files)
 <br>
 
+
 ### Install the `agcounts` Package
 ```r
 # Install the devtools package if it is not already installed
@@ -45,6 +48,7 @@ install.packages("devtools")
 devtools::install_github("bhelsel/agcounts")
 ```
 <br>
+
 
 ### Review and Set Parameters
 
@@ -56,6 +60,7 @@ agcounts::agcountsShinyApp()
 
 After identifying appropriate parameters to suit project needs, users will use the [R-command-line](###Reading-Files) to fully process and output data. 
 <br>
+
 
 ### Reading Files
 
@@ -103,7 +108,6 @@ of the `ggir` parser that offers calibration at an improved speed.
 `calculate_counts` is the main function in the `agcounts` package.
 <br>
 
-
 ##### Read and Convert a single GT3X file to ActiGraph counts
 ```r
 # path = "Full pathname to the GT3X file", e.g.:
@@ -140,6 +144,7 @@ epochs_uncalibrated <-
 ```
 <br>
 
+
 ### Get Counts
 
 The `get_counts` function is the wrapper function for `calculate_counts` that
@@ -150,6 +155,7 @@ path = system.file("extdata/example.gt3x", package = "agcounts")
 get_counts(path = path, epoch = 60, write.file = FALSE, return.data = TRUE, parser = "pygt3x")
 ```
 <br>
+
 
 ### Writing Files
 
@@ -206,6 +212,7 @@ parallel::stopCluster(cl)
 
 ```
 <br>
+
 
 ### Help and Package Maintenance
 
