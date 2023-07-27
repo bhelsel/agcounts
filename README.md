@@ -8,10 +8,12 @@
 <br>
 
 
+
 ### Background
 
 The use of portable accelerometers for the assessment of physical activity in free-living individuals has increased exponentially since the introduction of this technique in the early 1980’s (Montoye et al., 1983; Troiano et al., 2008, 2014). Over the past ~40 years, data collection and processing protocols have been refined (Troiano, 2023). The ActiGraph (ActiGraph LLC, Pensacola, FL) is among the most widely used accelerometers in physical activity and health research (Wijndaele et al., 2015). The 2022 release of the ActiGraph count algorithm (Neishabouri et al.) <a href = https://www.researchsquare.com/article/rs-1370418/v1>"Quantification of Acceleration as Activity Counts in ActiGraph Wearables"</a>, and accompanying Python package improved the transparency and interpretation of accelerometer device-measured physical activity. However, not all users are comfortable with the Python language. 
 <br>
+
 
 
 ### What the Package Does
@@ -27,6 +29,7 @@ The package reads the X, Y, and Z axes in a GT3X accelerometer file and converts
 <br>
 
 
+
 ### Getting Started
 
 Use of the package requires R (version 4.2.2 or greater recommended), with `devtools` and `agcounts` installed and Actigraph data file of type ".GT3X". 
@@ -35,8 +38,11 @@ We suggest the following workflow:
   
   1) [Install the `agcounts` Package](/README.md#install-the-agcounts-package)
   2) [Review and Set Parameters for Processing GT3X files](/README.md#review-and-set-parameters)
-  3) [Read and Calculate Counts](/README.md#reading-files)
+  3) [Read Files](/README.md#reading-files)
+  4) [Calculate Counts](/README.md#calculate-counts)
+  5) [Write Output](/README.md#writing-files)
 <br>
+
 
 
 ### Install the `agcounts` Package
@@ -48,6 +54,7 @@ install.packages("devtools")
 devtools::install_github("bhelsel/agcounts")
 ```
 <br>
+
 
 
 ### Review and Set Parameters
@@ -104,6 +111,8 @@ If the user is working with an ActiGraph device, we have also included a C++ ver
 of the `ggir` parser that offers calibration at an improved speed.
 <br>
 
+
+
 ### Calculate Counts
 `calculate_counts` is the main function in the `agcounts` package.
 <br>
@@ -145,6 +154,7 @@ epochs_uncalibrated <-
 <br>
 
 
+
 ### Get Counts
 
 The `get_counts` function is the wrapper function for `calculate_counts` that
@@ -155,6 +165,7 @@ path = system.file("extdata/example.gt3x", package = "agcounts")
 get_counts(path = path, epoch = 60, write.file = FALSE, return.data = TRUE, parser = "pygt3x")
 ```
 <br>
+
 
 
 ### Writing Files
@@ -212,6 +223,7 @@ parallel::stopCluster(cl)
 
 ```
 <br>
+
 
 
 ### Help and Package Maintenance
