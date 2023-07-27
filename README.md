@@ -31,9 +31,9 @@ Use of the package requires R (version 4.2.2 or greater recommended), with `devt
 
 We suggest the following workflow:
   
-  1) [Install the `agcounts` Package](/bhelsel/agcounts/edit/master/README.md#install-the-agcounts-package)
-  2) [Review and Set Parameters for Processing GT3X files](/bhelsel/agcounts/edit/master/README.md#review-and-set-parameters)
-  3) [Read and Calculate Counts](/bhelsel/agcounts/edit/master/README.md#reading-files)
+  1) [Install the `agcounts` Package](/README.md#install-the-agcounts-package)
+  2) [Review and Set Parameters for Processing GT3X files](/README.md#review-and-set-parameters)
+  3) [Read and Calculate Counts](/README.md#reading-files)
 <br>
 
 ### Install the `agcounts` Package
