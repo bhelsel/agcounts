@@ -32,18 +32,19 @@ calculate_counts <- function(
 
     raw <- .check_idle_sleep(raw, frequency, epoch, verbose, tz)
 
+    t1 = raw[["time"]][1]
     data_start <-
-      raw[1, "time"] %>%
+      t1 %>%
       format("%Y-%m-%d %H:%M:%S") %>%
       as.POSIXct(tz) %>%
       lubridate::floor_date(paste(epoch, "secs"))
 
-    if(data_start != raw[1, "time"]){
+    if(data_start != t1){
       raw <-
-        seq(data_start, (raw[1, "time"]-1), 1/frequency) %>%
+        seq(data_start, (t1-1), 1/frequency) %>%
         {data.frame(
-          time = as.POSIXct(., tz), X = rep(raw[1, "X"], length(.)),
-          Y = rep(raw[1, "Y"], length(.)), Z = rep(raw[1, "Z"], length(.))
+          time = as.POSIXct(., tz), X = rep(raw[["X"]][1], length(.)),
+          Y = rep(raw[["Y"]][1], length(.)), Z = rep(raw[["Z"]][1], length(.))
         )} %>%
         rbind(raw)
     }

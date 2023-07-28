@@ -230,7 +230,7 @@
 
   timevar %T>%
   {stopifnot(exists(., raw))} %>%
-  raw[1:min(nrow(raw), 1000), .] %>%
+  raw[1:min(nrow(raw), 1000), ., drop = TRUE] %>%
   lubridate::floor_date("1 sec") %>%
   table(.) %>%
   table(.) %>%
