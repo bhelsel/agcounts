@@ -78,6 +78,7 @@ agread <- function(path, parser = c("pygt3x", "GGIR", "read.gt3x"), tz = "UTC", 
 .gt3xReader <- function(path, tz = "UTC", verbose = FALSE, ...){
   if(verbose) print("Reading data with read.gt3x.")
   raw <- read.gt3x::read.gt3x(path, asDataFrame = TRUE, imputeZeroes = TRUE)
+  raw$time <- lubridate::force_tz(raw$time, tzone = tz)
   raw
 }
 

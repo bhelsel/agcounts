@@ -1,3 +1,8 @@
+# agcounts 0.6.5
+* Update README.md file.
+* Update code to allow interaction with data that is read into a tibble.
+* Minor updates to the Shiny app
+
 # agcounts 0.6.4
 * Updated the agcounts license with KU Copyright and Creative Commons (CC BY-NC-SA 4.0).
 * Changed the parsers to reflect the Python and R package names.

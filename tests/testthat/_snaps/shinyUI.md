@@ -142,10 +142,7 @@
               <label class="control-label" id="countsModule-countsPlotColor-label" for="countsModule-countsPlotColor">Plot Color (accepts color name or hex code)</label>
               <input id="countsModule-countsPlotColor" type="text" class="shiny-input-text form-control" value="#000000"/>
             </div>
-            <div class="form-group shiny-input-container">
-              <label class="control-label" id="countsModule-rangeCounts-label" for="countsModule-rangeCounts">Select a range for the X axis</label>
-              <input class="js-range-slider" id="countsModule-rangeCounts" data-skin="shiny" data-type="double" data-min="0" data-max="10000" data-from="0" data-to="2000" data-step="1" data-grid="true" data-grid-num="10" data-grid-snap="false" data-prettify-separator="," data-prettify-enabled="true" data-postfix=" counts" data-keyboard="true" data-drag-interval="true" data-data-type="number"/>
-            </div>
+            <div id="countsModule-rangeCounts" class="shiny-html-output"></div>
           </form>
         </div>
         <div class="col-sm-8" role="main">
