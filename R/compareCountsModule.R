@@ -13,7 +13,7 @@ compareCountsModuleUI <- function(id){
     shiny::sidebarPanel(
       shiny::fileInput(ns("agdFile"), "Choose the Matching AGD File", multiple = FALSE, accept = c(".agd")),
       shiny::selectInput(ns("axisCounts2"), "Count Axis", choices = c("Axis1", "Axis2", "Axis3", "Vector.Magnitude"), selected = "Vector.Magnitude"),
-      shiny::checkboxInput(ns("agdBlandAltmanPlot"), "Bland Altman Plot?", value = FALSE),
+      shiny::checkboxInput(ns("agdBlandAltmanPlot"), "Bland Altman Plot?", value = TRUE),
       shiny::uiOutput(ns("rangeYBlandAltman")),
       shiny::textInput(ns("agdPlotColor"), "Plot Color (accepts color name or hex code)", value = "#000000"),
     ),
@@ -43,11 +43,9 @@ compareCountsModuleServer <- function(id, filteredData){
     output$rangeYBlandAltman <- shiny::renderUI({
       shiny::req(comparisonData(), input$agdBlandAltmanPlot)
       ad <- max(abs(comparisonData()$Difference))
-      mn <- mean(comparisonData()$Difference) - (1.96 * stats::sd(comparisonData()$Difference))
-      mx <- mean(comparisonData()$Difference) + (1.96 * stats::sd(comparisonData()$Difference))
       shiny::sliderInput(session$ns("rangeYBlandAltman"),
                          "Adjust the Y-Axis of the Bland Altman Plot",
-                         min = -ad, max = ad, value = c(mn, mx),
+                         min = -ad, max = ad, value = c(-ad, ad),
                          post = " counts", ticks = FALSE)
     })
 

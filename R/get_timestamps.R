@@ -35,7 +35,7 @@
   rle(.) %>%
   {.$values[max(which(.$lengths == samples_per_epoch))]} %>%
   as.POSIXct(tz) %>%
-  {. + epoch - 0.001} %>%
+  {. + epoch - (1/frequency)} %>%
   lubridate::force_tz(tz)
 
 }

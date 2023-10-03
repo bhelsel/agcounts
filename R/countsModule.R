@@ -16,9 +16,8 @@ countsModuleUI <- function(id){
       shiny::HTML("<h5><b>Plot Settings for Calculate Counts</b></h5>"),
       shiny::selectInput(ns("axisCounts"), "Counts Axis", choices = c("Axis1", "Axis2", "Axis3", "Vector.Magnitude"), selected = "Vector.Magnitude"),
       shiny::checkboxInput(ns("excludeZeros"), "Exclude zeros from the plot?", value = FALSE),
-      shiny::numericInput(ns("binwidthCounts"), "Select a frequency polygon binwidth", value = 30, step = 10),
       shiny::textInput(ns("countsPlotColor"), "Plot Color (accepts color name or hex code)", value = "#000000"),
-      shiny::sliderInput(ns("rangeCounts"), "Select a range for the X axis", value = c(0, 2000), min = 0, max = 10000, post = " counts")
+      shiny::uiOutput(ns("rangeCounts"))
     ),
     shiny::mainPanel(
       shiny::tabsetPanel(
@@ -41,6 +40,18 @@ countsModuleUI <- function(id){
 countsModuleServer <- function(id, filteredData){
   shiny::moduleServer(id, function(input, output, session){
 
+    # Dynamic UI ----
+    output$rangeCounts <- shiny::renderUI({
+      shiny::req(calculatedCounts())
+      minTime <- calculatedCounts()[1, "time"]
+      maxTime <- calculatedCounts()[nrow(calculatedCounts()), "time"]
+      shiny::sliderInput(session$ns("rangeCounts"),
+                         "Select a range for the X axis",
+                         value = c(minTime, maxTime),
+                         min = minTime, max = maxTime,
+                         timeFormat = "%H:%M:%S", timezone = "UTC", ticks = FALSE)
+    })
+
     # Data Processing ----
     calculatedCounts <- shiny::reactive({
       shiny::req(filteredData())
@@ -59,10 +70,10 @@ countsModuleServer <- function(id, filteredData){
       defaultColor <- "#000000"
       countsColor <- ifelse(color %in% grDevices::colors() | grepl(hexFormat, color), color, defaultColor)
       if(input$excludeZeros) countData <- countData[countData[, input$axisCounts] > 0, ]
-      ggplot2::ggplot(data = countData, ggplot2::aes(x = .data[[input$axisCounts]])) +
-        ggplot2::geom_histogram(binwidth = input$binwidthCounts, fill = countsColor, color = "black") +
+      ggplot2::ggplot(data = countData, ggplot2::aes(x = time, y = .data[[input$axisCounts]])) +
+        ggplot2::geom_bar(fill = countsColor, color = "black", stat = "identity") +
         ggplot2::coord_cartesian(xlim = input$rangeCounts) +
-        ggplot2::labs(title = "Histogram of ActiGraph Counts", y = "Frequency") +
+        ggplot2::labs(title = "Bar plot of ActiGraph Counts", y = "Counts") +
         ggplot2::theme_minimal() +
         .agPlotTheme()
     }, res = 96)

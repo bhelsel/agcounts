@@ -30,14 +30,15 @@ calculate_counts <- function(
 
   #* Now calculate counts
 
-    raw <- .check_idle_sleep(raw, frequency, epoch, verbose, tz)
-
     t1 = raw[["time"]][1]
+
     data_start <-
       t1 %>%
       format("%Y-%m-%d %H:%M:%S") %>%
       as.POSIXct(tz) %>%
       lubridate::floor_date(paste(epoch, "secs"))
+
+    raw <- .check_idle_sleep(raw, frequency, epoch, verbose, tz)
 
     if(data_start != t1){
       raw <-
