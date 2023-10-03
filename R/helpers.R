@@ -228,17 +228,20 @@
 
   if (exists("sample_rate", attributes(raw))) return(attr(raw, "sample_rate"))
 
-  timevar %T>%
-  {stopifnot(exists(., raw))} %>%
-  raw[1:min(nrow(raw), 1000), ., drop = TRUE] %>%
-  lubridate::floor_date("1 sec") %>%
-  table(.) %>%
-  table(.) %>%
-  {names(.)[which.max(.)]} %>%
-  as.numeric(.) %T>%
-  {if(!. %in% seq(30, 100, 10)) stop(
-    "Frequency has to be 30, 40, 50, 60, 70, 80, 90 or 100 Hz"
-  )}
+  if (!timevar %in% colnames(raw)) {
+    stop(paste0("Time variable: ", timevar, " not in raw data"))
+  }
+
+  timevar %>%
+    raw[1:min(nrow(raw), 1000), ., drop = TRUE] %>%
+    lubridate::floor_date("1 sec") %>%
+    table(.) %>%
+    table(.) %>%
+    {names(.)[which.max(.)]} %>%
+    as.numeric(.) %T>%
+    {if(!. %in% seq(30, 100, 10)) stop(
+      "Frequency has to be 30, 40, 50, 60, 70, 80, 90 or 100 Hz"
+    )}
 
 }
 

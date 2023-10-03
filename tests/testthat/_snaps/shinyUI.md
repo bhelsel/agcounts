@@ -12,7 +12,7 @@
                 <label class="input-group-btn input-group-prepend">
                   <span class="btn btn-default btn-file">
                     Browse...
-                    <input id="rawDataModule-gt3xFile" name="rawDataModule-gt3xFile" type="file" style="position: absolute !important; top: -99999px !important; left: -99999px !important;" accept=".gt3x"/>
+                    <input id="rawDataModule-gt3xFile" class="shiny-input-file" name="rawDataModule-gt3xFile" type="file" style="position: absolute !important; top: -99999px !important; left: -99999px !important;" accept=".gt3x"/>
                   </span>
                 </label>
                 <input type="text" class="form-control" placeholder="No file selected" readonly="readonly"/>
@@ -47,7 +47,7 @@
             <div class="form-group shiny-input-container">
               <label class="control-label" id="rawDataModule-axisRaw-label" for="rawDataModule-axisRaw">Raw Axis</label>
               <div>
-                <select id="rawDataModule-axisRaw"><option value="X">X</option>
+                <select id="rawDataModule-axisRaw" class="shiny-input-select"><option value="X">X</option>
       <option value="Y" selected>Y</option>
       <option value="Z">Z</option>
       <option value="Vector.Magnitude">Vector.Magnitude</option></select>
@@ -59,7 +59,7 @@
             <h5><b>Plot Settings for Raw Data</b></h5>
             <div class="form-group shiny-input-container">
               <label class="control-label" id="rawDataModule-gt3xPlotColor-label" for="rawDataModule-gt3xPlotColor">Plot Color (accepts color name or hex code)</label>
-              <input id="rawDataModule-gt3xPlotColor" type="text" class="form-control" value="#000000"/>
+              <input id="rawDataModule-gt3xPlotColor" type="text" class="shiny-input-text form-control" value="#000000"/>
             </div>
             <div id="rawDataModule-rangeXraw" class="shiny-html-output"></div>
             <div id="rawDataModule-rangeYraw" class="shiny-html-output"></div>
@@ -110,7 +110,7 @@
             <div class="form-group shiny-input-container">
               <div class="checkbox">
                 <label>
-                  <input id="countsModule-lfe" type="checkbox"/>
+                  <input id="countsModule-lfe" type="checkbox" class="shiny-input-checkbox"/>
                   <span>Add a low frequency extension filter?</span>
                 </label>
               </div>
@@ -119,7 +119,7 @@
             <div class="form-group shiny-input-container">
               <label class="control-label" id="countsModule-axisCounts-label" for="countsModule-axisCounts">Counts Axis</label>
               <div>
-                <select id="countsModule-axisCounts"><option value="Axis1">Axis1</option>
+                <select id="countsModule-axisCounts" class="shiny-input-select"><option value="Axis1">Axis1</option>
       <option value="Axis2">Axis2</option>
       <option value="Axis3">Axis3</option>
       <option value="Vector.Magnitude" selected>Vector.Magnitude</option></select>
@@ -129,18 +129,18 @@
             <div class="form-group shiny-input-container">
               <div class="checkbox">
                 <label>
-                  <input id="countsModule-excludeZeros" type="checkbox"/>
+                  <input id="countsModule-excludeZeros" type="checkbox" class="shiny-input-checkbox"/>
                   <span>Exclude zeros from the plot?</span>
                 </label>
               </div>
             </div>
             <div class="form-group shiny-input-container">
               <label class="control-label" id="countsModule-binwidthCounts-label" for="countsModule-binwidthCounts">Select a frequency polygon binwidth</label>
-              <input id="countsModule-binwidthCounts" type="number" class="form-control" value="30" step="10"/>
+              <input id="countsModule-binwidthCounts" type="number" class="shiny-input-number form-control" value="30" step="10"/>
             </div>
             <div class="form-group shiny-input-container">
               <label class="control-label" id="countsModule-countsPlotColor-label" for="countsModule-countsPlotColor">Plot Color (accepts color name or hex code)</label>
-              <input id="countsModule-countsPlotColor" type="text" class="form-control" value="#000000"/>
+              <input id="countsModule-countsPlotColor" type="text" class="shiny-input-text form-control" value="#000000"/>
             </div>
             <div class="form-group shiny-input-container">
               <label class="control-label" id="countsModule-rangeCounts-label" for="countsModule-rangeCounts">Select a range for the X axis</label>
@@ -185,7 +185,7 @@
                 <label class="input-group-btn input-group-prepend">
                   <span class="btn btn-default btn-file">
                     Browse...
-                    <input id="compareCountsModule-agdFile" name="compareCountsModule-agdFile" type="file" style="position: absolute !important; top: -99999px !important; left: -99999px !important;" accept=".agd"/>
+                    <input id="compareCountsModule-agdFile" class="shiny-input-file" name="compareCountsModule-agdFile" type="file" style="position: absolute !important; top: -99999px !important; left: -99999px !important;" accept=".agd"/>
                   </span>
                 </label>
                 <input type="text" class="form-control" placeholder="No file selected" readonly="readonly"/>
@@ -197,7 +197,7 @@
             <div class="form-group shiny-input-container">
               <label class="control-label" id="compareCountsModule-axisCounts2-label" for="compareCountsModule-axisCounts2">Count Axis</label>
               <div>
-                <select id="compareCountsModule-axisCounts2"><option value="Axis1">Axis1</option>
+                <select id="compareCountsModule-axisCounts2" class="shiny-input-select"><option value="Axis1">Axis1</option>
       <option value="Axis2">Axis2</option>
       <option value="Axis3">Axis3</option>
       <option value="Vector.Magnitude" selected>Vector.Magnitude</option></select>
@@ -207,7 +207,7 @@
             <div class="form-group shiny-input-container">
               <div class="checkbox">
                 <label>
-                  <input id="compareCountsModule-agdBlandAltmanPlot" type="checkbox"/>
+                  <input id="compareCountsModule-agdBlandAltmanPlot" type="checkbox" class="shiny-input-checkbox"/>
                   <span>Bland Altman Plot?</span>
                 </label>
               </div>
@@ -215,7 +215,7 @@
             <div id="compareCountsModule-rangeYBlandAltman" class="shiny-html-output"></div>
             <div class="form-group shiny-input-container">
               <label class="control-label" id="compareCountsModule-agdPlotColor-label" for="compareCountsModule-agdPlotColor">Plot Color (accepts color name or hex code)</label>
-              <input id="compareCountsModule-agdPlotColor" type="text" class="form-control" value="#000000"/>
+              <input id="compareCountsModule-agdPlotColor" type="text" class="shiny-input-text form-control" value="#000000"/>
             </div>
           </form>
         </div>
