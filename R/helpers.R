@@ -231,7 +231,8 @@
   if (!timevar %in% colnames(raw)) {
     stop(paste0("Time variable: ", timevar, " not in raw data"))
   }
-  timevar %T>%
+
+  timevar %>%
     raw[1:min(nrow(raw), 1000), ., drop = TRUE] %>%
     lubridate::floor_date("1 sec") %>%
     table(.) %>%
