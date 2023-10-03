@@ -135,10 +135,6 @@
               </div>
             </div>
             <div class="form-group shiny-input-container">
-              <label class="control-label" id="countsModule-binwidthCounts-label" for="countsModule-binwidthCounts">Select a frequency polygon binwidth</label>
-              <input id="countsModule-binwidthCounts" type="number" class="shiny-input-number form-control" value="30" step="10"/>
-            </div>
-            <div class="form-group shiny-input-container">
               <label class="control-label" id="countsModule-countsPlotColor-label" for="countsModule-countsPlotColor">Plot Color (accepts color name or hex code)</label>
               <input id="countsModule-countsPlotColor" type="text" class="shiny-input-text form-control" value="#000000"/>
             </div>
@@ -204,7 +200,7 @@
             <div class="form-group shiny-input-container">
               <div class="checkbox">
                 <label>
-                  <input id="compareCountsModule-agdBlandAltmanPlot" type="checkbox" class="shiny-input-checkbox"/>
+                  <input id="compareCountsModule-agdBlandAltmanPlot" type="checkbox" class="shiny-input-checkbox" checked="checked"/>
                   <span>Bland Altman Plot?</span>
                 </label>
               </div>
