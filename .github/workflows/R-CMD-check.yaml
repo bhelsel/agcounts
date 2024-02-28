@@ -20,7 +20,6 @@ jobs:
         config:
           - {os: macos-latest,   r: 'release', python: '3.11'}
           - {os: windows-latest, r: 'release', python: '3.11'}
-          - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release', python: '3.11'}
           - {os: ubuntu-latest,   r: 'release', python: '3.11'}
           - {os: ubuntu-latest,   r: 'oldrel-1', python: '3.11'}
 
