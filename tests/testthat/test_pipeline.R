@@ -1,6 +1,4 @@
 # Copyright © 2022 University of Kansas. All rights reserved.
-#
-# Creative Commons Attribution NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
 
 testthat::test_that("Expected results from each stage of the algorithm", {
 

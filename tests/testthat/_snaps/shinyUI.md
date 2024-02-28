@@ -84,7 +84,7 @@
               </div>
               <div class="tab-pane" data-value="Data" id="tab-4785-2">
                 <h5> Average Raw Acceleration Data by Hour </h5>
-                <div class="reactable html-widget html-widget-output shiny-report-size html-fill-item-overflow-hidden html-fill-item" data-reactable-output="rawDataModule-rawReactableTable" id="rawDataModule-rawReactableTable" style="width:auto;height:auto;"></div>
+                <div class="reactable html-widget html-widget-output shiny-report-size html-fill-item" data-reactable-output="rawDataModule-rawReactableTable" id="rawDataModule-rawReactableTable" style="width:auto;height:auto;"></div>
               </div>
               <div class="tab-pane" data-value="Notes" id="tab-4785-3">
                 <div id="rawDataModule-sampleFrequency" class="shiny-text-output"></div>
@@ -157,7 +157,7 @@
               </div>
               <div class="tab-pane" data-value="Data" id="tab-4785-2">
                 <h5>Total and average accelerometer counts from agcounts</h5>
-                <div class="reactable html-widget html-widget-output shiny-report-size html-fill-item-overflow-hidden html-fill-item" data-reactable-output="countsModule-countsReactableTable" id="countsModule-countsReactableTable" style="width:auto;height:auto;"></div>
+                <div class="reactable html-widget html-widget-output shiny-report-size html-fill-item" data-reactable-output="countsModule-countsReactableTable" id="countsModule-countsReactableTable" style="width:auto;height:auto;"></div>
               </div>
             </div>
           </div>
@@ -228,7 +228,7 @@
               </div>
               <div class="tab-pane" data-value="Data" id="tab-4785-2">
                 <h5>Differences between ActiGraph counts and agcounts</h5>
-                <div class="reactable html-widget html-widget-output shiny-report-size html-fill-item-overflow-hidden html-fill-item" data-reactable-output="compareCountsModule-comparisonReactableTable" id="compareCountsModule-comparisonReactableTable" style="width:auto;height:auto;"></div>
+                <div class="reactable html-widget html-widget-output shiny-report-size html-fill-item" data-reactable-output="compareCountsModule-comparisonReactableTable" id="compareCountsModule-comparisonReactableTable" style="width:auto;height:auto;"></div>
               </div>
             </div>
           </div>

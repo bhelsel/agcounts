@@ -1,3 +1,7 @@
+# agcounts 0.6.6
+* Prepare agcounts for a CRAN submission
+* Fix problem with `GGIR::g.calibrate` needing `GGIR::g.inspectfile` results.
+
 # agcounts 0.6.5
 * Update README.md file.
 * Update code to allow interaction with data that is read into a tibble.

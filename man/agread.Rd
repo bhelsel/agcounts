@@ -35,9 +35,7 @@ This function reads in raw acceleration data
     with the pygt3x Python package, the read.gt3x R package with GGIR autocalibration, or the read.gt3x R package.
 }
 \examples{
-\dontrun{
-   agread(system.file("extdata/example.gt3x", package = "agcounts"), parser = "pygt3x")
-}
+    agread(system.file("extdata/example.gt3x", package = "agcounts"), parser = "pygt3x")
 }
 \seealso{
 \code{\link[GGIR]{g.calibrate}}

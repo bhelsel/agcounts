@@ -1,6 +1,5 @@
-# Copyright © 2022 University of Kansas. All rights reserved.
-#
-# Creative Commons Attribution NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
+#' @keywords internal
+"_PACKAGE"
 
 #' @title agcounts: R Package for Extracting Actigraphy Counts from Accelerometer Data.
 #'
@@ -18,7 +17,6 @@
 #'
 #' \code{\link{agShinyDeployApp}}
 #'
-#' @docType package
 #' @name agcounts
 #' @importFrom read.gt3x read.gt3x
 #' @import magrittr

@@ -10,7 +10,7 @@ agShinyDeployApp(...)
 \item{...}{arguments passed to \code{\link[bslib]{bs_theme}}}
 }
 \value{
-No data or values are returned.
+Deploys a Shiny app on localhost. No data or values are returned.
 }
 \description{
 This function deploys the agcounts Shiny app.

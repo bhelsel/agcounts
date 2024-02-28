@@ -1,6 +1,9 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^inst/extdata/.*\.RData$
 ^LICENSE\.md$
-inst/extdata/.*Epoch Counts.*
 ^\.github$
 ^codecov\.yml$
+^README\.Rmd$
+^tests/testthat/test_gcalibrateC\.R$
+^man/figures

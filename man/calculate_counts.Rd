@@ -18,6 +18,9 @@ calculate_counts(raw, epoch, lfe_select = FALSE, tz = "UTC", verbose = FALSE)
 
 \item{verbose}{Print the progress of the Actigraph raw data conversion to counts, Default: FALSE.}
 }
+\value{
+Returns a data.frame containing the ActiGraph count values
+}
 \description{
 Calculate ActiGraph activity counts from raw acceleration data
     by passing in a data frame with a time stamp, X, Y, and Z axis. This function
@@ -27,7 +30,7 @@ Calculate ActiGraph activity counts from raw acceleration data
     data frame rather than a path name to a GT3X file.
 }
 \examples{
-f <- system.file("extdata/example.gt3x", package = "agcounts")
-d <- read.gt3x::read.gt3x(f, asDataFrame = TRUE, imputeZeroes = TRUE)
-calculate_counts(d, 60)
+    f <- system.file("extdata/example.gt3x", package = "agcounts")
+    d <- read.gt3x::read.gt3x(f, asDataFrame = TRUE, imputeZeroes = TRUE)
+    calculate_counts(d, 60)
 }

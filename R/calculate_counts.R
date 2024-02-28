@@ -1,6 +1,4 @@
 # Copyright © 2022 University of Kansas. All rights reserved.
-#
-# Creative Commons Attribution NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
 
 #' @title calculate_counts
 #' @description Calculate ActiGraph activity counts from raw acceleration data
@@ -12,11 +10,13 @@
 #' @param raw data frame of raw acceleration data obtained from
 #'   \code{\link[read.gt3x]{read.gt3x}}
 #' @inheritParams get_counts
+#' @return Returns a data.frame containing the ActiGraph count values
 #' @export
 #' @examples
-#' f <- system.file("extdata/example.gt3x", package = "agcounts")
-#' d <- read.gt3x::read.gt3x(f, asDataFrame = TRUE, imputeZeroes = TRUE)
-#' calculate_counts(d, 60)
+#'     f <- system.file("extdata/example.gt3x", package = "agcounts")
+#'     d <- read.gt3x::read.gt3x(f, asDataFrame = TRUE, imputeZeroes = TRUE)
+#'     calculate_counts(d, 60)
+
 calculate_counts <- function(
   raw, epoch, lfe_select = FALSE,
   tz = "UTC", verbose = FALSE

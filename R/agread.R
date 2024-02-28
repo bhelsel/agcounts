@@ -1,6 +1,4 @@
 # Copyright © 2022 University of Kansas. All rights reserved.
-#
-# Creative Commons Attribution NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
 
 #' @title Read in raw acceleration data
 #' @description This function reads in raw acceleration data
@@ -14,16 +12,14 @@
 #' @details This function reads in raw acceleration data
 #'     with the pygt3x Python package, the read.gt3x R package with GGIR autocalibration, or the read.gt3x R package.
 #' @examples
-#' \dontrun{
-#'    agread(system.file("extdata/example.gt3x", package = "agcounts"), parser = "pygt3x")
-#' }
+#'     agread(system.file("extdata/example.gt3x", package = "agcounts"), parser = "pygt3x")
 #' @seealso
 #'  \code{\link[GGIR]{g.calibrate}}
 #'  \code{\link[read.gt3x]{read.gt3x}}
 #' @rdname agread
 #' @export
 #' @importFrom reticulate import py_module_available `%as%`
-#' @importFrom GGIR g.calibrate
+#' @importFrom GGIR g.calibrate g.inspectfile
 #' @importFrom read.gt3x read.gt3x
 
 agread <- function(path, parser = c("pygt3x", "GGIR", "read.gt3x"), tz = "UTC", verbose = FALSE, ...){
@@ -68,7 +64,8 @@ agread <- function(path, parser = c("pygt3x", "GGIR", "read.gt3x"), tz = "UTC", 
 
 .ggirReader <- function(path, tz = "UTC", verbose = FALSE, ...){
   if(verbose) print("Reading data with read.gt3x and calibrating with GGIR.")
-  C <- GGIR::g.calibrate(datafile = path, use.temp = FALSE, printsummary = FALSE)
+  I <- GGIR::g.inspectfile(datafile = path)
+  C <- GGIR::g.calibrate(datafile = path, use.temp = FALSE, printsummary = FALSE, inspectfileobject = I)
   raw <- read.gt3x::read.gt3x(path, asDataFrame = TRUE, imputeZeroes = TRUE)
   raw[, 2:4] <- scale(raw[, 2:4], center = -C$offset, scale = 1/C$scale)
   if(C$nhoursused==0) message("\n There is not enough data to perform the GGIR autocalibration method. Returning data as read by read.gt3x.")
@@ -92,11 +89,9 @@ agread <- function(path, parser = c("pygt3x", "GGIR", "read.gt3x"), tz = "UTC", 
 #' @details This function uses a C++ implementation of the GGIR `g.calibrate` function to
 #' return calibrated raw acceleration data.
 #' @examples
-#' \dontrun{
 #'    path <- system.file("extdata/example.gt3x", package = "agcounts")
 #'    data <- read.gt3x::read.gt3x(path, asDataFrame = TRUE)
 #'    data <- agcalibrate(raw = data)
-#' }
 #' @seealso
 #'  \code{\link[lubridate]{force_tz}}
 #' @rdname agcalibrate

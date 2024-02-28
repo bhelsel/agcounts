@@ -1,8 +1,9 @@
 # Copyright © 2022 University of Kansas. All rights reserved.
-#
-# Creative Commons Attribution NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
 
-#' @export
+#' @title .get_sleep
+#' @description Identifies parts of the data set where idle sleep mode was engaged.
+#' @param raw A data frame of the raw Actigraph data
+#' @noRd
 #' @keywords internal
 .get_sleep <- function(raw, ...) {
   UseMethod(".get_sleep", raw)

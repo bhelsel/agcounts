@@ -292,7 +292,7 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue, Rcpp:
         scale = scale * scalech;
         res.push_back(calcRes(curr, closestpoint, weights));
         weights = calWeights(curr, closestpoint);
-        if(abs(res[iter + 1] - res[iter]) < tol) break;
+        if(std::abs(res[iter + 1] - res[iter]) < tol) break;
 
       }
 

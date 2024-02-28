@@ -26,11 +26,9 @@ This function uses a C++ implementation of the GGIR `g.calibrate` function to
 return calibrated raw acceleration data.
 }
 \examples{
-\dontrun{
    path <- system.file("extdata/example.gt3x", package = "agcounts")
    data <- read.gt3x::read.gt3x(path, asDataFrame = TRUE)
    data <- agcalibrate(raw = data)
-}
 }
 \seealso{
 \code{\link[lubridate]{force_tz}}

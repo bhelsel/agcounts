@@ -1,10 +1,8 @@
 # Copyright © 2022 University of Kansas. All rights reserved.
-#
-# Creative Commons Attribution NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
 
 #' @title agShinyDeployApp
 #' @description This function deploys the agcounts Shiny app.
-#' @return No data or values are returned.
+#' @return Deploys a Shiny app on localhost. No data or values are returned.
 #' @details This function deploys the agcounts Shiny app for data visualization
 #' and exploration. It also provides an opportunity to compare ActiGraph counts
 #' generated from the agcounts package with those from ActiGraph's .agd files.

@@ -1,6 +1,4 @@
 # Copyright © 2022 University of Kansas. All rights reserved.
-#
-# Creative Commons Attribution NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
 
 #' @title .check_idle_sleep
 #' @description Check for missing raw data in the Actigraph file
@@ -262,7 +260,7 @@
 #' @param data Data set containing a time, X, Y, and Z variable
 #' @param sample_frequency Sample frequency
 #' @param epoch Epoch level
-#' @return Data set with Euclidean Norm Minus One and Mean Amplitude Deviation
+#' @return A data.frame with Euclidean Norm Minus One and Mean Amplitude Deviation
 #' @noRd
 #' @keywords internal
 

@@ -1,6 +1,4 @@
 # Copyright © 2022 University of Kansas. All rights reserved.
-#
-# Creative Commons Attribution NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
 
 #' @title get_counts
 #' @description Main function to extract counts from the Actigraph GT3X Files.
@@ -13,18 +11,16 @@
 #' @param tz the desired timezone, Default: \code{UTC}
 #' @param parser The parser to use when reading in the data. Parser values include pygt3x, GGIR, and read.gt3x options.
 #' @param ... arguments passed to \code{\link[data.table]{fwrite}}
-#' @return Returns a CSV file if write.file is TRUE or a data frame if return.data is TRUE
+#' @return Writes a CSV file if write.file is TRUE and returns a data.frame if return.data is TRUE
 #' @details Main function to extract counts from the Actigraph GT3X Files.
 #' @seealso
 #'  \code{\link[read.gt3x]{read.gt3x}}
 #' @examples
-#' if(interactive()){
 #'  get_counts(
 #'   path = system.file("extdata/example.gt3x", package = "agcounts"),
 #'   epoch = 60, lfe_select = FALSE,
 #'   write.file = FALSE, return.data = TRUE
 #'   )
-#'   }
 #' @export
 
 get_counts <- function(
