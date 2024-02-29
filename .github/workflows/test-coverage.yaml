@@ -2,9 +2,9 @@
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
-    branches: [main, master, development]
+    branches: [main, master]
   pull_request:
-    branches: [main, master, development]
+    branches: [main, master]
 
 name: test-coverage
 
@@ -23,21 +23,8 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::covr remotes
+          extra-packages: any::covr
           needs: coverage
-
-      - uses: actions/setup-python@4
-        with:
-          Python-version: '3.11'
-
-      - name: setup r-reticulate venv
-        shell: Rscript {0}
-        run: |
-          remotes::install_local()
-          reticulate::virtualenv_create("agcounts", Sys.which("python"))
-          reticulate::virtualenv_install("agcounts", c("numpy", "pandas", "pygt3x"))
-          python <- reticulate::virtualenv_python("agcounts")
-          writeLines(sprintf("RETICULATE_PYTHON=%s", python), Sys.getenv("GITHUB_ENV"))
 
       - name: Test coverage
         run: |

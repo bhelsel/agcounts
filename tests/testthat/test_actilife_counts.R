@@ -2,7 +2,7 @@
 
 testthat::test_that("agcounts and Actilife counts are the same",{
 
-  #skip_if(!py_module_available("pygt3x"))
+  skip_if(!py_module_available("pygt3x"))
   gt3xPath <- system.file("extdata/example.gt3x", package = "agcounts")
   agdPath <- system.file("extdata/example5sec.agd", package = "agcounts")
 
