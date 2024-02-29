@@ -1,7 +1,7 @@
 # Copyright © 2022 University of Kansas. All rights reserved.
 
 testthat::test_that("Shiny app rawDataModuleServer loads raw acceleration data", {
-  skip_if(!py_module_available("pygt3x"))
+  #skip_if(!py_module_available("pygt3x"))
   shiny::testServer(rawDataModuleServer, {
     path = system.file("extdata/example.gt3x", package = "agcounts")
     session$setInputs(gt3xFile = list(datapath = path), parser = "pygt3x",
@@ -31,7 +31,7 @@ testthat::test_that("Shiny app rawDataModuleServer loads raw acceleration data",
 })
 
 testthat::test_that("Shiny app rawDataModuleServer loads dynamic UI", {
-  skip_if(!py_module_available("pygt3x"))
+  #skip_if(!py_module_available("pygt3x"))
   app <- shinytest2::AppDriver$new(agShinyDeployApp())
   app$upload_file(`rawDataModule-gt3xFile` = system.file("extdata/example.gt3x", package = "agcounts"))
   app$set_inputs(`rawDataModule-parser` = "read.gt3x")
@@ -52,7 +52,7 @@ testthat::test_that("Shiny app rawDataModuleServer loads dynamic UI", {
 
 testthat::test_that("Shiny app compareCountsModule loads agd data", {
 
-  skip_if(!py_module_available("pygt3x"))
+  #skip_if(!py_module_available("pygt3x"))
   shiny::testServer(compareCountsModuleServer, {
     path = system.file("extdata/calibration1sec.agd", package = "agcounts")
     data <- .read_agd(path)

@@ -1,7 +1,7 @@
 # Copyright © 2022 University of Kansas. All rights reserved.
 
 testthat::test_that("Test raw module reactable table output", {
-  skip_if(!py_module_available("pygt3x"))
+  #skip_if(!py_module_available("pygt3x"))
   app <- shinytest2::AppDriver$new(agShinyDeployApp())
   app$upload_file(`rawDataModule-gt3xFile` = system.file("extdata/example.gt3x", package = "agcounts"))
   app$set_inputs(`rawDataModule-parser` = "read.gt3x")

@@ -2,7 +2,7 @@
 
 testthat::test_that("Check that data can be read into agcounts using each agread method", {
 
-  skip_if(!py_module_available("pygt3x"))
+  #skip_if(!py_module_available("pygt3x"))
 
   file <- system.file("extdata/example.gt3x", package = "agcounts")
 
