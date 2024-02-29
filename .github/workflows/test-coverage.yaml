@@ -23,8 +23,21 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::covr
+          extra-packages: any::covr remotes
           needs: coverage
+
+      - uses: actions/setup-python@4
+	with:
+          Python-version: '3.11'
+
+      - name: setup r-reticulate venv
+        shell: Rscript {0}
+        run: |
+          remotes::install_local()
+          reticulate::virtualenv_create("agcounts", Sys.which("python"))
+          reticulate::virtualenv_install("agcounts", c("numpy", "pandas", "pygt3x"))
+          python <- reticulate::virtualenv_python("agcounts")
+          writeLines(sprintf("RETICULATE_PYTHON=%s", python), Sys.getenv("GITHUB_ENV"))
 
       - name: Test coverage
         run: |

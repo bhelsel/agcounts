@@ -53,8 +53,7 @@ jobs:
           reticulate::virtualenv_create("agcounts", Sys.which("python"))
           reticulate::virtualenv_install("agcounts", c("numpy", "pandas", "pygt3x"))
           python <- reticulate::virtualenv_python("agcounts")
-          writeLines(sprintf("RETICULATE_PYTHON=%s", python),
-                     Sys.getenv("GITHUB_ENV"))
+          writeLines(sprintf("RETICULATE_PYTHON=%s", python), Sys.getenv("GITHUB_ENV"))
 
       - uses: r-lib/actions/check-r-package@v2
         with:
