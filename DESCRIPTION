@@ -52,3 +52,5 @@ Config/testthat/edition: 3
 LinkingTo: 
     Rcpp,
     RcppArmadillo
+URL: https://github.com/bhelsel/agcounts
+BugReports: https://github.com/bhelsel/agcounts/issues
