@@ -7,6 +7,14 @@
 \description{
 Calculate 'ActiGraph' counts from the X, Y, and Z axes of a triaxial accelerometer. This work was inspired by Neishabouri et al. who published the article "Quantification of Acceleration as Activity Counts in 'ActiGraph' Wearables" on February 24, 2022. The link to the article (\url{https://pubmed.ncbi.nlm.nih.gov/35831446}) and 'python' implementation of this code (\url{https://github.com/actigraph/agcounts}).
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/bhelsel/agcounts}
+  \item Report bugs at \url{https://github.com/bhelsel/agcounts/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Brian C. Helsel \email{bhelsel@kumc.edu}
 
