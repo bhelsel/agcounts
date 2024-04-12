@@ -4,7 +4,7 @@
 \alias{agcalibrate}
 \title{Calibrate acceleration data}
 \usage{
-agcalibrate(raw, verbose = FALSE, tz = "UTC", ...)
+agcalibrate(raw, verbose = FALSE, tz = "UTC", imputeTimeGaps = FALSE, ...)
 }
 \arguments{
 \item{raw}{data frame of raw acceleration data obtained from}
@@ -12,6 +12,8 @@ agcalibrate(raw, verbose = FALSE, tz = "UTC", ...)
 \item{verbose}{Print the progress of the calibration for the raw data, Default: FALSE}
 
 \item{tz}{the desired timezone, Default: \code{UTC}}
+
+\item{imputeTimeGaps}{Imputes gaps in the raw acceleration data, Default: FALSE}
 
 \item{...}{Additional arguments to pass into the agread function}
 }

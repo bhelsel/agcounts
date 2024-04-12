@@ -21,6 +21,7 @@
 #'   epoch = 60, lfe_select = FALSE,
 #'   write.file = FALSE, return.data = TRUE
 #'   )
+#' @importFrom data.table fwrite
 #' @export
 
 get_counts <- function(

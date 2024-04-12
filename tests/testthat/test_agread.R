@@ -24,7 +24,7 @@ testthat::test_that("Check that data can be read into agcounts using each agread
   raw <- read.gt3x(path = file, asDataFrame = TRUE)
   sf <- agcounts:::.get_frequency(raw)
   invisible(capture.output(agcalibrated <- agcalibrate(raw)))
-  expect_equal(nrow(agcalibrated), 18001) # Looks like agcalibrate produces 1 additional row of data
+  expect_equal(nrow(agcalibrated), 18000)
   expect_equal(ncol(agcalibrated), 4)
 
   class(raw) <- "data.frame"
