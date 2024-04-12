@@ -35,7 +35,7 @@
     first.obs <- which(!is_sleep)[1]
 
     first.time.obs <-
-      raw[first.obs, "time"] %>%
+      raw[first.obs, "time", drop = TRUE] %>%
       lubridate::ceiling_date(paste0(epoch, "sec"))
 
     raw <- raw[raw$time >= first.time.obs,  ]

@@ -105,10 +105,11 @@ agcalibrate <- function(raw, verbose = FALSE, tz = "UTC", ...){
   if("last_sample_time" %in% names(attributes(raw))){
     last_sample_time <- attr(raw, "last_sample_time")
   } else{
-    last_sample_time <- raw[nrow(raw), 1]
+    last_sample_time <- raw[nrow(raw), 1, drop = TRUE]
   }
   C <- gcalibrateC(dataset = as.matrix(raw[, c("X", "Y", "Z")]), sf = sf)
-  timestamps = seq(raw[1, 1], last_sample_time, 1/sf) %>% lubridate::force_tz(tz) %>% data.frame(time = .)
+  timestamps = seq(raw[1, 1, drop = TRUE], last_sample_time, 1/sf) %>%
+    lubridate::force_tz(tz) %>% data.frame(time = .)
   raw = merge(timestamps, raw, by = "time", all = TRUE)
   raw[which(is.na(raw[, 2])), 2] <- 0
   raw[which(is.na(raw[, 3])), 3] <- 0
