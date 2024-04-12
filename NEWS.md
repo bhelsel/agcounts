@@ -1,3 +1,7 @@
+# agcounts 0.6.7
+* Update `agcalibrate` to speed up function by first converting to a `data.table` before merging with the time stamps.
+* Add parameter `imputeTimeGaps` to `agcalibrate` for users to decide if zeros are added back after calibration.
+
 # agcounts 0.6.6
 * Prepare agcounts for a CRAN submission
 * Fix problem with `GGIR::g.calibrate` needing `GGIR::g.inspectfile` results.

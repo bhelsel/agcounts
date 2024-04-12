@@ -84,6 +84,7 @@ agread <- function(path, parser = c("pygt3x", "GGIR", "read.gt3x"), tz = "UTC", 
 #' @param raw data frame of raw acceleration data obtained from
 #' @param verbose Print the progress of the calibration for the raw data, Default: FALSE
 #' @param tz the desired timezone, Default: \code{UTC}
+#' @param imputeTimeGaps Imputes gaps in the raw acceleration data, Default: FALSE
 #' @param ... Additional arguments to pass into the agread function
 #' @return Returns the calibrated raw acceleration data
 #' @details This function uses a C++ implementation of the GGIR `g.calibrate` function to
@@ -97,15 +98,29 @@ agread <- function(path, parser = c("pygt3x", "GGIR", "read.gt3x"), tz = "UTC", 
 #' @rdname agcalibrate
 #' @export
 #' @importFrom lubridate force_tz
+#' @importFrom data.table setDT setDF
 
 
-agcalibrate <- function(raw, verbose = FALSE, tz = "UTC", ...){
+agcalibrate <- function(raw, verbose = FALSE, tz = "UTC", imputeTimeGaps = FALSE, ...){
   if(any(.get_sleep(raw))) stop("Calibration requires the data to be imported without imputed zeros.")
   sf = .get_frequency(raw)
   C <- gcalibrateC(dataset = as.matrix(raw[, c("X", "Y", "Z")]), sf = sf)
-  raw[, c("X", "Y", "Z")] <- scale(raw[, c("X", "Y", "Z")],
-                                   center = -C$offset,
-                                   scale = 1/C$scale)
+
+  if(imputeTimeGaps){
+    if("last_sample_time" %in% names(attributes(raw))){
+      last_sample_time <- attr(raw, "last_sample_time") - 1
+    } else{
+      last_sample_time <- raw[nrow(raw), 1, drop = TRUE]
+    }
+    timestamps <- last_sample_time %>%
+      seq(raw[1, 1, drop = TRUE], ., 1/sf) %>%
+      lubridate::force_tz(tz) %>%
+      data.frame(time = .)
+    raw = data.table::setDF(merge(data.table::setDT(timestamps), data.table::setDT(raw), by = "time", all = TRUE))
+    raw[is.na(raw)] <- 0
+  }
+
+  raw[, c("X", "Y", "Z")] <- scale(raw[, c("X", "Y", "Z")], center = -C$offset, scale = 1/C$scale)
   if(C$nhoursused==0) message("\n There is not enough data to perform the GGIR calibration method. Returning data as read by read.gt3x.")
   raw
 }
