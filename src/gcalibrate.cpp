@@ -1,3 +1,4 @@
+// [[Rcpp::plugins(cpp11)]]
 #include <RcppArmadillo.h>
 #include <iostream>
 #include <vector>
@@ -91,7 +92,7 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue, Rcpp:
   }
 
   Rcpp::NumericVector ws {5, 900, 3600};
-  int startpage, endpage, blocksize = 12 * ws(2), minloadcrit = 72;
+  int startpage, endpage, blocksize = 12 * ws(2), minloadcrit = 168;
   double NR = ceil((90*pow(10, 6)) / (sf*10)) + 1000; // NR = number of '10' second rows (this is for 10 days at 80 Hz)
   int count = 0; // counter to keep track of the number of seconds that have been read
   double spherecrit = 0.3, sdcriter = 0.013;
@@ -162,7 +163,8 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue, Rcpp:
     if((use > 0) && (use != LD)){
       S = data(Rcpp::Range(use, LD-1), Rcpp::_);
     }
-    data = data(Rcpp::Range(0, use-1), Rcpp::_);
+
+    if(use != 0) data = data(Rcpp::Range(0, use-1), Rcpp::_);    
 
     if(data.nrow() < blocksize * 30){
       LD = 0;
@@ -274,7 +276,9 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue, Rcpp:
 
         for(int i = 0; i < input.nrow(); i++){
           for(int j = 0; j < input.ncol(); j++){
-            closestpoint(i, j) = curr(i, j) / sqrt(rsum[i]);
+            if(curr(i, j) != 0){
+              closestpoint(i, j) = curr(i, j) / sqrt(rsum[i]);
+            }
           }
         }
 
@@ -311,6 +315,7 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue, Rcpp:
 
       if((calErrorEnd < calErrorStart) && (calErrorEnd < 0.01) && (nhoursused > minloadcrit)){
         LD = 0;
+        Rcpp::Rcout << "Recalibration done, no problems detected";
       }
     }
       i += 1;

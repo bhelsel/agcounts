@@ -7,3 +7,4 @@
 ^README\.Rmd$
 ^tests/testthat/test_gcalibrateC\.R$
 ^man/figures
+.vscode/
