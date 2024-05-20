@@ -1,3 +1,9 @@
+# agcounts 0.6.8
+* Fix issue #20 related to C++ compiling by adding the `Rcpp` plugin for C++ 11.
+* Update C++ code for `gcalibrateC` to resolve issue when there are NaN values in sphere data (issue #35)
+* Resolve issue #36 when `calErrorEnd` never gets below 0.01.
+* Change minloadcrit from 72 to 168 as recommended in issue #34
+
 # agcounts 0.6.7
 * Update `agcalibrate` to speed up function by first converting to a `data.table` before merging with the time stamps.
 * Add parameter `imputeTimeGaps` to `agcalibrate` for users to decide if zeros are added back after calibration.
