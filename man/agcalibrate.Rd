@@ -4,7 +4,14 @@
 \alias{agcalibrate}
 \title{Calibrate acceleration data}
 \usage{
-agcalibrate(raw, verbose = FALSE, tz = "UTC", imputeTimeGaps = FALSE, ...)
+agcalibrate(
+  raw,
+  verbose = FALSE,
+  tz = "UTC",
+  imputeTimeGaps = FALSE,
+  ...,
+  debug = FALSE
+)
 }
 \arguments{
 \item{raw}{data frame of raw acceleration data obtained from}
@@ -16,6 +23,8 @@ agcalibrate(raw, verbose = FALSE, tz = "UTC", imputeTimeGaps = FALSE, ...)
 \item{imputeTimeGaps}{Imputes gaps in the raw acceleration data, Default: FALSE}
 
 \item{...}{Additional arguments to pass into the agread function}
+
+\item{debug}{print out diagnostic information for C++ code}
 }
 \value{
 Returns the calibrated raw acceleration data
