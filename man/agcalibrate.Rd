@@ -4,7 +4,16 @@
 \alias{agcalibrate}
 \title{Calibrate acceleration data}
 \usage{
-agcalibrate(raw, verbose = FALSE, tz = "UTC", imputeTimeGaps = FALSE, ...)
+agcalibrate(
+  raw,
+  verbose = FALSE,
+  tz = "UTC",
+  imputeTimeGaps = FALSE,
+  ...,
+  spherecrit = 0.3,
+  sdcriter = 0.013,
+  minloadcrit = 168L
+)
 }
 \arguments{
 \item{raw}{data frame of raw acceleration data obtained from}
@@ -16,6 +25,13 @@ agcalibrate(raw, verbose = FALSE, tz = "UTC", imputeTimeGaps = FALSE, ...)
 \item{imputeTimeGaps}{Imputes gaps in the raw acceleration data, Default: FALSE}
 
 \item{...}{Additional arguments to pass into the agread function}
+
+\item{sdcriter}{Criteria to define non-wear time, defined as the estimated noise
+measured in the raw accelerometer data.}
+
+\item{minloadcrit}{The minimum number of hours the code needs to read for the
+autocalibration procedure to be effective (only sensitive to multitudes
+of 12 hrs, other values will be ceiled)}
 }
 \value{
 Returns the calibrated raw acceleration data
