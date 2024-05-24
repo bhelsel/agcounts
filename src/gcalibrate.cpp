@@ -85,7 +85,7 @@ Rcpp::DoubleVector calWeights(Rcpp::NumericMatrix curr, Rcpp::NumericMatrix clos
 
 
 //[[Rcpp::export]]
-Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue, Rcpp::Nullable<Rcpp::NumericMatrix> dataset = R_NilValue, int sf = NA_INTEGER){
+Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue, Rcpp::Nullable<Rcpp::NumericMatrix> dataset = R_NilValue, int sf = NA_INTEGER, const bool debug = false){
 
   if(sf == NA_INTEGER){
     Rcpp::stop("Sample frequency can not be detected and is needed for the GGIR calibration.");
@@ -164,7 +164,7 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue, Rcpp:
       S = data(Rcpp::Range(use, LD-1), Rcpp::_);
     }
 
-    if(use != 0) data = data(Rcpp::Range(0, use-1), Rcpp::_);    
+    if(use != 0) data = data(Rcpp::Range(0, use-1), Rcpp::_);
 
     if(data.nrow() < blocksize * 30){
       LD = 0;
@@ -177,6 +177,9 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue, Rcpp:
     GxM2 = gDownSample(Gx, sf); GyM2 = gDownSample(Gy, sf); GzM2 = gDownSample(Gz, sf);
     GxSD2 = StDevC(Gx, sf); GySD2 = StDevC(Gy, sf); GzSD2 = StDevC(Gz, sf);
 
+    if (debug) {
+      Rcpp::Rcout << "!!!CPP parser info: running meta\n";
+    }
     for(int i = count, j = 0; i < count+EN2.size(); i++, j++){
       meta(i, 0) = EN2[j];
       meta(i, 1) = GxM2[j];
@@ -194,6 +197,9 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue, Rcpp:
 
     // Filter data by those SD values less than the sdcriter of 0.013
     // Determine length of meta_temp
+    if (debug) {
+      Rcpp::Rcout << "!!!CPP parser info: running meta_trim_counter\n";
+    }
     int meta_trim_counter = 0;
     for(int i = 0; i < meta_trim.nrow(); i++){
       if(meta_trim(i, 4) < sdcriter && meta_trim(i, 5) < sdcriter && meta_trim(i, 6) < sdcriter){
@@ -202,6 +208,9 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue, Rcpp:
     }
 
     // Assign values to meta_temp from meta_trim if they meet the sdcriter requirements
+    if (debug) {
+      Rcpp::Rcout << "!!!CPP parser info: running meta_temp_counter\n";
+    }
     Rcpp::NumericMatrix meta_temp(meta_trim_counter, 7);
     int meta_temp_counter = 0;
     for(int i = 0; i < meta_trim.nrow(); i++){
@@ -212,6 +221,9 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue, Rcpp:
     }
 
     // Calibration Start
+    if (debug) {
+      Rcpp::Rcout << "!!!CPP parser info: running cal_error_start\n";
+    }
     Rcpp::DoubleVector cal_error_start(meta_temp.nrow());
     for(int i = 0; i < meta_temp.nrow(); i++){
       cal_error_start[i] = (sqrt(pow(meta_temp(i, 1), 2) + pow(meta_temp(i, 2), 2) + pow(meta_temp(i, 3), 2)) - 1);
@@ -224,6 +236,9 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue, Rcpp:
     npoints = meta_temp.nrow();
 
     // Check to see if the sphere is populated
+    if (debug) {
+      Rcpp::Rcout << "!!!CPP parser info: running sphere population\n";
+    }
     int tel = 0;
     for(int i = 1; i <= 3; i++){
       if(min(meta_temp(Rcpp::_, i)) < -spherecrit && max(meta_temp(Rcpp::_, i)) > spherecrit){
@@ -265,6 +280,9 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue, Rcpp:
       Rcpp::Function lm_wfit = stats_env["lm.wfit"];
       Rcpp::List fobj;
 
+      if (debug) {
+        Rcpp::Rcout << "!!!CPP parser info: running Cscale creation\n";
+      }
       for(int iter = 0; iter < maxiter; iter++){
         curr = Cscale(input, offset, scale);
         std::fill(rsum.begin(), rsum.end(), 0);
@@ -274,6 +292,9 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue, Rcpp:
           }
         }
 
+        if (debug) {
+          Rcpp::Rcout << "!!!CPP parser info: running getting closest point\n";
+        }
         for(int i = 0; i < input.nrow(); i++){
           for(int j = 0; j < input.ncol(); j++){
             if(curr(i, j) != 0){
@@ -282,6 +303,9 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue, Rcpp:
           }
         }
 
+        if (debug) {
+          Rcpp::Rcout << "!!!CPP parser info: running getting fitted values\n";
+        }
         for(int k = 0; k < input.ncol(); k++){
             X_lmwfit(Rcpp::_, 1) = curr(Rcpp::_, k);
             X_lmwfit(Rcpp::_, 2) = inputtemp(Rcpp::_, k);
@@ -302,6 +326,9 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue, Rcpp:
 
       Rcpp::NumericMatrix meta_temp2 = Cscale(meta_temp(Rcpp::_, Rcpp::Range(1,3)), offset, scale);
 
+      if (debug) {
+        Rcpp::Rcout << "!!!CPP parser info: running cal_error_end\n";
+      }
       Rcpp::DoubleVector cal_error_end(meta_temp2.nrow());
       for(int i = 0; i < meta_temp2.nrow(); i++){
         cal_error_end[i] = (sqrt(pow(meta_temp2(i, 0), 2) + pow(meta_temp2(i, 1), 2) + pow(meta_temp2(i, 2), 2)) - 1);
