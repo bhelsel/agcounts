@@ -12,15 +12,18 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // gcalibrateC
-Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname, Rcpp::Nullable<Rcpp::NumericMatrix> dataset, int sf);
-RcppExport SEXP _agcounts_gcalibrateC(SEXP pathnameSEXP, SEXP datasetSEXP, SEXP sfSEXP) {
+Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname, Rcpp::Nullable<Rcpp::NumericMatrix> dataset, int sf, double spherecrit, double sdcriter, int minloadcrit);
+RcppExport SEXP _agcounts_gcalibrateC(SEXP pathnameSEXP, SEXP datasetSEXP, SEXP sfSEXP, SEXP spherecritSEXP, SEXP sdcriterSEXP, SEXP minloadcritSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::String> >::type pathname(pathnameSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericMatrix> >::type dataset(datasetSEXP);
     Rcpp::traits::input_parameter< int >::type sf(sfSEXP);
-    rcpp_result_gen = Rcpp::wrap(gcalibrateC(pathname, dataset, sf));
+    Rcpp::traits::input_parameter< double >::type spherecrit(spherecritSEXP);
+    Rcpp::traits::input_parameter< double >::type sdcriter(sdcriterSEXP);
+    Rcpp::traits::input_parameter< int >::type minloadcrit(minloadcritSEXP);
+    rcpp_result_gen = Rcpp::wrap(gcalibrateC(pathname, dataset, sf, spherecrit, sdcriter, minloadcrit));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -38,7 +41,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_agcounts_gcalibrateC", (DL_FUNC) &_agcounts_gcalibrateC, 3},
+    {"_agcounts_gcalibrateC", (DL_FUNC) &_agcounts_gcalibrateC, 6},
     {"_agcounts_upsampleC", (DL_FUNC) &_agcounts_upsampleC, 2},
     {NULL, NULL, 0}
 };
