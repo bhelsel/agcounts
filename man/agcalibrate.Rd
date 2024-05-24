@@ -26,6 +26,9 @@ agcalibrate(
 
 \item{...}{Additional arguments to pass into the agread function}
 
+\item{spherecrit}{The minimum required acceleration value (in g) on both sides of 0 g
+for each axis. Used to judge whether the sphere is sufficiently populated}
+
 \item{sdcriter}{Criteria to define non-wear time, defined as the estimated noise
 measured in the raw accelerometer data.}
 

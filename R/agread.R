@@ -87,7 +87,7 @@ agread <- function(path, parser = c("pygt3x", "GGIR", "read.gt3x"), tz = "UTC", 
 #' @param tz the desired timezone, Default: \code{UTC}
 #' @param imputeTimeGaps Imputes gaps in the raw acceleration data, Default: FALSE
 #' @param spherecrit The minimum required acceleration value (in g) on both sides of 0 g
-#' for each axis. Used to judge whether the sphere is sufficiently populated}
+#' for each axis. Used to judge whether the sphere is sufficiently populated
 #' @param sdcriter Criteria to define non-wear time, defined as the estimated noise
 #' measured in the raw accelerometer data.
 #' @param minloadcrit The minimum number of hours the code needs to read for the
