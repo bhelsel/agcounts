@@ -125,7 +125,7 @@ agcalibrate <- function(raw, verbose = FALSE, tz = "UTC", imputeTimeGaps = FALSE
     is.wholenumber(minloadcrit) && length(minloadcrit) == 1
   )
   spherecrit = as.double(spherecrit)
-  spherecrit = as.double(spherecrit)
+  sdcriter = as.double(sdcriter)
   minloadcrit = as.integer(minloadcrit)
   C <- gcalibrateC(dataset = as.matrix(raw[, c("X", "Y", "Z")]), sf = sf,
                    spherecrit = spherecrit,
