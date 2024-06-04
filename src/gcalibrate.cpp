@@ -334,7 +334,6 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue, Rcpp:
 
       if (debug) {
         Rcpp::Rcout << "!!!CPP parser info: running Cscale creation\n";
-        Rcpp::Rcout << "!!!CPP parser info: maxiter" << maxiter << "\n";
       }
       for(int iter = 0; iter < maxiter; iter++){
         curr = Cscale(input, offset, scale);
@@ -396,6 +395,8 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue, Rcpp:
       if((calErrorEnd < calErrorStart) && (calErrorEnd < 0.01) && (nhoursused > minloadcrit)){
         LD = 0;
         Rcpp::Rcout << "Recalibration done, no problems detected";
+      } else {
+        Rcpp::Rcout << "Recalibration criteria not met\n";
       }
     }
     i += 1;
