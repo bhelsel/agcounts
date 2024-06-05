@@ -85,16 +85,13 @@ Rcpp::DoubleVector calWeights(Rcpp::NumericMatrix curr, Rcpp::NumericMatrix clos
 
 
 //[[Rcpp::export]]
-<<<<<<< minloadcrit
 Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue,
                        Rcpp::Nullable<Rcpp::NumericMatrix> dataset = R_NilValue,
                        int sf = NA_INTEGER,
                        double spherecrit = 0.3,
                        double sdcriter = 0.013,
-                       int minloadcrit = 168){
-=======
-Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue, Rcpp::Nullable<Rcpp::NumericMatrix> dataset = R_NilValue, int sf = NA_INTEGER, const bool debug = false){
->>>>>>> master
+                       int minloadcrit = 168,
+                       const bool debug = false){
 
   if(sf == NA_INTEGER){
     Rcpp::stop("Sample frequency can not be detected and is needed for the GGIR calibration.");
@@ -191,16 +188,12 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue, Rcpp:
       Rcpp::Rcout << "!!!CPP parser info: now S.nrow()" << S.nrow() << "\n";
     }
 
-<<<<<<< minloadcrit
-    if(use != 0) data = data(Rcpp::Range(0, use-1), Rcpp::_);
-=======
     if(use != 0) {
       if (debug) {
         Rcpp::Rcout << "!!!CPP parser info: use != 0: use = " << use << "\n";
       }
       data = data(Rcpp::Range(0, use-1), Rcpp::_);
     }
->>>>>>> master
 
     if(data.nrow() < blocksize * 30){
       if (debug) {

@@ -9,14 +9,11 @@ agcalibrate(
   verbose = FALSE,
   tz = "UTC",
   imputeTimeGaps = FALSE,
-  ...,
-<<<<<<< minloadcrit
   spherecrit = 0.3,
   sdcriter = 0.013,
-  minloadcrit = 168L
-=======
-  debug = FALSE
->>>>>>> master
+  minloadcrit = 168L,
+  debug = FALSE,
+  ...
 )
 }
 \arguments{
@@ -28,9 +25,6 @@ agcalibrate(
 
 \item{imputeTimeGaps}{Imputes gaps in the raw acceleration data, Default: FALSE}
 
-\item{...}{Additional arguments to pass into the agread function}
-
-<<<<<<< minloadcrit
 \item{spherecrit}{The minimum required acceleration value (in g) on both sides of 0 g
 for each axis. Used to judge whether the sphere is sufficiently populated}
 
@@ -40,9 +34,10 @@ measured in the raw accelerometer data.}
 \item{minloadcrit}{The minimum number of hours the code needs to read for the
 autocalibration procedure to be effective (only sensitive to multitudes
 of 12 hrs, other values will be ceiled)}
-=======
+
 \item{debug}{print out diagnostic information for C++ code}
->>>>>>> master
+
+\item{...}{Additional arguments to pass into the agread function}
 }
 \value{
 Returns the calibrated raw acceleration data

@@ -81,7 +81,6 @@ agread <- function(path, parser = c("pygt3x", "GGIR", "read.gt3x"), tz = "UTC", 
 
 #' @title Calibrate acceleration data
 #' @description This function uses a C++ implementation of the GGIR `g.calibrate` function.
-#'
 #' @param raw data frame of raw acceleration data obtained from
 #' @param verbose Print the progress of the calibration for the raw data, Default: FALSE
 #' @param tz the desired timezone, Default: \code{UTC}
@@ -93,12 +92,8 @@ agread <- function(path, parser = c("pygt3x", "GGIR", "read.gt3x"), tz = "UTC", 
 #' @param minloadcrit The minimum number of hours the code needs to read for the
 #' autocalibration procedure to be effective (only sensitive to multitudes
 #' of 12 hrs, other values will be ceiled)
-#' @param ... Additional arguments to pass into the agread function
-<<<<<<< minloadcrit
-#'
-=======
 #' @param debug print out diagnostic information for C++ code
->>>>>>> master
+#' @param ... Additional arguments to pass into the agread function
 #' @return Returns the calibrated raw acceleration data
 #' @details This function uses a C++ implementation of the GGIR `g.calibrate` function to
 #' return calibrated raw acceleration data.
@@ -114,11 +109,9 @@ agread <- function(path, parser = c("pygt3x", "GGIR", "read.gt3x"), tz = "UTC", 
 #' @importFrom data.table setDT setDF
 
 
-agcalibrate <- function(raw, verbose = FALSE, tz = "UTC", imputeTimeGaps = FALSE, ...,
-<<<<<<< minloadcrit
-                        spherecrit = 0.3,
-                        sdcriter = 0.013,
-                        minloadcrit = 168L){
+agcalibrate <- function(raw, verbose = FALSE, tz = "UTC", imputeTimeGaps = FALSE,
+                        spherecrit = 0.3, sdcriter = 0.013, minloadcrit = 168L, debug = FALSE, ...){
+
   if(any(.get_sleep(raw))) stop("Calibration requires the data to be imported without imputed zeros.")
   sf = .get_frequency(raw)
   is.wholenumber <- function(x, tol = .Machine$double.eps^0.5) {
@@ -132,17 +125,10 @@ agcalibrate <- function(raw, verbose = FALSE, tz = "UTC", imputeTimeGaps = FALSE
   spherecrit = as.double(spherecrit)
   sdcriter = as.double(sdcriter)
   minloadcrit = as.integer(minloadcrit)
-  C <- gcalibrateC(dataset = as.matrix(raw[, c("X", "Y", "Z")]), sf = sf,
-                   spherecrit = spherecrit,
-                   sdcriter = sdcriter,
-                   minloadcrit = minloadcrit)
-=======
-                        debug = FALSE){
-  if(any(.get_sleep(raw))) stop("Calibration requires the data to be imported without imputed zeros.")
-  sf = .get_frequency(raw)
-  C <- gcalibrateC(dataset = as.matrix(raw[, c("X", "Y", "Z")]), sf = sf,
+  C <- gcalibrateC(dataset = as.matrix(raw[, c("X", "Y", "Z")]),
+                   sf = sf, spherecrit = spherecrit,
+                   sdcriter = sdcriter, minloadcrit = minloadcrit,
                    debug = as.logical(debug))
->>>>>>> master
 
   if(imputeTimeGaps){
     if("last_sample_time" %in% names(attributes(raw))){

@@ -12,28 +12,19 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // gcalibrateC
-<<<<<<< minloadcrit
-Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname, Rcpp::Nullable<Rcpp::NumericMatrix> dataset, int sf, double spherecrit, double sdcriter, int minloadcrit);
-RcppExport SEXP _agcounts_gcalibrateC(SEXP pathnameSEXP, SEXP datasetSEXP, SEXP sfSEXP, SEXP spherecritSEXP, SEXP sdcriterSEXP, SEXP minloadcritSEXP) {
-=======
-Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname, Rcpp::Nullable<Rcpp::NumericMatrix> dataset, int sf, const bool debug);
-RcppExport SEXP _agcounts_gcalibrateC(SEXP pathnameSEXP, SEXP datasetSEXP, SEXP sfSEXP, SEXP debugSEXP) {
->>>>>>> master
+Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname, Rcpp::Nullable<Rcpp::NumericMatrix> dataset, int sf, double spherecrit, double sdcriter, int minloadcrit, const bool debug);
+RcppExport SEXP _agcounts_gcalibrateC(SEXP pathnameSEXP, SEXP datasetSEXP, SEXP sfSEXP, SEXP spherecritSEXP, SEXP sdcriterSEXP, SEXP minloadcritSEXP, SEXP debugSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::String> >::type pathname(pathnameSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericMatrix> >::type dataset(datasetSEXP);
     Rcpp::traits::input_parameter< int >::type sf(sfSEXP);
-<<<<<<< minloadcrit
     Rcpp::traits::input_parameter< double >::type spherecrit(spherecritSEXP);
     Rcpp::traits::input_parameter< double >::type sdcriter(sdcriterSEXP);
     Rcpp::traits::input_parameter< int >::type minloadcrit(minloadcritSEXP);
-    rcpp_result_gen = Rcpp::wrap(gcalibrateC(pathname, dataset, sf, spherecrit, sdcriter, minloadcrit));
-=======
     Rcpp::traits::input_parameter< const bool >::type debug(debugSEXP);
-    rcpp_result_gen = Rcpp::wrap(gcalibrateC(pathname, dataset, sf, debug));
->>>>>>> master
+    rcpp_result_gen = Rcpp::wrap(gcalibrateC(pathname, dataset, sf, spherecrit, sdcriter, minloadcrit, debug));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -51,11 +42,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-<<<<<<< minloadcrit
-    {"_agcounts_gcalibrateC", (DL_FUNC) &_agcounts_gcalibrateC, 6},
-=======
-    {"_agcounts_gcalibrateC", (DL_FUNC) &_agcounts_gcalibrateC, 4},
->>>>>>> master
+    {"_agcounts_gcalibrateC", (DL_FUNC) &_agcounts_gcalibrateC, 7},
     {"_agcounts_upsampleC", (DL_FUNC) &_agcounts_upsampleC, 2},
     {NULL, NULL, 0}
 };
