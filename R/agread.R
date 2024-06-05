@@ -86,6 +86,7 @@ agread <- function(path, parser = c("pygt3x", "GGIR", "read.gt3x"), tz = "UTC", 
 #' @param tz the desired timezone, Default: \code{UTC}
 #' @param imputeTimeGaps Imputes gaps in the raw acceleration data, Default: FALSE
 #' @param ... Additional arguments to pass into the agread function
+#' @param debug print out diagnostic information for C++ code
 #' @return Returns the calibrated raw acceleration data
 #' @details This function uses a C++ implementation of the GGIR `g.calibrate` function to
 #' return calibrated raw acceleration data.
@@ -101,10 +102,12 @@ agread <- function(path, parser = c("pygt3x", "GGIR", "read.gt3x"), tz = "UTC", 
 #' @importFrom data.table setDT setDF
 
 
-agcalibrate <- function(raw, verbose = FALSE, tz = "UTC", imputeTimeGaps = FALSE, ...){
+agcalibrate <- function(raw, verbose = FALSE, tz = "UTC", imputeTimeGaps = FALSE, ...,
+                        debug = FALSE){
   if(any(.get_sleep(raw))) stop("Calibration requires the data to be imported without imputed zeros.")
   sf = .get_frequency(raw)
-  C <- gcalibrateC(dataset = as.matrix(raw[, c("X", "Y", "Z")]), sf = sf)
+  C <- gcalibrateC(dataset = as.matrix(raw[, c("X", "Y", "Z")]), sf = sf,
+                   debug = as.logical(debug))
 
   if(imputeTimeGaps){
     if("last_sample_time" %in% names(attributes(raw))){
