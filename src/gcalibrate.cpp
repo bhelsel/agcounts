@@ -85,17 +85,26 @@ Rcpp::DoubleVector calWeights(Rcpp::NumericMatrix curr, Rcpp::NumericMatrix clos
 
 
 //[[Rcpp::export]]
+<<<<<<< minloadcrit
+Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue,
+                       Rcpp::Nullable<Rcpp::NumericMatrix> dataset = R_NilValue,
+                       int sf = NA_INTEGER,
+                       double spherecrit = 0.3,
+                       double sdcriter = 0.013,
+                       int minloadcrit = 168){
+=======
 Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue, Rcpp::Nullable<Rcpp::NumericMatrix> dataset = R_NilValue, int sf = NA_INTEGER, const bool debug = false){
+>>>>>>> master
 
   if(sf == NA_INTEGER){
     Rcpp::stop("Sample frequency can not be detected and is needed for the GGIR calibration.");
   }
 
   Rcpp::NumericVector ws {5, 900, 3600};
-  int startpage, endpage, blocksize = 12 * ws(2), minloadcrit = 168;
+  int startpage, endpage, blocksize = 12 * ws(2);
   double NR = ceil((90*pow(10, 6)) / (sf*10)) + 1000; // NR = number of '10' second rows (this is for 10 days at 80 Hz)
   int count = 0; // counter to keep track of the number of seconds that have been read
-  double spherecrit = 0.3, sdcriter = 0.013;
+  // double spherecrit = 0.3, sdcriter = 0.013;
   double nhoursused, calErrorStart = 0.0, calErrorEnd = 0.0;
   int LD = 2; // dummy variable used to identify end of file and to make the process stop
   int i = 0; // counter to keep track of which block is being read
@@ -182,12 +191,16 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue, Rcpp:
       Rcpp::Rcout << "!!!CPP parser info: now S.nrow()" << S.nrow() << "\n";
     }
 
+<<<<<<< minloadcrit
+    if(use != 0) data = data(Rcpp::Range(0, use-1), Rcpp::_);
+=======
     if(use != 0) {
       if (debug) {
         Rcpp::Rcout << "!!!CPP parser info: use != 0: use = " << use << "\n";
       }
       data = data(Rcpp::Range(0, use-1), Rcpp::_);
     }
+>>>>>>> master
 
     if(data.nrow() < blocksize * 30){
       if (debug) {
