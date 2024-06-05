@@ -94,7 +94,11 @@ agread <- function(path, parser = c("pygt3x", "GGIR", "read.gt3x"), tz = "UTC", 
 #' autocalibration procedure to be effective (only sensitive to multitudes
 #' of 12 hrs, other values will be ceiled)
 #' @param ... Additional arguments to pass into the agread function
+<<<<<<< minloadcrit
 #'
+=======
+#' @param debug print out diagnostic information for C++ code
+>>>>>>> master
 #' @return Returns the calibrated raw acceleration data
 #' @details This function uses a C++ implementation of the GGIR `g.calibrate` function to
 #' return calibrated raw acceleration data.
@@ -111,6 +115,7 @@ agread <- function(path, parser = c("pygt3x", "GGIR", "read.gt3x"), tz = "UTC", 
 
 
 agcalibrate <- function(raw, verbose = FALSE, tz = "UTC", imputeTimeGaps = FALSE, ...,
+<<<<<<< minloadcrit
                         spherecrit = 0.3,
                         sdcriter = 0.013,
                         minloadcrit = 168L){
@@ -131,6 +136,13 @@ agcalibrate <- function(raw, verbose = FALSE, tz = "UTC", imputeTimeGaps = FALSE
                    spherecrit = spherecrit,
                    sdcriter = sdcriter,
                    minloadcrit = minloadcrit)
+=======
+                        debug = FALSE){
+  if(any(.get_sleep(raw))) stop("Calibration requires the data to be imported without imputed zeros.")
+  sf = .get_frequency(raw)
+  C <- gcalibrateC(dataset = as.matrix(raw[, c("X", "Y", "Z")]), sf = sf,
+                   debug = as.logical(debug))
+>>>>>>> master
 
   if(imputeTimeGaps){
     if("last_sample_time" %in% names(attributes(raw))){

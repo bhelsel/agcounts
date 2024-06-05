@@ -4,12 +4,12 @@
 #include <vector>
 
 Rcpp::NumericMatrix rbindC (Rcpp::NumericMatrix S, Rcpp::NumericMatrix data){
-    arma::mat a_S = Rcpp::as<arma::mat>(S);
-    arma::mat a_data = Rcpp::as<arma::mat>(data);
-    arma::mat a_combined_data = join_vert(a_S, a_data);
-    Rcpp::NumericMatrix combined_data = Rcpp::wrap(a_combined_data);
-    return(combined_data);
-  }
+  arma::mat a_S = Rcpp::as<arma::mat>(S);
+  arma::mat a_data = Rcpp::as<arma::mat>(data);
+  arma::mat a_combined_data = join_vert(a_S, a_data);
+  Rcpp::NumericMatrix combined_data = Rcpp::wrap(a_combined_data);
+  return(combined_data);
+}
 
 Rcpp::NumericVector gDownSample(Rcpp::NumericVector X, int sf){
   // cumsum
@@ -32,24 +32,24 @@ Rcpp::NumericVector gDownSample(Rcpp::NumericVector X, int sf){
 }
 
 Rcpp::NumericVector StDevC(Rcpp::NumericVector X, int sf){
-    // Create a matrix from vector X
-    int X_nrows = sf * 10;
-    int X_ncols = ceil(X.size() / (sf * 10));
-    Rcpp::NumericMatrix M (X_nrows, X_ncols);
-    int iterator = 0;
-    //int M_nrows = M.nrow();
-    int M_ncols = M.ncol();
-    Rcpp::NumericVector M_SD2;
-    for(int j = 0; j < X_ncols; j++){
-      for(int i = 0; i < X_nrows; i++){
-        M(i, j) = X[iterator];
-        iterator += 1;
-      }
+  // Create a matrix from vector X
+  int X_nrows = sf * 10;
+  int X_ncols = ceil(X.size() / (sf * 10));
+  Rcpp::NumericMatrix M (X_nrows, X_ncols);
+  int iterator = 0;
+  //int M_nrows = M.nrow();
+  int M_ncols = M.ncol();
+  Rcpp::NumericVector M_SD2;
+  for(int j = 0; j < X_ncols; j++){
+    for(int i = 0; i < X_nrows; i++){
+      M(i, j) = X[iterator];
+      iterator += 1;
     }
-    for(int j = 0; j < M_ncols; j++){
-      M_SD2.push_back(sd(M(Rcpp::_, j)));
-    }
-    return M_SD2;
+  }
+  for(int j = 0; j < M_ncols; j++){
+    M_SD2.push_back(sd(M(Rcpp::_, j)));
+  }
+  return M_SD2;
 }
 
 Rcpp::NumericMatrix Cscale(Rcpp::NumericMatrix X, Rcpp::NumericVector offset, Rcpp::NumericVector scale){
@@ -85,12 +85,16 @@ Rcpp::DoubleVector calWeights(Rcpp::NumericMatrix curr, Rcpp::NumericMatrix clos
 
 
 //[[Rcpp::export]]
+<<<<<<< minloadcrit
 Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue,
                        Rcpp::Nullable<Rcpp::NumericMatrix> dataset = R_NilValue,
                        int sf = NA_INTEGER,
                        double spherecrit = 0.3,
                        double sdcriter = 0.013,
                        int minloadcrit = 168){
+=======
+Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue, Rcpp::Nullable<Rcpp::NumericMatrix> dataset = R_NilValue, int sf = NA_INTEGER, const bool debug = false){
+>>>>>>> master
 
   if(sf == NA_INTEGER){
     Rcpp::stop("Sample frequency can not be detected and is needed for the GGIR calibration.");
@@ -156,25 +160,58 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue,
 
     }
 
+    if (debug) {
+      Rcpp::Rcout << "!!!CPP parser info: startpage" << startpage << ", endpage:" << endpage << "\n";
+    }
+
+    if (debug) {
+      Rcpp::Rcout << "!!!CPP parser info: data.nrow()" << data.nrow() << ", blocksize:" << blocksize << "\n";
+    }
+
     if(data.nrow() < blocksize) break;
 
     // add left over data using a similar rbind function
+    if (debug) {
+      Rcpp::Rcout << "!!!CPP parser info: S.nrow()" << S.nrow() << "\n";
+    }
     if(S.nrow() > 0) {
       data = rbindC(S, data);
     }
     LD = data.nrow();
     int use = (floor(LD / (ws[2]*sf))) * (ws[2]*sf); // number of data points to use
 
+    if (debug) {
+      Rcpp::Rcout << "!!!CPP parser info: LD:" << LD << ", use:" << use << "\n";
+    }
+
     if((use > 0) && (use != LD)){
       S = data(Rcpp::Range(use, LD-1), Rcpp::_);
     }
+    if (debug) {
+      Rcpp::Rcout << "!!!CPP parser info: now S.nrow()" << S.nrow() << "\n";
+    }
 
+<<<<<<< minloadcrit
     if(use != 0) data = data(Rcpp::Range(0, use-1), Rcpp::_);
+=======
+    if(use != 0) {
+      if (debug) {
+        Rcpp::Rcout << "!!!CPP parser info: use != 0: use = " << use << "\n";
+      }
+      data = data(Rcpp::Range(0, use-1), Rcpp::_);
+    }
+>>>>>>> master
 
     if(data.nrow() < blocksize * 30){
+      if (debug) {
+        Rcpp::Rcout << "!!!CPP parser info: data.nrow() < blocksize * 30 \n";
+      }
       LD = 0;
     } else{
       LD = data.nrow();
+      if (debug) {
+        Rcpp::Rcout << "!!!CPP parser info: data.nrow() >= blocksize * 30; LD = " << LD << "\n";
+      }
     }
 
     Gx = data(Rcpp::_, 0); Gy = data(Rcpp::_, 1); Gz = data(Rcpp::_, 2);
@@ -182,6 +219,9 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue,
     GxM2 = gDownSample(Gx, sf); GyM2 = gDownSample(Gy, sf); GzM2 = gDownSample(Gz, sf);
     GxSD2 = StDevC(Gx, sf); GySD2 = StDevC(Gy, sf); GzSD2 = StDevC(Gz, sf);
 
+    if (debug) {
+      Rcpp::Rcout << "!!!CPP parser info: running meta\n";
+    }
     for(int i = count, j = 0; i < count+EN2.size(); i++, j++){
       meta(i, 0) = EN2[j];
       meta(i, 1) = GxM2[j];
@@ -193,20 +233,32 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue,
     }
 
     count += EN2.size(); // increasing "count": the indicator of how many seconds have been read
+    if (debug) {
+      Rcpp::Rcout << "!!!CPP parser info: meta_trim count = " << count << "\n";
+    }
     Rcpp::NumericMatrix meta_trim(count-1, 7);
     meta_trim = meta(Rcpp::Range(0, count-1), Rcpp::_);
     nhoursused = (meta_trim.nrow() * 10) / 3600;
 
     // Filter data by those SD values less than the sdcriter of 0.013
     // Determine length of meta_temp
+    if (debug) {
+      Rcpp::Rcout << "!!!CPP parser info: running meta_trim_counter\n";
+    }
     int meta_trim_counter = 0;
     for(int i = 0; i < meta_trim.nrow(); i++){
       if(meta_trim(i, 4) < sdcriter && meta_trim(i, 5) < sdcriter && meta_trim(i, 6) < sdcriter){
         meta_trim_counter += 1;
       }
     }
+    if (debug) {
+      Rcpp::Rcout << "!!!CPP parser info: meta_trim_counter = " << meta_trim_counter << "\n";
+    }
 
     // Assign values to meta_temp from meta_trim if they meet the sdcriter requirements
+    if (debug) {
+      Rcpp::Rcout << "!!!CPP parser info: running meta_temp_counter\n";
+    }
     Rcpp::NumericMatrix meta_temp(meta_trim_counter, 7);
     int meta_temp_counter = 0;
     for(int i = 0; i < meta_trim.nrow(); i++){
@@ -215,20 +267,37 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue,
         meta_temp_counter += 1;
       }
     }
+    if (debug) {
+      Rcpp::Rcout << "!!!CPP parser info: meta_temp_counter = " << meta_temp_counter << "\n";
+    }
 
     // Calibration Start
+    if (debug) {
+      Rcpp::Rcout << "!!!CPP parser info: running cal_error_start\n";
+    }
+    if (debug) {
+      Rcpp::Rcout << "!!!CPP parser info: meta_temp.nrow():" << meta_temp.nrow() << "\n";
+    }
+
     Rcpp::DoubleVector cal_error_start(meta_temp.nrow());
     for(int i = 0; i < meta_temp.nrow(); i++){
       cal_error_start[i] = (sqrt(pow(meta_temp(i, 1), 2) + pow(meta_temp(i, 2), 2) + pow(meta_temp(i, 3), 2)) - 1);
       if(cal_error_start[i] < 0) {
         cal_error_start[i] *= -1;
-        }
+      }
       calErrorStart += cal_error_start[i];
     }
     calErrorStart = std::round((calErrorStart / meta_temp.nrow()) * 100000) / 100000;
     npoints = meta_temp.nrow();
+    if (debug) {
+      Rcpp::Rcout << "!!!CPP parser info: npoints:" << npoints << "\n";
+    }
+
 
     // Check to see if the sphere is populated
+    if (debug) {
+      Rcpp::Rcout << "!!!CPP parser info: running sphere population\n";
+    }
     int tel = 0;
     for(int i = 1; i <= 3; i++){
       if(min(meta_temp(Rcpp::_, i)) < -spherecrit && max(meta_temp(Rcpp::_, i)) > spherecrit){
@@ -236,6 +305,9 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue,
       }
     }
 
+    if (debug) {
+      Rcpp::Rcout << "!!!CPP parser info: tel:" << tel << "\n";
+    }
     int spherepopulated;
     if(tel == 3){
       spherepopulated = 1;
@@ -244,6 +316,9 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue,
     }
 
     if(spherepopulated == 1){
+      if (debug) {
+        Rcpp::Rcout << "!!!CPP parser info: spherepopulated = 1" << "\n";
+      }
       Rcpp::NumericMatrix input = meta_temp(Rcpp::_, Rcpp::Range(1,3));
       Rcpp::NumericMatrix inputtemp(input.nrow(), input.ncol());
       double meantemp = mean(inputtemp(Rcpp::_, 1));
@@ -270,6 +345,9 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue,
       Rcpp::Function lm_wfit = stats_env["lm.wfit"];
       Rcpp::List fobj;
 
+      if (debug) {
+        Rcpp::Rcout << "!!!CPP parser info: running Cscale creation\n";
+      }
       for(int iter = 0; iter < maxiter; iter++){
         curr = Cscale(input, offset, scale);
         std::fill(rsum.begin(), rsum.end(), 0);
@@ -279,6 +357,9 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue,
           }
         }
 
+        if (debug) {
+          Rcpp::Rcout << "!!!CPP parser info: running getting closest point\n";
+        }
         for(int i = 0; i < input.nrow(); i++){
           for(int j = 0; j < input.ncol(); j++){
             if(curr(i, j) != 0){
@@ -287,14 +368,17 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue,
           }
         }
 
+        if (debug) {
+          Rcpp::Rcout << "!!!CPP parser info: running getting fitted values\n";
+        }
         for(int k = 0; k < input.ncol(); k++){
-            X_lmwfit(Rcpp::_, 1) = curr(Rcpp::_, k);
-            X_lmwfit(Rcpp::_, 2) = inputtemp(Rcpp::_, k);
-            fobj = lm_wfit(Rcpp::Named("x") = X_lmwfit, Rcpp::Named("y") = closestpoint(Rcpp::_, k), Rcpp::Named("w") = weights);
-            coef = fobj["coefficients"];
-            offsetch[k] = coef[0];
-            scalech[k] = coef[1];
-            curr(Rcpp::_, k) = Rcpp::as<Rcpp::DoubleVector>(fobj["fitted.values"]);
+          X_lmwfit(Rcpp::_, 1) = curr(Rcpp::_, k);
+          X_lmwfit(Rcpp::_, 2) = inputtemp(Rcpp::_, k);
+          fobj = lm_wfit(Rcpp::Named("x") = X_lmwfit, Rcpp::Named("y") = closestpoint(Rcpp::_, k), Rcpp::Named("w") = weights);
+          coef = fobj["coefficients"];
+          offsetch[k] = coef[0];
+          scalech[k] = coef[1];
+          curr(Rcpp::_, k) = Rcpp::as<Rcpp::DoubleVector>(fobj["fitted.values"]);
         }
 
         offset = offset + offsetch / (scale * scalech);
@@ -307,12 +391,15 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue,
 
       Rcpp::NumericMatrix meta_temp2 = Cscale(meta_temp(Rcpp::_, Rcpp::Range(1,3)), offset, scale);
 
+      if (debug) {
+        Rcpp::Rcout << "!!!CPP parser info: running cal_error_end\n";
+      }
       Rcpp::DoubleVector cal_error_end(meta_temp2.nrow());
       for(int i = 0; i < meta_temp2.nrow(); i++){
         cal_error_end[i] = (sqrt(pow(meta_temp2(i, 0), 2) + pow(meta_temp2(i, 1), 2) + pow(meta_temp2(i, 2), 2)) - 1);
         if(cal_error_end[i] < 0) {
           cal_error_end[i] *= -1;
-          }
+        }
         calErrorEnd += cal_error_end[i];
       }
       calErrorEnd = std::round((calErrorEnd / meta_temp2.nrow()) * 100000) / 100000;
@@ -321,10 +408,12 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue,
       if((calErrorEnd < calErrorStart) && (calErrorEnd < 0.01) && (nhoursused > minloadcrit)){
         LD = 0;
         Rcpp::Rcout << "Recalibration done, no problems detected";
+      } else {
+        Rcpp::Rcout << "Recalibration criteria not met\n";
       }
     }
-      i += 1;
-      spheredata = meta_temp;
+    i += 1;
+    spheredata = meta_temp;
   }
 
   if(spheredata.nrow() == 0){
@@ -338,9 +427,15 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue,
   }
 
 
-  Rcpp::List calibration = Rcpp::List::create(Rcpp::Named("scale") = scale, Rcpp::Named("offset") = offset, Rcpp::Named("tempoffset") = tempoffset,
-    Rcpp::Named("calErrorStart") = calErrorStart, Rcpp::Named("calErrorEnd") = calErrorEnd, Rcpp::Named("spheredata") = spheredata,
-    Rcpp::Named("npoints") = npoints, Rcpp::Named("nhoursused") = nhoursused);
+  Rcpp::List calibration = Rcpp::List::create(Rcpp::Named("scale") = scale,
+                                              Rcpp::Named("offset") = offset,
+                                              Rcpp::Named("tempoffset") = tempoffset,
+                                              Rcpp::Named("calErrorStart") = calErrorStart,
+                                              Rcpp::Named("calErrorEnd") = calErrorEnd,
+                                              Rcpp::Named("spheredata") = spheredata,
+                                              Rcpp::Named("npoints") = npoints,
+                                              Rcpp::Named("nhoursused") = nhoursused,
+                                              Rcpp::Named("minloadcrit") = minloadcrit);
 
   return calibration;
 }
