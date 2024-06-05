@@ -1,3 +1,6 @@
+# agcounts 0.6.9
+* Added debugging capabilities to C++ code and additional arguments to control spherecrit, sdcriter, and minloadcrit within the `gcalibrateC` function. Thanks to John Muschelli for the contribution!
+
 # agcounts 0.6.8
 * Fix issue #20 related to C++ compiling by adding the `Rcpp` plugin for C++ 11.
 * Update C++ code for `gcalibrateC` to resolve issue when there are NaN values in sphere data (issue #35)
