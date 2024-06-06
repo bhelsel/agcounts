@@ -402,9 +402,10 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue,
         LD = 0;
         Rcpp::Rcout << "Recalibration done, no problems detected";
       } else {
-        if (debug) {
+        if (debug){
           Rcpp::Rcout << "Recalibration criteria not met\n";
         }
+      }
     }
     i += 1;
     spheredata = meta_temp;
