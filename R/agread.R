@@ -146,6 +146,8 @@ agcalibrate <- function(raw, verbose = FALSE, tz = "UTC", imputeTimeGaps = FALSE
 
   raw[, c("X", "Y", "Z")] <- scale(raw[, c("X", "Y", "Z")], center = -C$offset, scale = 1/C$scale)
   if(C$nhoursused==0) message("\n There is not enough data to perform the GGIR calibration method. Returning data as read by read.gt3x.")
+  attr(raw, "offset") = C$offset
+  attr(raw, "scale") = C$scale
   raw
 }
 
