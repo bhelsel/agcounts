@@ -18,7 +18,12 @@ testthat::test_that("Shiny app rawDataModuleServer loads raw acceleration data",
     testthat::compare(input$parser, "pygt3x")
 
     # Test the Calibrated Data
-    testthat::expect_equal(ncol(calibratedData()), 5)
+    py_module_version = agcounts:::pygt3x_module_version()
+    if (py_module_version >= package_version("0.7.1")) {
+      testthat::expect_equal(ncol(calibratedData()), 6L)
+    } else {
+      testthat::expect_equal(ncol(calibratedData()), 5L)
+    }
     testthat::expect_equal(nrow(calibratedData()), 18000)
     testthat::compare(mean(calibratedData()$X), 0.9727254, tolerance = 1e-7)
     testthat::compare(mean(calibratedData()$Y), 0.6042353, tolerance = 1e-7)

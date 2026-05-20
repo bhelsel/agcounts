@@ -37,6 +37,17 @@ agread <- function(path, parser = c("pygt3x", "GGIR", "read.gt3x"), tz = "UTC", 
   )
 }
 
+pygt3x_module_version = function() {
+  if (!reticulate::py_available(initialize = TRUE)) {
+    return(NA)
+  }
+  if (!reticulate::py_module_available("pygt3x")) {
+    return(NA)
+  }
+  pkgs = reticulate::py_list_packages()
+  package_version(pkgs[pkgs$package == "pygt3x", "version"])
+}
+
 .pygt3xReader <- function(path, tz = "UTC", verbose = FALSE, ...){
   reader <- NULL
   if(!reticulate::py_module_available("pygt3x")) stop('Python module "pygt3x" not found.')
@@ -49,12 +60,17 @@ agread <- function(path, parser = c("pygt3x", "GGIR", "read.gt3x"), tz = "UTC", 
   # Import Classes
   FileReader <- Reader$FileReader
   to_pandas <- FileReader$to_pandas
+  py_module_version = pygt3x_module_version()
+  cn = c("time", "X", "Y", "Z")
+  if (py_module_version >= package_version("0.7.1")) {
+    cn = c(cn, "IdleSleepMode")
+  }
   # Read and calibrate data
   with(FileReader(path) %as% reader, {
     raw = to_pandas(reader)
     raw = reset_index(raw)})
   # Return Data
-  colnames(raw) <- c("time", "X", "Y", "Z")
+  colnames(raw) <- cn
   raw$time <- as.POSIXct(raw$time, origin = "1970-01-01 00:00:00", tz=tz)
   meta <- read.gt3x::parse_gt3x_info(path, tz = tz)
   attr(raw, "start_time") <- meta$`Start Date` %>% lubridate::force_tz(tz)

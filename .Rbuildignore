@@ -8,3 +8,5 @@
 ^tests/testthat/test_gcalibrateC\.R$
 ^man/figures
 .vscode/
+^\.positai$
+^\.claude$
