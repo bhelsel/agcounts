@@ -5,11 +5,7 @@
 \alias{agcounts-package}
 \title{agcounts: Calculate 'ActiGraph' Counts from Accelerometer Data}
 \description{
-Calculate 'ActiGraph' counts from the X, Y, and Z axes of a triaxial 
-    accelerometer. This work was inspired by Neishabouri et al. who published the 
-    article "Quantification of Acceleration as Activity Counts in 'ActiGraph' Wearables" 
-    on February 24, 2022. The link to the article (\url{https://pubmed.ncbi.nlm.nih.gov/35831446}) 
-    and 'python' implementation of this code (\url{https://github.com/actigraph/agcounts}).
+Calculate 'ActiGraph' counts from the X, Y, and Z axes of a triaxial accelerometer. This work was inspired by Neishabouri et al. who published the article "Quantification of Acceleration as Activity Counts in 'ActiGraph' Wearables" on February 24, 2022. The link to the article (\url{https://pubmed.ncbi.nlm.nih.gov/35831446}) and 'python' implementation of this code (\url{https://github.com/actigraph/agcounts}).
 }
 \seealso{
 Useful links:
@@ -22,12 +18,18 @@ Useful links:
 \author{
 \strong{Maintainer}: Brian C. Helsel \email{bhelsel@kumc.edu}
 
+Authors:
+\itemize{
+  \item Brian C. Helsel \email{bhelsel@kumc.edu}
+}
+
 Other contributors:
 \itemize{
   \item Paul R. Hibbing [contributor]
   \item Robert N. Montgomery [contributor]
   \item Eric D. Vidoni [contributor]
   \item Jonathan Clutton [contributor]
+  \item John Muschelli [contributor]
   \item University of Kansas [copyright holder]
 }
 
