@@ -1,4 +1,4 @@
-// [[Rcpp::plugins(cpp11)]]
+// [[Rcpp::plugins(cpp14)]]
 #include <Rcpp.h>
 using namespace Rcpp;
 
@@ -25,4 +25,3 @@ NumericMatrix upsampleC(NumericMatrix X, double b_fp) {
   }
   return out;
 }
-
