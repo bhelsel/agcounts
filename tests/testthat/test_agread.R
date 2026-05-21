@@ -7,9 +7,9 @@ testthat::test_that("Check that data can be read into agcounts using pygt3x", {
   expect_equal(nrow(pygt3x), 18000)
   py_module_version = agcounts:::pygt3x_module_version()
   if (py_module_version >= package_version("0.7.1")) {
-    expect_equal(ncol(pygt3x), 4)
+    expect_equal(ncol(pygt3x), 5L)
   } else {
-    expect_equal(ncol(pygt3x), 5)
+    expect_equal(ncol(pygt3x), 4L)
   }
 })
 
