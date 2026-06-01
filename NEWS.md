@@ -1,3 +1,8 @@
+# agcounts 0.7.0
+* Fix problem with agread as it was not evaluating the `tz` argument
+* Add cpp14 requirement to work with RcppArmadillo in `agcalibrate`
+* Update parser "pygt3x" to work with idle sleep mode ouput from actigraph/pygt3x in v0.7.1
+
 # agcounts 0.6.9
 * Added debugging capabilities to C++ code and additional arguments to control spherecrit, sdcriter, and minloadcrit within the `gcalibrateC` function. Thanks to John Muschelli for the contribution!
 
