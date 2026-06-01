@@ -21,6 +21,9 @@ testthat::test_that("Check that data can be read into agcounts using each agread
   expect_equal(nrow(rawData), 18000)
   expect_equal(ncol(rawData), 4)
 
+  invisible(capture.output(rawData <- agread(path = file, parser = "read.gt3x", verbose = FALSE, tz = "EST")))
+  expect_true(lubridate::tz(rawData$time) == "EST")
+
   raw <- read.gt3x(path = file, asDataFrame = TRUE)
   sf <- agcounts:::.get_frequency(raw)
   invisible(capture.output(agcalibrated <- agcalibrate(raw)))
