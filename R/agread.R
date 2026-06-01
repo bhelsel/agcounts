@@ -30,9 +30,9 @@ agread <- function(path, parser = c("pygt3x", "GGIR", "read.gt3x"), tz = "UTC", 
     parser <- "GGIR"
   }
   switch(parser,
-         "pygt3x" = .pygt3xReader(path = path, verbose = verbose, ...),
-         "GGIR" = .ggirReader(path = path, verbose = verbose, ...),
-         "read.gt3x" = .gt3xReader(path = path, verbose = verbose, ...),
+         "pygt3x" = .pygt3xReader(path = path, verbose = verbose, tz = tz, ...),
+         "GGIR" = .ggirReader(path = path, verbose = verbose, tz = tz, ...),
+         "read.gt3x" = .gt3xReader(path = path, verbose = verbose, tz = tz, ...),
          stop("No method exists yet for ", sQuote(parser), call. = FALSE)
   )
 }
@@ -56,7 +56,7 @@ agread <- function(path, parser = c("pygt3x", "GGIR", "read.gt3x"), tz = "UTC", 
   # Return Data
   colnames(raw) <- c("time", "X", "Y", "Z")
   raw$time <- as.POSIXct(raw$time, origin = "1970-01-01 00:00:00", tz=tz)
-  meta <- read.gt3x::parse_gt3x_info(path)
+  meta <- read.gt3x::parse_gt3x_info(path, tz = tz)
   attr(raw, "start_time") <- meta$`Start Date` %>% lubridate::force_tz(tz)
   attr(raw, "stop_time") <- meta$`Stop Date` %>% lubridate::force_tz(tz)
   raw
@@ -66,7 +66,7 @@ agread <- function(path, parser = c("pygt3x", "GGIR", "read.gt3x"), tz = "UTC", 
   if(verbose) print("Reading data with read.gt3x and calibrating with GGIR.")
   I <- GGIR::g.inspectfile(datafile = path)
   C <- GGIR::g.calibrate(datafile = path, use.temp = FALSE, printsummary = FALSE, inspectfileobject = I)
-  raw <- read.gt3x::read.gt3x(path, asDataFrame = TRUE, imputeZeroes = TRUE)
+  raw <- .gt3xReader(path, tz = tz, verbose = verbose, ...)
   raw[, 2:4] <- scale(raw[, 2:4], center = -C$offset, scale = 1/C$scale)
   if(C$nhoursused==0) message("\n There is not enough data to perform the GGIR autocalibration method. Returning data as read by read.gt3x.")
   raw
