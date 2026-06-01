@@ -5,7 +5,12 @@ testthat::test_that("Check that data can be read into agcounts using pygt3x", {
   file <- system.file("extdata/example.gt3x", package = "agcounts")
   pygt3x <- agread(path = file, parser = "pygt3x", verbose = FALSE)
   expect_equal(nrow(pygt3x), 18000)
-  expect_equal(ncol(pygt3x), 4)
+  py_module_version = agcounts:::pygt3x_module_version()
+  if (py_module_version >= package_version("0.7.1")) {
+    expect_equal(ncol(pygt3x), 5L)
+  } else {
+    expect_equal(ncol(pygt3x), 4L)
+  }
 })
 
 

@@ -59,7 +59,7 @@
             <h5><b>Plot Settings for Raw Data</b></h5>
             <div class="form-group shiny-input-container">
               <label class="control-label" id="rawDataModule-gt3xPlotColor-label" for="rawDataModule-gt3xPlotColor">Plot Color (accepts color name or hex code)</label>
-              <input id="rawDataModule-gt3xPlotColor" type="text" class="shiny-input-text form-control" value="#000000"/>
+              <input id="rawDataModule-gt3xPlotColor" type="text" class="shiny-input-text form-control" value="#000000" data-update-on="change"/>
             </div>
             <div id="rawDataModule-rangeXraw" class="shiny-html-output"></div>
             <div id="rawDataModule-rangeYraw" class="shiny-html-output"></div>
@@ -136,7 +136,7 @@
             </div>
             <div class="form-group shiny-input-container">
               <label class="control-label" id="countsModule-countsPlotColor-label" for="countsModule-countsPlotColor">Plot Color (accepts color name or hex code)</label>
-              <input id="countsModule-countsPlotColor" type="text" class="shiny-input-text form-control" value="#000000"/>
+              <input id="countsModule-countsPlotColor" type="text" class="shiny-input-text form-control" value="#000000" data-update-on="change"/>
             </div>
             <div id="countsModule-rangeCounts" class="shiny-html-output"></div>
           </form>
@@ -208,7 +208,7 @@
             <div id="compareCountsModule-rangeYBlandAltman" class="shiny-html-output"></div>
             <div class="form-group shiny-input-container">
               <label class="control-label" id="compareCountsModule-agdPlotColor-label" for="compareCountsModule-agdPlotColor">Plot Color (accepts color name or hex code)</label>
-              <input id="compareCountsModule-agdPlotColor" type="text" class="shiny-input-text form-control" value="#000000"/>
+              <input id="compareCountsModule-agdPlotColor" type="text" class="shiny-input-text form-control" value="#000000" data-update-on="change"/>
             </div>
           </form>
         </div>
