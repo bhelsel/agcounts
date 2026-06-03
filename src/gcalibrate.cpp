@@ -1,4 +1,3 @@
-// [[Rcpp::plugins(cpp14)]]
 #include <RcppArmadillo.h>
 #include <iostream>
 #include <vector>

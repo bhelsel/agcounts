@@ -26,7 +26,6 @@ Imports:
     gsignal,
     lubridate,
     magrittr,
-    Rcpp,
     GGIR,
     stats,
     utils,
@@ -54,6 +53,5 @@ LinkingTo:
     RcppArmadillo
 URL: https://github.com/bhelsel/agcounts
 BugReports: https://github.com/bhelsel/agcounts/issues
-SystemRequirements: C++14
 Config/roxygen2/version: 8.0.0
 
