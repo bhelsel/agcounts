@@ -145,7 +145,7 @@ Rcpp::List gcalibrateC(Rcpp::Nullable<Rcpp::String> pathname = R_NilValue,
     }
 
     if(dataset.isNotNull()){
-      Rcpp::NumericMatrix dataset_(dataset);
+      Rcpp::NumericMatrix dataset_(dataset.get());
       if((i==0) && (dataset_.nrow() < sf * ws[2] * 2)) break; // Not enough data for calibration.
       if(i == 0) {
         startpage = 0;
